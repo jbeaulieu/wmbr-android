@@ -21,7 +21,7 @@
             android:icon="@drawable/ic_event_black_24dp"
             android:title="Events Calendar" />
         <item
-            android:id="@+id/nav_connect"
+            android:id="@+id/nav_contact"
             android:icon="@drawable/ic_menu_share"
             android:title="Contact Us!" />
         <item

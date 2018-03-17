@@ -5,6 +5,7 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.view.View;
 import android.support.design.widget.NavigationView;
+import android.support.v4.app.FragmentManager;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
@@ -15,6 +16,8 @@ import android.view.MenuItem;
 
 public class NavigationActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
+
+    FragmentManager fragmentManager = getSupportFragmentManager();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,6 +43,9 @@ public class NavigationActivity extends AppCompatActivity
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
+
+        HomeFragment homeFragment = new HomeFragment();
+        fragmentManager.beginTransaction().replace(R.id.defaultLayout, homeFragment, homeFragment.getTag()).commit();
     }
 
     @Override
@@ -77,19 +83,24 @@ public class NavigationActivity extends AppCompatActivity
     @SuppressWarnings("StatementWithEmptyBody")
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
-        // Handle navigation view item clicks here.
+        // Handle navigation view item clicks
         int id = item.getItemId();
 
         if (id == R.id.nav_live_stream) {
-
+            StreamFragment streamFragment = new StreamFragment();
+            fragmentManager.beginTransaction().replace(R.id.defaultLayout, streamFragment, streamFragment.getTag()).commit();
         } else if (id == R.id.nav_schedule) {
-
+            ScheduleFragment scheduleFragment = new ScheduleFragment();
+            fragmentManager.beginTransaction().replace(R.id.defaultLayout, scheduleFragment, scheduleFragment.getTag()).commit();
         } else if (id == R.id.nav_archives) {
-
+            ArchiveFragment archiveFragment = new ArchiveFragment();
+            fragmentManager.beginTransaction().replace(R.id.defaultLayout, archiveFragment, archiveFragment.getTag()).commit();
         } else if (id == R.id.nav_event_cal) {
-
-        } else if (id == R.id.nav_connect) {
-
+            EventsFragment eventsFragment = new EventsFragment();
+            fragmentManager.beginTransaction().replace(R.id.defaultLayout, eventsFragment, eventsFragment.getTag()).commit();
+        } else if (id == R.id.nav_contact) {
+            ContactFragment contactFragment = new ContactFragment();
+            fragmentManager.beginTransaction().replace(R.id.defaultLayout, contactFragment, contactFragment.getTag()).commit();
         } else if (id == R.id.nav_settings) {
 
         }
