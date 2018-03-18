@@ -14,14 +14,12 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class IcyStreamMeta {
-
     protected URL streamUrl;
     private Map<String, String> metadata;
     private boolean isError;
+    private Map<String, String> data;
 
-    public IcyStreamMeta(URL streamUrl) {
-        setStreamUrl(streamUrl);
-
+    public IcyStreamMeta() {
         isError = false;
     }
 
@@ -32,7 +30,7 @@ public class IcyStreamMeta {
      * @throws IOException
      */
     public String getArtist() throws IOException {
-        Map<String, String> data = getMetadata();
+        data = getMetadata();
 
         if (!data.containsKey("StreamTitle"))
             return "";
@@ -43,19 +41,34 @@ public class IcyStreamMeta {
     }
 
     /**
+     * Get streamTitle
+     *
+     * @return String
+     * @throws IOException
+     */
+    public String getStreamTitle() throws IOException {
+        data = getMetadata();
+
+        if (!data.containsKey("StreamTitle"))
+            return "";
+
+        return data.get("StreamTitle");
+    }
+
+    /**
      * Get title using stream's title
      *
      * @return String
      * @throws IOException
      */
     public String getTitle() throws IOException {
-        Map<String, String> data = getMetadata();
+        data = getMetadata();
 
         if (!data.containsKey("StreamTitle"))
             return "";
 
         String streamTitle = data.get("StreamTitle");
-        String artist = streamTitle.substring(streamTitle.indexOf("-")+1);
+        String artist = streamTitle.substring(streamTitle.indexOf("-") + 1);
         return artist.trim();
     }
 
@@ -67,17 +80,16 @@ public class IcyStreamMeta {
         return metadata;
     }
 
-    public void refreshMeta() throws IOException {
+    synchronized public void refreshMeta() throws IOException {
         retreiveMetadata();
     }
 
-    private void retreiveMetadata() throws IOException {
+    synchronized private void retreiveMetadata() throws IOException {
         URLConnection con = streamUrl.openConnection();
         con.setRequestProperty("Icy-MetaData", "1");
         con.setRequestProperty("Connection", "close");
         con.setRequestProperty("Accept", null);
         con.connect();
-
         int metaDataOffset = 0;
         Map<String, List<String>> headers = con.getHeaderFields();
         InputStream stream = con.getInputStream();
@@ -89,7 +101,7 @@ public class IcyStreamMeta {
             // Headers are sent within a stream
             StringBuilder strHeaders = new StringBuilder();
             char c;
-            while ((c = (char)stream.read()) != -1) {
+            while ((c = (char) stream.read()) != -1) {
                 strHeaders.append(c);
                 if (strHeaders.length() > 5 && (strHeaders.substring((strHeaders.length() - 4), strHeaders.length()).equals("\r\n\r\n"))) {
                     // end of headers
@@ -133,13 +145,12 @@ public class IcyStreamMeta {
             }
             if (inData) {
                 if (b != 0) {
-                    metaData.append((char)b);
+                    metaData.append((char) b);
                 }
             }
             if (count > (metaDataOffset + metaDataLength)) {
                 break;
             }
-
         }
 
         // Set the data
@@ -147,6 +158,7 @@ public class IcyStreamMeta {
 
         // Close
         stream.close();
+
     }
 
     public boolean isError() {
@@ -171,7 +183,7 @@ public class IcyStreamMeta {
         for (int i = 0; i < metaParts.length; i++) {
             m = p.matcher(metaParts[i]);
             if (m.find()) {
-                metadata.put((String)m.group(1), (String)m.group(2));
+                metadata.put((String) m.group(1), (String) m.group(2));
             }
         }
 
