@@ -1,5 +1,6 @@
 package com.jbproductions.wmbr;
 
+import android.content.Intent;
 import android.media.MediaPlayer;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -8,7 +9,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.TextView;
 
 import java.io.IOException;
@@ -23,12 +24,12 @@ public class StreamFragment extends Fragment {
         // Required empty public constructor
     }
 
-    final MediaPlayer mp = new MediaPlayer();
+    boolean isStreaming = false;
 
     IcyStreamMeta streamMeta;
     MetadataTask2 metadataTask2;
     String title_artist;
-    Button streamButton;
+    ImageButton streamButton;
     TextView showTitleTextView;
 
     @Override
@@ -37,53 +38,78 @@ public class StreamFragment extends Fragment {
         // Inflate the layout for this fragment
         View view =  inflater.inflate(R.layout.fragment_stream, container, false);
 
-        streamButton = view.findViewById(R.id.button);
+        streamButton = view.findViewById(R.id.streamButton);
         showTitleTextView = view.findViewById(R.id.showTitleTextView);
 
         final String streamUrl = "http://wmbr.org:8000/hi";
+        MediaPlayer mp = new MediaPlayer();
 
         streamButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                try {
-                    mp.setDataSource(streamUrl);
-                } catch (IllegalArgumentException e) {
-                    // TODO Auto-generated catch block
-                    e.printStackTrace();
-                } catch (IllegalStateException e) {
-                    // TODO Auto-generated catch block
-                    e.printStackTrace();
-                } catch (IOException e) {
-                    // TODO Auto-generated catch block
-                    e.printStackTrace();
-                }
-                try {
-                    mp.prepare();
-                    mp.start();
-                } catch (IllegalStateException e) {
-                    // TODO Auto-generated catch block
-                    e.printStackTrace();
-                } catch (IOException e) {
-                    // TODO Auto-generated catch block
-                    e.printStackTrace();
-                }
 
-                streamMeta = new IcyStreamMeta();
-                try {
-                    streamMeta.setStreamUrl(new URL(streamUrl));
-                } catch (MalformedURLException e) {
-                    e.printStackTrace();
-                }
-                metadataTask2 =new MetadataTask2();
-                try {
-                    metadataTask2.execute(new URL(streamUrl));
-                } catch (MalformedURLException e) {
-                    e.printStackTrace();
-                }
+                if(isStreaming)
+                {
+/*                    mp.stop();
+                    mp.release();*/
+                    Log.d("Streaming Update", "Stopping stream");
+                    //getActivity().stopService(new Intent(getActivity(), StreamRadio.class));
+                    streamButton.setBackgroundResource(R.drawable.ic_play_arrow_black_24dp);
 
-                Timer timer = new Timer();
-                MyTimerTask task = new MyTimerTask();
-                timer.schedule(task,100, 10000);
+
+                }
+                else {
+
+/*                    try {
+                        mp.setDataSource(streamUrl);
+                    } catch (IllegalArgumentException e) {
+                        // TODO Auto-generated catch block
+                        e.printStackTrace();
+                    } catch (IllegalStateException e) {
+                        // TODO Auto-generated catch block
+                        e.printStackTrace();
+                    } catch (IOException e) {
+                        // TODO Auto-generated catch block
+                        e.printStackTrace();
+                    }
+
+                    try {
+                        mp.prepare();
+                        mp.start();
+                    } catch (IllegalStateException e) {
+                        // TODO Auto-generated catch block
+                        e.printStackTrace();
+                    } catch (IOException e) {
+                        // TODO Auto-generated catch block
+                        e.printStackTrace();
+                    }*/
+
+                    Log.d("Streaming Update", "Starting stream");
+                    //getActivity().startService(new Intent(getActivity(), StreamRadio.class));
+                    isStreaming = true;
+
+                    mp.setAudioAttributes(CONTENT_);
+
+                    streamButton.setBackgroundResource(R.drawable.ic_stop_black_24dp);
+
+                    streamMeta = new IcyStreamMeta();
+                    try {
+                        streamMeta.setStreamUrl(new URL(streamUrl));
+                    } catch (MalformedURLException e) {
+                        e.printStackTrace();
+                    }
+                    metadataTask2 =new MetadataTask2();
+                    try {
+                        metadataTask2.execute(new URL(streamUrl));
+                    } catch (MalformedURLException e) {
+                        e.printStackTrace();
+                    }
+
+                    Timer timer = new Timer();
+                    MyTimerTask task = new MyTimerTask();
+                    timer.schedule(task,100, 10000);
+
+                }
 
             }
         });

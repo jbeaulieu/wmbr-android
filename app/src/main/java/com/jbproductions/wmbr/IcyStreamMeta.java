@@ -1,7 +1,4 @@
 package com.jbproductions.wmbr;
-/**
- * Created by Jon on 3/17/2018.
- */
 
 import java.io.IOException;
 import java.io.InputStream;

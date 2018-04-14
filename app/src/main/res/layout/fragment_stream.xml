@@ -1,34 +1,29 @@
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:gravity="center_horizontal"
+    android:orientation="vertical"
     tools:context="com.jbproductions.wmbr.StreamFragment">
 
-    <!-- TODO: Update blank fragment layout -->
+    <TextView
+        android:id="@+id/WMBRTitleTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="WMBR" />
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:gravity="center_horizontal"
-        android:orientation="vertical">
+    <TextView
+        android:id="@+id/showTitleTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Show Title" />
 
-        <TextView
-            android:id="@+id/WMBRTitleTextView"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="WMBR" />
+    <ImageButton
+        android:id="@+id/streamButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:contentDescription="Start and stop live stream"
+        android:src="@drawable/ic_play_arrow_black_24dp" />
 
-        <TextView
-            android:id="@+id/showTitleTextView"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Show Title" />
-
-        <Button
-            android:id="@+id/button"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Button" />
-    </LinearLayout>
-
-</FrameLayout>
+</LinearLayout>
