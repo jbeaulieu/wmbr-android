@@ -1,6 +1,7 @@
 package com.jbproductions.wmbr;
 
 import android.content.Intent;
+import android.media.AudioAttributes;
 import android.media.MediaPlayer;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -42,7 +43,7 @@ public class StreamFragment extends Fragment {
         showTitleTextView = view.findViewById(R.id.showTitleTextView);
 
         final String streamUrl = "http://wmbr.org:8000/hi";
-        MediaPlayer mp = new MediaPlayer();
+        final MediaPlayer mp = new MediaPlayer();
 
         streamButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -88,7 +89,7 @@ public class StreamFragment extends Fragment {
                     //getActivity().startService(new Intent(getActivity(), StreamRadio.class));
                     isStreaming = true;
 
-                    mp.setAudioAttributes(CONTENT_);
+                    //mp.setAudioAttributes(AudioAttributes.CONTENT_TYPE_MUSIC);
 
                     streamButton.setBackgroundResource(R.drawable.ic_stop_black_24dp);
 
