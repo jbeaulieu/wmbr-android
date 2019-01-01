@@ -26,4 +26,11 @@
         android:contentDescription="Start and stop live stream"
         android:src="@drawable/ic_play_arrow_black_24dp" />
 
+    <ImageButton
+        android:id="@+id/stopButton"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:contentDescription="Start and stop live stream"
+        android:src="@drawable/ic_stop_black_24dp" />
+
 </LinearLayout>
