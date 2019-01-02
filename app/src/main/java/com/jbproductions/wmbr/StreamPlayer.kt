@@ -32,7 +32,7 @@ class StreamPlayer
             return mMediaPlayer
         }
         /**
-         * Once mediplayer completes, inform all the callbacks
+         * Once mediaplayer completes, inform all the callbacks
          */
         private val mediaPlayerCompletionListener = MediaPlayer.OnCompletionListener {
             for (callback in callbacks) {
@@ -42,7 +42,7 @@ class StreamPlayer
         }
 
         /**
-         * Once mediplayer is prepared, inform all the callbacks
+         * Once mediaplayer is prepared, inform all the callbacks
          */
         private val mediaPlayerPreparedListener = MediaPlayer.OnPreparedListener {
             for (callback in callbacks) {
@@ -52,7 +52,7 @@ class StreamPlayer
         }
 
         /**
-         * Once mediplayer hits error, inform all the callbacks
+         * Once mediaplayer hits error, inform all the callbacks
          */
         private val mediaPlayerErrorListener = MediaPlayer.OnErrorListener { mp, what, extra ->
             for (callback in callbacks) {
@@ -102,28 +102,28 @@ class StreamPlayer
         }
 
         /**
-         * Public fucntion to pause the playback
+         * Public function to pause playback
          */
         fun pause() {
             mediaPlayer!!.pause()
         }
 
         /**
-         * Public fucntion to play the playback
+         * Public function to start playback
          */
         fun playNew() {
             mediaPlayer!!.start()
         }
 
         /**
-         * Public fucntion to stop the playback
+         * Public function to stop playback
          */
         fun stop() {
             mediaPlayer!!.stop()
         }
 
         /**
-         * Public function to play a specific  the playback
+         * Public function to play a specify playback
          * [url] is set for playback
          */
         fun playItem(url:String) {
