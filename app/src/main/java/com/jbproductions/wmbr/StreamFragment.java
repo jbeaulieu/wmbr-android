@@ -45,10 +45,11 @@ public class StreamFragment extends Fragment {
         }
     }
 
-    final String streamUrl = "http://wmbr.org:8000/hi";
+    private final String streamUrl = "http://wmbr.org:8000/hi";
 
     ImageButton streamButton;
     ImageButton stopButton;
+    ProgressBar bufferProgressBar;
     TextView showTitleTextView;
 
     @Override
@@ -62,10 +63,8 @@ public class StreamFragment extends Fragment {
         bufferProgressBar = view.findViewById(R.id.bufferProgress);
         showTitleTextView = view.findViewById(R.id.showTitleTextView);
 
-        audioPlayer = new StreamPlayer(getContext());
-        //audioPlayer.addCallback(streamAudioPlayerCallback);
-        show("BUFFERING......");
-        showProgress(false);
+        audioPlayer = StreamPlayer.Companion.getInstance(getContext());
+        audioPlayer.addCallback(new streamAudioPlayerCallback());
 
         streamButton.setOnClickListener(new View.OnClickListener() {
             @Override
