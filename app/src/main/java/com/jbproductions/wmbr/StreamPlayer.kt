@@ -36,7 +36,6 @@ class StreamPlayer
          */
         private val mediaPlayerCompletionListener = MediaPlayer.OnCompletionListener {
             for (callback in callbacks) {
-
                 callback.itemComplete()
             }
         }

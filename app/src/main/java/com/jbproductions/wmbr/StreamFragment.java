@@ -6,8 +6,12 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import static android.view.View.VISIBLE;
+import static android.view.View.INVISIBLE;
 
 public class StreamFragment extends Fragment {
 
@@ -21,8 +25,8 @@ public class StreamFragment extends Fragment {
     {
         @Override
         public void playerPrepared() {
-            show("BUFFERING COMPLETE......");
-            showProgress(false);
+            showToast("PLAYER PREPARED");
+            showBufferProgress(false);
         }
 
         @Override
@@ -32,12 +36,12 @@ public class StreamFragment extends Fragment {
 
         @Override
         public void itemComplete() {
-            show("FINISHED PLAYING......");
+            showToast("FINISHED PLAYING......");
         }
 
         @Override
         public void playerError() {
-            show("Error while playing......");
+            showToast("Error while playing......");
         }
     }
 
@@ -55,6 +59,7 @@ public class StreamFragment extends Fragment {
 
         streamButton = view.findViewById(R.id.streamButton);
         stopButton = view.findViewById(R.id.stopButton);
+        bufferProgressBar = view.findViewById(R.id.bufferProgress);
         showTitleTextView = view.findViewById(R.id.showTitleTextView);
 
         audioPlayer = new StreamPlayer(getContext());
@@ -65,9 +70,9 @@ public class StreamFragment extends Fragment {
         streamButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                show("BUFFERING......");
+                showToast("Just a sec, buffering");
                 audioPlayer.playItem(streamUrl);
-                showProgress(true);
+                showBufferProgress(true);
             }
         });
 
@@ -75,7 +80,6 @@ public class StreamFragment extends Fragment {
             @Override
             public void onClick(View view) {
                 audioPlayer.stop();
-                showProgress(false);
             }
         });
 
@@ -83,11 +87,15 @@ public class StreamFragment extends Fragment {
         return view;
     }
 
-    public void showProgress(Boolean status) {
-
+    public void showBufferProgress(Boolean status) {
+        if(status) {
+            this.bufferProgressBar.setVisibility(VISIBLE);
+        } else {
+            this.bufferProgressBar.setVisibility(INVISIBLE);
+        }
     }
 
-    public void show(String message) {
+    public void showToast(String message) {
         Toast.makeText(getActivity(), message, Toast.LENGTH_LONG).show();
     }
 

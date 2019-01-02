@@ -33,4 +33,12 @@
         android:contentDescription="@string/stop_button_description"
         android:src="@drawable/ic_stop_black_24dp" />
 
+    <ProgressBar
+        android:id="@+id/bufferProgress"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:visibility="invisible"
+        android:layout_marginBottom="26dp"
+        android:layout_marginStart="14dp" />
+
 </LinearLayout>
