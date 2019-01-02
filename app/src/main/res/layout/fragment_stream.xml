@@ -11,26 +11,26 @@
         android:id="@+id/WMBRTitleTextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="WMBR" />
+        android:text="@string/app_name" />
 
     <TextView
         android:id="@+id/showTitleTextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Show Title" />
+        android:text="@string/show_title_placeholder" />
 
     <ImageButton
         android:id="@+id/streamButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:contentDescription="Start and stop live stream"
+        android:contentDescription="@string/stream_button_description"
         android:src="@drawable/ic_play_arrow_black_24dp" />
 
     <ImageButton
         android:id="@+id/stopButton"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:contentDescription="Start and stop live stream"
+        android:contentDescription="@string/stop_button_description"
         android:src="@drawable/ic_stop_black_24dp" />
 
 </LinearLayout>
