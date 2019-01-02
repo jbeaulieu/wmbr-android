@@ -10,4 +10,5 @@
     <string name="stop_button_description">Stop live stream</string>
 
     <string name="show_title_placeholder">Show Title</string>
+    <string name="buffer_message">Just a sec, buffering</string>
 </resources>

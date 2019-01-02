@@ -21,27 +21,26 @@ public class StreamFragment extends Fragment {
 
     private StreamPlayer audioPlayer;
 
-    private class streamAudioPlayerCallback implements StreamPlayer.StreamPlayerCallback
-    {
+    private class streamAudioPlayerCallback implements StreamPlayer.StreamPlayerCallback {
         @Override
         public void playerPrepared() {
-            showToast("PLAYER PREPARED");
+            // Player is prepared, hide the buffer progress wheel
             showBufferProgress(false);
         }
 
         @Override
-        public void playerProgress(long l, float f) {
-            //TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        public void playerProgress(long offsetInMilliseconds, float percent) {
+            //TODO("not implemented") - progress record
         }
 
         @Override
         public void itemComplete() {
-            showToast("FINISHED PLAYING......");
+            //TODO("not implemented") - finished playing
         }
 
         @Override
         public void playerError() {
-            showToast("Error while playing......");
+            //TODO("not implemented") - error while playing
         }
     }
 
@@ -63,18 +62,23 @@ public class StreamFragment extends Fragment {
         bufferProgressBar = view.findViewById(R.id.bufferProgress);
         showTitleTextView = view.findViewById(R.id.showTitleTextView);
 
+        // Set up new singleton instance of audioPlayer and add callbacks
         audioPlayer = StreamPlayer.Companion.getInstance(getContext());
         audioPlayer.addCallback(new streamAudioPlayerCallback());
 
+        /* Clicking the 'start button should start the stream, display the "buffering" message,
+            and show the progress wheel to indicate buffering
+         */
         streamButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                showToast("Just a sec, buffering");
                 audioPlayer.playItem(streamUrl);
+                showToast(getString(R.string.buffer_message));
                 showBufferProgress(true);
             }
         });
 
+        // Clicking the stop button should stop the stream - no other calls necessary atm
         stopButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -82,20 +86,26 @@ public class StreamFragment extends Fragment {
             }
         });
 
-
         return view;
     }
 
-    public void showBufferProgress(Boolean status) {
-        if(status) {
+    /**
+     * Hide/Unhide the progress bar used to show that the stream is buffering
+     * @param visible Boolean for if the bar should display or not
+     */
+    public void showBufferProgress(Boolean visible) {
+        if(visible) {
             this.bufferProgressBar.setVisibility(VISIBLE);
         } else {
             this.bufferProgressBar.setVisibility(INVISIBLE);
         }
     }
 
+    /**
+     * Convenience function for easily displaying a message via toast
+     * @param message String to be toasted
+     */
     public void showToast(String message) {
         Toast.makeText(getActivity(), message, Toast.LENGTH_LONG).show();
     }
-
 }
