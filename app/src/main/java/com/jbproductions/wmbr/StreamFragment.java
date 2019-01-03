@@ -10,6 +10,15 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import org.xmlpull.v1.XmlPullParser;
+import org.xmlpull.v1.XmlPullParserException;
+import org.xmlpull.v1.XmlPullParserFactory;
+
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.HttpURLConnection;
+import java.net.URL;
+
 import static android.view.View.VISIBLE;
 import static android.view.View.INVISIBLE;
 
@@ -86,6 +95,9 @@ public class StreamFragment extends Fragment {
             }
         });
 
+        // Parse current show info XML
+        parseXML();
+
         return view;
     }
 
@@ -93,7 +105,7 @@ public class StreamFragment extends Fragment {
      * Hide/Unhide the progress bar used to show that the stream is buffering
      * @param visible Boolean for if the bar should display or not
      */
-    public void showBufferProgress(Boolean visible) {
+    private void showBufferProgress(Boolean visible) {
         if(visible) {
             this.bufferProgressBar.setVisibility(VISIBLE);
         } else {
@@ -105,7 +117,72 @@ public class StreamFragment extends Fragment {
      * Convenience function for easily displaying a message via toast
      * @param message String to be toasted
      */
-    public void showToast(String message) {
+    private void showToast(String message) {
         Toast.makeText(getActivity(), message, Toast.LENGTH_LONG).show();
+    }
+
+    /**
+     * Given a string representation of a URL, sets up a connection and gets an input stream.
+     * @param urlString String representation of URL for XML file
+     * @return InputStream
+     * @throws IOException //TODO:document
+     */
+    private InputStream downloadUrl(String urlString) throws IOException {
+        URL url = new URL(urlString);
+        HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+        conn.setReadTimeout(10000 /* milliseconds */);
+        conn.setConnectTimeout(15000 /* milliseconds */);
+        conn.setRequestMethod("GET");
+        conn.setDoInput(true);
+        // Starts the query
+        conn.connect();
+        return conn.getInputStream();
+    }
+
+    private void parseXML() {
+        XmlPullParserFactory parserFactory;
+        try {
+            parserFactory = XmlPullParserFactory.newInstance();
+            XmlPullParser parser = parserFactory.newPullParser();
+            InputStream xmlInputStream = downloadUrl("http://wmbr.org/cgi-bin/xmlinfo");
+            parser.setFeature(XmlPullParser.FEATURE_PROCESS_NAMESPACES, false);
+            parser.setInput(xmlInputStream, null);
+            processParsing(parser);
+        } catch (XmlPullParserException e) {
+            //TODO: Handle exception
+        } catch (IOException i) {
+            //TODO: Handle exception
+        }
+    }
+
+    private void processParsing(XmlPullParser parser) throws IOException, XmlPullParserException {
+        int eventType = parser.getEventType();
+
+        String showname = "";
+        String showhosts = "";
+        String temp = "";
+
+        while(eventType != XmlPullParser.END_DOCUMENT) {
+            String tagName = null;
+
+            switch(eventType) {
+                case XmlPullParser.START_TAG:
+
+                    tagName = parser.getName();
+
+                     if ("showname".equals(tagName)) {
+                         showname = parser.nextText();
+                     } else if ("showhosts".equals(tagName)) {
+                         showhosts = parser.nextText();
+                     } else if ("temp".equals(tagName)) {
+                         temp = parser.nextText();
+                     }
+                    break;
+            }
+
+            eventType = parser.next();
+        }
+
+        showTitleTextView.setText(showname + " " + showhosts + " " + temp);
     }
 }
