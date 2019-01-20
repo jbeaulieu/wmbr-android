@@ -3,6 +3,7 @@ package com.jbproductions.wmbr;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.util.Log;
+import android.util.SparseArray;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,6 +11,8 @@ import android.widget.ImageButton;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import java.util.Map;
 
 import static android.view.View.VISIBLE;
 import static android.view.View.INVISIBLE;
@@ -50,7 +53,11 @@ public class StreamFragment extends Fragment {
     ImageButton streamButton;
     ImageButton stopButton;
     ProgressBar bufferProgressBar;
-    TextView showTitleTextView;
+    TextView showNameTextView;
+    TextView showHostsTextView;
+    TextView timeTextView;
+    TextView temperatureTextView;
+    TextView weatherTextView;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -61,13 +68,24 @@ public class StreamFragment extends Fragment {
         streamButton = view.findViewById(R.id.streamButton);
         stopButton = view.findViewById(R.id.stopButton);
         bufferProgressBar = view.findViewById(R.id.bufferProgress);
-        showTitleTextView = view.findViewById(R.id.showTitleTextView);
+        showNameTextView = view.findViewById(R.id.showNameTextView);
+        showHostsTextView = view.findViewById(R.id.showHostsTextView);
+        timeTextView = view.findViewById(R.id.timeTextView);
+        temperatureTextView = view.findViewById(R.id.temperatureTextView);
+        weatherTextView = view.findViewById(R.id.weatherTextView);
 
         // Set up new singleton instance of audioPlayer and add callbacks
         audioPlayer = StreamPlayer.Companion.getInstance(getContext());
         audioPlayer.addCallback(new streamAudioPlayerCallback());
 
-        XmlParser.getStreamMetadata();
+        Map wmbrStatus = XmlParser.getStreamMetadata();
+        showNameTextView.setText(wmbrStatus.get("showName").toString());
+        showHostsTextView.setText(wmbrStatus.get("showHosts").toString());
+        timeTextView.setText(wmbrStatus.get("time").toString());
+        temperatureTextView.setText(wmbrStatus.get("temperature").toString());
+        weatherTextView.setText(wmbrStatus.get("wx").toString());
+
+        SparseArray<Show> showDB = XmlParser.getShowInfo();
 
         /* Clicking the 'start button should start the stream, display the "buffering" message,
             and show the progress wheel to indicate buffering
@@ -88,11 +106,6 @@ public class StreamFragment extends Fragment {
                 audioPlayer.stop();
             }
         });
-
-        // Parse current show info XML
-        //parseXML();
-
-        //showTitleTextView.setText(showname + " " + showhosts + " " + temp);
 
         return view;
     }
