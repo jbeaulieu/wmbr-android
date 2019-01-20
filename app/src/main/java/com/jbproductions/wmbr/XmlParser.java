@@ -71,6 +71,64 @@ public class XmlParser {
 
     }
 
+    static Map getShowInfos() {
+        Map<Integer, Show> showDB = new HashMap<>();
+        XmlPullParser parser = setupXmlParser(scheduleMeta);
+        Show currentShow = null;
+        Integer showid;
+
+        try {
+            int eventType = parser.getEventType();
+
+            while(eventType != XmlPullParser.END_DOCUMENT) {
+                String tagName;
+
+                if (eventType == XmlPullParser.START_TAG) {
+
+                    tagName = parser.getName();
+
+                    if("show".equals(tagName)) {
+                        currentShow = new Show();
+                        showid = Integer.parseInt(parser.getAttributeValue(0));
+                        currentShow.setID(showid);
+                        showDB.put(showid, currentShow);
+                    } else if (currentShow != null) {
+
+                        if("name".equals(tagName)) {
+                            currentShow.setName(parser.nextText());
+                        } else if ("day".equals(tagName)) {
+                            currentShow.setDay(Integer.parseInt(parser.nextText()));
+                        } else if ("time_str".equals(tagName)) {
+                            currentShow.setTime(parser.nextText());
+                        } else if ("length".equals(tagName)) {
+                            currentShow.setLength(Integer.parseInt(parser.nextText()));
+                        } else if ("alternates".equals(tagName)) {
+                            currentShow.setAlternates(Integer.parseInt(parser.nextText()));
+                        } else if ("hosts".equals(tagName)) {
+                            currentShow.setHosts(parser.nextText());
+                        } else if ("producers".equals(tagName)) {
+                            currentShow.setProducers(parser.nextText());
+                        } else if ("url".equals(tagName)) {
+                            currentShow.setUrl(parser.nextText());
+                        } else if ("email".equals(tagName)) {
+                            currentShow.setEmail(parser.nextText());
+                        } else if ("description".equals(tagName)) {
+                            currentShow.setDescription(parser.nextText());
+                        }
+                    }
+                }
+                eventType = parser.next();  // Advance the parser to the next tag
+            }
+
+        } catch (XmlPullParserException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        return showDB;
+    }
+
     /**
      * Configures an XmlPullParser object to pull xml data from a given URL
      * @param resourceURL String of the URL to the xml that will be parsed
