@@ -1,5 +1,7 @@
 package com.jbproductions.wmbr;
 
+import android.util.SparseArray;
+
 import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserException;
 import org.xmlpull.v1.XmlPullParserFactory;
@@ -71,11 +73,11 @@ public class XmlParser {
 
     }
 
-    static Map getShowInfos() {
-        Map<Integer, Show> showDB = new HashMap<>();
+    static SparseArray<Show> getShowInfo() {
+        SparseArray<Show> showDB = new SparseArray<>();
         XmlPullParser parser = setupXmlParser(scheduleMeta);
         Show currentShow = null;
-        Integer showid;
+        int showid;
 
         try {
             int eventType = parser.getEventType();
