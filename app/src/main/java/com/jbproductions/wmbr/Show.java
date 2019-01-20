@@ -1,7 +1,5 @@
 package com.jbproductions.wmbr;
 
-import java.util.ArrayList;
-
 public class Show {
 
     public Show() {
@@ -19,6 +17,10 @@ public class Show {
         day = dayOfWeek;
     }
 
+    /**
+     * Sets the start time for the given show
+     * @param showTime String value of the show's start time, scraped from wmbr.org
+     */
     public void setTime(String showTime) {
         time = convertTo24HourTime(showTime);
     }
@@ -37,6 +39,50 @@ public class Show {
 
     public void setHosts(String showHosts) {
         hosts = showHosts;
+    }
+
+    public void setProducers(String showProducers) {
+        producers = showProducers;
+    }
+
+    public void setUrl(String showUrl) {
+        url = showUrl;
+    }
+
+    public void setEmail(String showEmail) {
+        email = showEmail;
+    }
+
+    public void setDescription(String showDescription) {
+        description = showDescription;
+    }
+
+    public int getID() {
+        return id;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public String getHosts() {
+        return hosts;
+    }
+
+    public String getProducers() {
+        return producers;
+    }
+
+    public String getUrl() {
+        return url;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public String getDescription() {
+        return description;
     }
 
     /**
