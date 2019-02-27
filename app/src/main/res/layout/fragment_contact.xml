@@ -41,7 +41,7 @@
                     android:paddingBottom="10dp"
                     android:paddingLeft="5dp"
                     android:paddingRight="5dp"
-                    android:text="By Phone"
+                    android:text="@string/contact_by_phone"
                     android:textColor="#FFFFFF"
                     android:background="#1A73E8"
                     android:textAppearance="@style/TextAppearance.AppCompat.Headline"/>
@@ -57,6 +57,7 @@
 
                     <ImageView
                         android:id="@+id/request_phone_icon"
+                        android:contentDescription="@string/content_description_phone_icon"
                         android:layout_width="wrap_content"
                         android:layout_height="0dp"
                         android:layout_marginEnd="16dp"
@@ -75,7 +76,7 @@
                         android:layout_gravity="center_vertical"
                         android:paddingTop="10dp"
                         android:paddingBottom="10dp"
-                        android:text="617-253-8810 (Request Line)"
+                        android:text="@string/request_phone_number"
                         android:textAppearance="@style/TextAppearance.AppCompat.Medium"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
@@ -96,6 +97,7 @@
 
                     <ImageView
                         android:id="@+id/business_phone_icon"
+                        android:contentDescription="@string/content_description_phone_icon"
                         android:layout_width="wrap_content"
                         android:layout_height="0dp"
                         android:layout_marginEnd="16dp"
@@ -114,7 +116,7 @@
                         android:layout_gravity="center_vertical"
                         android:paddingTop="10dp"
                         android:paddingBottom="10dp"
-                        android:text="617-253-4000 (Business Line)"
+                        android:text="@string/business_phone_number"
                         android:textAppearance="@style/TextAppearance.AppCompat.Medium"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
@@ -155,7 +157,7 @@
                     android:paddingBottom="10dp"
                     android:paddingLeft="5dp"
                     android:paddingRight="5dp"
-                    android:text="Social Media"
+                    android:text="@string/contact_social_media"
                     android:textColor="#FFFFFF"
                     android:background="#A4C639"
                     android:textAppearance="@style/TextAppearance.AppCompat.Headline"/>
@@ -171,6 +173,7 @@
 
                     <ImageView
                         android:id="@+id/facebook_icon"
+                        android:contentDescription="@string/content_description_fb_icon"
                         android:layout_width="wrap_content"
                         android:layout_height="0dp"
                         android:layout_marginEnd="16dp"
@@ -190,7 +193,7 @@
                         android:layout_gravity="center_vertical"
                         android:paddingTop="10dp"
                         android:paddingBottom="10dp"
-                        android:text="Facebook"
+                        android:text="@string/social_media_fb"
                         android:textAppearance="@style/TextAppearance.AppCompat.Medium"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
@@ -211,6 +214,7 @@
 
                     <ImageView
                         android:id="@+id/icon"
+                        android:contentDescription="@string/content_description_twitter_icon"
                         android:layout_width="wrap_content"
                         android:layout_height="0dp"
                         android:layout_marginEnd="16dp"
@@ -230,7 +234,7 @@
                         android:layout_gravity="center_vertical"
                         android:paddingTop="10dp"
                         android:paddingBottom="10dp"
-                        android:text="Twitter"
+                        android:text="@string/social_media_twitter"
                         android:textAppearance="@style/TextAppearance.AppCompat.Medium"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
@@ -251,6 +255,7 @@
 
                     <ImageView
                         android:id="@+id/icon2"
+                        android:contentDescription="@string/content_description_ig_icon"
                         android:layout_width="wrap_content"
                         android:layout_height="0dp"
                         android:layout_marginEnd="16dp"
@@ -270,7 +275,7 @@
                         android:layout_gravity="center_vertical"
                         android:paddingTop="10dp"
                         android:paddingBottom="10dp"
-                        android:text="Instagram"
+                        android:text="@string/social_media_ig"
                         android:textAppearance="@style/TextAppearance.AppCompat.Medium"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
@@ -313,7 +318,7 @@
                     android:paddingBottom="10dp"
                     android:paddingLeft="5dp"
                     android:paddingRight="5dp"
-                    android:text="By Email"
+                    android:text="@string/contact_email"
                     android:textColor="#FFFFFF"
                     android:background="#FFBD07"
                     android:textAppearance="@style/TextAppearance.AppCompat.Headline"/>
@@ -329,6 +334,7 @@
 
                     <ImageView
                         android:id="@+id/music_dept_email_icon"
+                        android:contentDescription="@string/content_description_email_icon"
                         android:layout_width="wrap_content"
                         android:layout_height="0dp"
                         android:layout_marginEnd="16dp"
@@ -347,7 +353,7 @@
                         android:layout_gravity="center_vertical"
                         android:paddingTop="10dp"
                         android:paddingBottom="10dp"
-                        android:text="Music Dept: music@wmbr.org"
+                        android:text="@string/email_music"
                         android:textAppearance="@style/TextAppearance.AppCompat.Medium"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
@@ -368,6 +374,7 @@
 
                     <ImageView
                         android:id="@+id/news_dept_email_icon"
+                        android:contentDescription="@string/content_description_email_icon"
                         android:layout_width="wrap_content"
                         android:layout_height="0dp"
                         android:layout_marginEnd="16dp"
@@ -386,7 +393,7 @@
                         android:layout_gravity="center_vertical"
                         android:paddingTop="10dp"
                         android:paddingBottom="10dp"
-                        android:text="News Dept: press@wmbr.org"
+                        android:text="@string/email_news"
                         android:textAppearance="@style/TextAppearance.AppCompat.Medium"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
@@ -407,6 +414,7 @@
 
                     <ImageView
                         android:id="@+id/psa_email_icon"
+                        android:contentDescription="@string/content_description_email_icon"
                         android:layout_width="wrap_content"
                         android:layout_height="0dp"
                         android:layout_marginEnd="16dp"
@@ -425,7 +433,7 @@
                         android:layout_gravity="center_vertical"
                         android:paddingTop="10dp"
                         android:paddingBottom="10dp"
-                        android:text="PSAs: psa@wmbr.org"
+                        android:text="@string/email_psa"
                         android:textAppearance="@style/TextAppearance.AppCompat.Medium"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
@@ -446,6 +454,7 @@
 
                     <ImageView
                         android:id="@+id/guide_email_icon"
+                        android:contentDescription="@string/content_description_email_icon"
                         android:layout_width="wrap_content"
                         android:layout_height="0dp"
                         android:layout_marginEnd="16dp"
@@ -464,7 +473,7 @@
                         android:layout_gravity="center_vertical"
                         android:paddingTop="10dp"
                         android:paddingBottom="10dp"
-                        android:text="Program Guide Requests: guide@wmbr.org"
+                        android:text="@string/email_guide"
                         android:textAppearance="@style/TextAppearance.AppCompat.Medium"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
@@ -485,6 +494,7 @@
 
                     <ImageView
                         android:id="@+id/webmaster_email_icon"
+                        android:contentDescription="@string/content_description_email_icon"
                         android:layout_width="wrap_content"
                         android:layout_height="0dp"
                         android:layout_marginEnd="16dp"
@@ -503,7 +513,7 @@
                         android:layout_gravity="center_vertical"
                         android:paddingTop="10dp"
                         android:paddingBottom="10dp"
-                        android:text="Webmaster: webmaster@wmbr.org"
+                        android:text="@string/email_webmaster"
                         android:textAppearance="@style/TextAppearance.AppCompat.Medium"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
@@ -524,6 +534,7 @@
 
                     <ImageView
                         android:id="@+id/management_email_icon"
+                        android:contentDescription="@string/content_description_email_icon"
                         android:layout_width="wrap_content"
                         android:layout_height="0dp"
                         android:layout_marginEnd="16dp"
@@ -542,7 +553,7 @@
                         android:layout_gravity="center_vertical"
                         android:paddingTop="10dp"
                         android:paddingBottom="10dp"
-                        android:text="Management: management@wmbr.org"
+                        android:text="@string/email_mgmt"
                         android:textAppearance="@style/TextAppearance.AppCompat.Medium"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
@@ -562,7 +573,6 @@
             android:layout_marginStart="5dp"
             android:layout_marginTop="4dp"
             android:layout_marginEnd="5dp"
-            android:layout_marginBottom="64dp"
             card_view:cardCornerRadius="4dp"
             card_view:cardElevation="2dp"
             card_view:cardUseCompatPadding="true"
@@ -582,7 +592,7 @@
                     android:paddingBottom="10dp"
                     android:paddingLeft="5dp"
                     android:paddingRight="5dp"
-                    android:text="By Mail"
+                    android:text="@string/contact_mail"
                     android:textColor="#FFFFFF"
                     android:background="#931621"
                     android:textAppearance="@style/TextAppearance.AppCompat.Headline"/>
@@ -598,6 +608,7 @@
 
                     <ImageView
                         android:id="@+id/address_icon"
+                        android:contentDescription="@string/content_description_address_icon"
                         android:layout_width="wrap_content"
                         android:layout_height="0dp"
                         android:layout_marginEnd="16dp"
@@ -616,7 +627,7 @@
                         android:layout_gravity="center_vertical"
                         android:paddingTop="10dp"
                         android:paddingBottom="10dp"
-                        android:text="3 Ames Street\nCambridge, MA 02142"
+                        android:text="@string/wmbr_address"
                         android:textAppearance="@style/TextAppearance.AppCompat.Medium"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
