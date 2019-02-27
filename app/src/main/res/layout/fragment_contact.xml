@@ -23,24 +23,25 @@
             android:layout_marginEnd="5dp"
             android:layout_marginBottom="4dp"
             card_view:cardCornerRadius="4dp"
-            card_view:cardElevation="2dp">
+            card_view:cardElevation="2dp"
+            card_view:cardUseCompatPadding="true"
+            card_view:cardPreventCornerOverlap="false">
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:paddingLeft="4dp"
-                android:paddingRight="4dp"
                 android:orientation="vertical">
 
                 <TextView
                     android:id="@+id/phone_card_title"
-                    android:layout_width="wrap_content"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical"
                     android:paddingTop="10dp"
                     android:paddingBottom="10dp"
-                    android:text="Contact the DJ - Request Line"
-                    android:textColor="#336699"
+                    android:text="By Phone"
+                    android:textColor="#FFFFFF"
+                    android:background="#1A73E8"
                     android:textAppearance="@style/TextAppearance.AppCompat.Headline"/>
 
                 <android.support.constraint.ConstraintLayout
@@ -51,31 +52,68 @@
                     android:focusable="true">
 
                     <ImageView
-                        android:id="@+id/phone_icon"
+                        android:id="@+id/request_phone_icon"
                         android:layout_width="wrap_content"
                         android:layout_height="0dp"
                         android:layout_marginEnd="16dp"
-                        app:layout_constraintBottom_toBottomOf="@+id/phone_text_view"
-                        app:layout_constraintEnd_toStartOf="@+id/phone_text_view"
+                        app:layout_constraintBottom_toBottomOf="@+id/request_phone_text_view"
+                        app:layout_constraintEnd_toStartOf="@+id/request_phone_text_view"
                         app:layout_constraintHorizontal_bias="0.42"
                         app:layout_constraintHorizontal_chainStyle="packed"
                         app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toTopOf="@+id/phone_text_view"
+                        app:layout_constraintTop_toTopOf="@+id/request_phone_text_view"
                         android:src="@drawable/ic_local_phone_black_24dp" />
 
                     <TextView
-                        android:id="@+id/phone_text_view"
+                        android:id="@+id/request_phone_text_view"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center_vertical"
                         android:paddingTop="10dp"
                         android:paddingBottom="10dp"
-                        android:text="617-253-8810"
+                        android:text="617-253-8810 (Request Line)"
                         android:textAppearance="@style/TextAppearance.AppCompat.Medium"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintHorizontal_bias="0.5"
-                        app:layout_constraintStart_toEndOf="@+id/phone_icon"
+                        app:layout_constraintStart_toEndOf="@+id/request_phone_icon"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                </android.support.constraint.ConstraintLayout>
+
+                <android.support.constraint.ConstraintLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="?android:attr/selectableItemBackground"
+                    android:clickable="true"
+                    android:focusable="true">
+
+                    <ImageView
+                        android:id="@+id/business_phone_icon"
+                        android:layout_width="wrap_content"
+                        android:layout_height="0dp"
+                        android:layout_marginEnd="16dp"
+                        app:layout_constraintBottom_toBottomOf="@+id/business_phone_text_view"
+                        app:layout_constraintEnd_toStartOf="@+id/business_phone_text_view"
+                        app:layout_constraintHorizontal_bias="0.42"
+                        app:layout_constraintHorizontal_chainStyle="packed"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="@+id/business_phone_text_view"
+                        android:src="@drawable/ic_local_phone_black_24dp" />
+
+                    <TextView
+                        android:id="@+id/business_phone_text_view"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical"
+                        android:paddingTop="10dp"
+                        android:paddingBottom="10dp"
+                        android:text="617-253-4000 (Business Line)"
+                        android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintHorizontal_bias="0.5"
+                        app:layout_constraintStart_toEndOf="@+id/business_phone_icon"
                         app:layout_constraintTop_toTopOf="parent" />
 
                 </android.support.constraint.ConstraintLayout>
@@ -93,7 +131,9 @@
             android:layout_marginEnd="5dp"
             android:layout_marginBottom="4dp"
             card_view:cardCornerRadius="4dp"
-            card_view:cardElevation="2dp">
+            card_view:cardElevation="2dp"
+            card_view:cardUseCompatPadding="true"
+            card_view:cardPreventCornerOverlap="false">
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -102,13 +142,14 @@
 
                 <TextView
                     android:id="@+id/media_card_title"
-                    android:layout_width="wrap_content"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical"
                     android:paddingTop="10dp"
                     android:paddingBottom="10dp"
-                    android:text="Connect with us"
-                    android:textColor="#00522A"
+                    android:text="Social Media"
+                    android:textColor="#FFFFFF"
+                    android:background="#A4C639"
                     android:textAppearance="@style/TextAppearance.AppCompat.Headline"/>
 
                 <android.support.constraint.ConstraintLayout
@@ -240,7 +281,9 @@
             android:layout_marginEnd="5dp"
             android:layout_marginBottom="4dp"
             card_view:cardCornerRadius="4dp"
-            card_view:cardElevation="2dp">
+            card_view:cardElevation="2dp"
+            card_view:cardUseCompatPadding="true"
+            card_view:cardPreventCornerOverlap="false">
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -249,13 +292,14 @@
 
                 <TextView
                     android:id="@+id/dept_emails_card_title"
-                    android:layout_width="wrap_content"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical"
                     android:paddingTop="10dp"
                     android:paddingBottom="10dp"
-                    android:text="Contact by Email"
-                    android:textColor="#993399"
+                    android:text="By Email"
+                    android:textColor="#FFFFFF"
+                    android:background="#FFBD07"
                     android:textAppearance="@style/TextAppearance.AppCompat.Headline"/>
 
                 <android.support.constraint.ConstraintLayout
@@ -485,7 +529,6 @@
         <android.support.v7.widget.CardView
             xmlns:card_view="http://schemas.android.com/apk/res-auto"
             android:id="@+id/address_card"
-            android:layout_gravity="center"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginStart="5dp"
@@ -493,24 +536,25 @@
             android:layout_marginEnd="5dp"
             android:layout_marginBottom="64dp"
             card_view:cardCornerRadius="4dp"
-            card_view:cardElevation="2dp">
+            card_view:cardElevation="2dp"
+            card_view:cardUseCompatPadding="true"
+            card_view:cardPreventCornerOverlap="false">
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:paddingLeft="4dp"
-                android:paddingRight="4dp"
                 android:orientation="vertical">
 
                 <TextView
                     android:id="@+id/address_card_title"
-                    android:layout_width="wrap_content"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical"
                     android:paddingTop="10dp"
                     android:paddingBottom="10dp"
-                    android:text="Other Ways"
-                    android:textColor="#931621"
+                    android:text="By Mail"
+                    android:textColor="#FFFFFF"
+                    android:background="#931621"
                     android:textAppearance="@style/TextAppearance.AppCompat.Headline"/>
 
                 <android.support.constraint.ConstraintLayout
@@ -550,42 +594,6 @@
 
                 </android.support.constraint.ConstraintLayout>
 
-                <android.support.constraint.ConstraintLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:background="?android:attr/selectableItemBackground"
-                    android:clickable="true"
-                    android:focusable="true">
-
-                    <ImageView
-                        android:id="@+id/business_phone_icon"
-                        android:layout_width="wrap_content"
-                        android:layout_height="0dp"
-                        android:layout_marginEnd="16dp"
-                        app:layout_constraintBottom_toBottomOf="@+id/business_phone_text_view"
-                        app:layout_constraintEnd_toStartOf="@+id/business_phone_text_view"
-                        app:layout_constraintHorizontal_bias="0.42"
-                        app:layout_constraintHorizontal_chainStyle="packed"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toTopOf="@+id/business_phone_text_view"
-                        android:src="@drawable/ic_local_phone_black_24dp" />
-
-                    <TextView
-                        android:id="@+id/business_phone_text_view"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center_vertical"
-                        android:paddingTop="10dp"
-                        android:paddingBottom="10dp"
-                        android:text="617-253-4000 (Business Line)"
-                        android:textAppearance="@style/TextAppearance.AppCompat.Medium"
-                        app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintHorizontal_bias="0.5"
-                        app:layout_constraintStart_toEndOf="@+id/business_phone_icon"
-                        app:layout_constraintTop_toTopOf="parent" />
-
-                </android.support.constraint.ConstraintLayout>
             </LinearLayout>
         </android.support.v7.widget.CardView>
 
