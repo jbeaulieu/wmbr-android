@@ -129,7 +129,6 @@ public class NavigationActivity extends AppCompatActivity
     }
 
     public void makeCall(View view) {
-        Log.d("TAG", "HERE");
         String uri = null;
 
         switch(view.getTag().toString()) {
@@ -154,6 +153,36 @@ public class NavigationActivity extends AppCompatActivity
             ActivityCompat.requestPermissions(NavigationActivity.this, new String[]{Manifest.permission.CALL_PHONE}, REQUEST_CALL_PHONE_PERMISSION);
             return;
         }
+        startActivity(intent);
+    }
+
+    public void sendEmail(View view) {
+
+        String uri = null;
+
+        switch(view.getTag().toString()) {
+            case "music":
+                uri = "mailto:music@wmbr.org";
+                break;
+            case "news":
+                uri = "mailto:press@wmbr.org";
+                break;
+            case "psa":
+                uri = "mailto:psa@wmbr.org";
+                break;
+            case "guide":
+                uri = "mailto:guide@wmbr.org";
+                break;
+            case "webmaster":
+                uri = "mailto:webmaster@wmbr.org";
+                break;
+            case "management":
+                uri = "mailto:management@wmbr.org";
+                break;
+        }
+
+        Intent intent = new Intent(Intent.ACTION_SENDTO);
+        intent.setData(Uri.parse(uri));
         startActivity(intent);
     }
 }

@@ -411,7 +411,9 @@
                     android:paddingLeft="5dp"
                     android:paddingRight="5dp"
                     android:clickable="true"
-                    android:focusable="true">
+                    android:focusable="true"
+                    android:onClick="sendEmail"
+                    android:tag="music">
 
                     <ImageView
                         android:id="@+id/music_dept_email_icon"
@@ -451,7 +453,9 @@
                     android:paddingLeft="5dp"
                     android:paddingRight="5dp"
                     android:clickable="true"
-                    android:focusable="true">
+                    android:focusable="true"
+                    android:onClick="sendEmail"
+                    android:tag="news">
 
                     <ImageView
                         android:id="@+id/news_dept_email_icon"
@@ -491,7 +495,9 @@
                     android:paddingLeft="5dp"
                     android:paddingRight="5dp"
                     android:clickable="true"
-                    android:focusable="true">
+                    android:focusable="true"
+                    android:onClick="sendEmail"
+                    android:tag="psa">
 
                     <ImageView
                         android:id="@+id/psa_email_icon"
@@ -531,7 +537,9 @@
                     android:paddingLeft="5dp"
                     android:paddingRight="5dp"
                     android:clickable="true"
-                    android:focusable="true">
+                    android:focusable="true"
+                    android:onClick="sendEmail"
+                    android:tag="guide">
 
                     <ImageView
                         android:id="@+id/guide_email_icon"
@@ -571,7 +579,9 @@
                     android:paddingLeft="5dp"
                     android:paddingRight="5dp"
                     android:clickable="true"
-                    android:focusable="true">
+                    android:focusable="true"
+                    android:onClick="sendEmail"
+                    android:tag="webmaster">
 
                     <ImageView
                         android:id="@+id/webmaster_email_icon"
@@ -611,7 +621,9 @@
                     android:paddingLeft="5dp"
                     android:paddingRight="5dp"
                     android:clickable="true"
-                    android:focusable="true">
+                    android:focusable="true"
+                    android:onClick="sendEmail"
+                    android:tag="management">
 
                     <ImageView
                         android:id="@+id/management_email_icon"
