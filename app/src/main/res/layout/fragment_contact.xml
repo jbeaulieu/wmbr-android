@@ -57,17 +57,18 @@
 
                     <ImageView
                         android:id="@+id/request_phone_icon"
-                        android:contentDescription="@string/content_description_phone_icon"
                         android:layout_width="wrap_content"
                         android:layout_height="0dp"
+                        android:layout_marginStart="8dp"
                         android:layout_marginEnd="16dp"
+                        android:contentDescription="@string/content_description_phone_icon"
+                        android:src="@drawable/ic_local_phone_black_24dp"
                         app:layout_constraintBottom_toBottomOf="@+id/request_phone_text_view"
                         app:layout_constraintEnd_toStartOf="@+id/request_phone_text_view"
-                        app:layout_constraintHorizontal_bias="0.42"
+                        app:layout_constraintHorizontal_bias="0"
                         app:layout_constraintHorizontal_chainStyle="packed"
                         app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toTopOf="@+id/request_phone_text_view"
-                        android:src="@drawable/ic_local_phone_black_24dp" />
+                        app:layout_constraintTop_toTopOf="@+id/request_phone_text_view" />
 
                     <TextView
                         android:id="@+id/request_phone_text_view"
@@ -80,7 +81,7 @@
                         android:textAppearance="@style/TextAppearance.AppCompat.Medium"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintHorizontal_bias="0.5"
+                        app:layout_constraintHorizontal_bias="0"
                         app:layout_constraintStart_toEndOf="@+id/request_phone_icon"
                         app:layout_constraintTop_toTopOf="parent" />
 
@@ -97,30 +98,30 @@
 
                     <ImageView
                         android:id="@+id/business_phone_icon"
-                        android:contentDescription="@string/content_description_phone_icon"
                         android:layout_width="wrap_content"
                         android:layout_height="0dp"
+                        android:layout_marginStart="8dp"
                         android:layout_marginEnd="16dp"
+                        android:contentDescription="@string/content_description_phone_icon"
+                        android:src="@drawable/ic_local_phone_black_24dp"
                         app:layout_constraintBottom_toBottomOf="@+id/business_phone_text_view"
                         app:layout_constraintEnd_toStartOf="@+id/business_phone_text_view"
-                        app:layout_constraintHorizontal_bias="0.42"
+                        app:layout_constraintHorizontal_bias="0"
                         app:layout_constraintHorizontal_chainStyle="packed"
                         app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toTopOf="@+id/business_phone_text_view"
-                        android:src="@drawable/ic_local_phone_black_24dp" />
+                        app:layout_constraintTop_toTopOf="@+id/business_phone_text_view"/>
 
                     <TextView
                         android:id="@+id/business_phone_text_view"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_gravity="center_vertical"
                         android:paddingTop="10dp"
                         android:paddingBottom="10dp"
                         android:text="@string/business_phone_number"
                         android:textAppearance="@style/TextAppearance.AppCompat.Medium"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintHorizontal_bias="0.5"
+                        app:layout_constraintHorizontal_bias="0"
                         app:layout_constraintStart_toEndOf="@+id/business_phone_icon"
                         app:layout_constraintTop_toTopOf="parent" />
 
@@ -173,31 +174,31 @@
 
                     <ImageView
                         android:id="@+id/facebook_icon"
-                        android:contentDescription="@string/content_description_fb_icon"
                         android:layout_width="wrap_content"
                         android:layout_height="0dp"
+                        android:layout_marginStart="8dp"
                         android:layout_marginEnd="16dp"
+                        android:contentDescription="@string/content_description_fb_icon"
+                        android:src="@drawable/ic_facebook"
+                        android:tint="#3C5A99"
                         app:layout_constraintBottom_toBottomOf="@+id/facebook_text_view"
                         app:layout_constraintEnd_toStartOf="@+id/facebook_text_view"
-                        app:layout_constraintHorizontal_bias="0.42"
+                        app:layout_constraintHorizontal_bias="0"
                         app:layout_constraintHorizontal_chainStyle="packed"
                         app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toTopOf="@+id/facebook_text_view"
-                        android:src="@drawable/ic_facebook"
-                        android:tint="#3C5A99"/>
+                        app:layout_constraintTop_toTopOf="@+id/facebook_text_view" />
 
                     <TextView
                         android:id="@+id/facebook_text_view"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_gravity="center_vertical"
                         android:paddingTop="10dp"
                         android:paddingBottom="10dp"
                         android:text="@string/social_media_fb"
                         android:textAppearance="@style/TextAppearance.AppCompat.Medium"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintHorizontal_bias="0.5"
+                        app:layout_constraintHorizontal_bias="0"
                         app:layout_constraintStart_toEndOf="@+id/facebook_icon"
                         app:layout_constraintTop_toTopOf="parent" />
 
@@ -213,33 +214,33 @@
                     android:focusable="true">
 
                     <ImageView
-                        android:id="@+id/icon"
+                        android:id="@+id/twitter_icon"
                         android:contentDescription="@string/content_description_twitter_icon"
                         android:layout_width="wrap_content"
                         android:layout_height="0dp"
+                        android:layout_marginStart="8dp"
                         android:layout_marginEnd="16dp"
-                        app:layout_constraintBottom_toBottomOf="@+id/app_name"
-                        app:layout_constraintEnd_toStartOf="@+id/app_name"
-                        app:layout_constraintHorizontal_bias="0.42"
+                        android:src="@drawable/ic_twitter"
+                        android:tint="#38A1F3"
+                        app:layout_constraintBottom_toBottomOf="@+id/twitter_text_view"
+                        app:layout_constraintEnd_toStartOf="@+id/twitter_text_view"
+                        app:layout_constraintHorizontal_bias="0"
                         app:layout_constraintHorizontal_chainStyle="packed"
                         app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toTopOf="@+id/app_name"
-                        android:src="@drawable/ic_twitter"
-                        android:tint="#38A1F3"/>
+                        app:layout_constraintTop_toTopOf="@+id/twitter_text_view" />
 
                     <TextView
-                        android:id="@+id/app_name"
+                        android:id="@+id/twitter_text_view"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_gravity="center_vertical"
                         android:paddingTop="10dp"
                         android:paddingBottom="10dp"
                         android:text="@string/social_media_twitter"
                         android:textAppearance="@style/TextAppearance.AppCompat.Medium"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintHorizontal_bias="0.5"
-                        app:layout_constraintStart_toEndOf="@+id/icon"
+                        app:layout_constraintHorizontal_bias="0"
+                        app:layout_constraintStart_toEndOf="@+id/twitter_icon"
                         app:layout_constraintTop_toTopOf="parent" />
 
                 </android.support.constraint.ConstraintLayout>
@@ -254,33 +255,33 @@
                     android:focusable="true">
 
                     <ImageView
-                        android:id="@+id/icon2"
-                        android:contentDescription="@string/content_description_ig_icon"
+                        android:id="@+id/ig_icon"
                         android:layout_width="wrap_content"
                         android:layout_height="0dp"
+                        android:layout_marginStart="8dp"
                         android:layout_marginEnd="16dp"
-                        app:layout_constraintBottom_toBottomOf="@+id/app_name2"
-                        app:layout_constraintEnd_toStartOf="@+id/app_name2"
-                        app:layout_constraintHorizontal_bias="0.42"
+                        android:contentDescription="@string/content_description_ig_icon"
+                        android:src="@drawable/ic_instagram"
+                        android:tint="#E95950"
+                        app:layout_constraintBottom_toBottomOf="@+id/ig_text_view"
+                        app:layout_constraintEnd_toStartOf="@+id/ig_text_view"
+                        app:layout_constraintHorizontal_bias="0"
                         app:layout_constraintHorizontal_chainStyle="packed"
                         app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toTopOf="@+id/app_name2"
-                        android:src="@drawable/ic_instagram"
-                        android:tint="#E95950"/>
+                        app:layout_constraintTop_toTopOf="@+id/ig_text_view" />
 
                     <TextView
-                        android:id="@+id/app_name2"
+                        android:id="@+id/ig_text_view"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_gravity="center_vertical"
                         android:paddingTop="10dp"
                         android:paddingBottom="10dp"
                         android:text="@string/social_media_ig"
                         android:textAppearance="@style/TextAppearance.AppCompat.Medium"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintHorizontal_bias="0.5"
-                        app:layout_constraintStart_toEndOf="@+id/icon2"
+                        app:layout_constraintHorizontal_bias="0"
+                        app:layout_constraintStart_toEndOf="@+id/ig_icon"
                         app:layout_constraintTop_toTopOf="parent" />
 
                 </android.support.constraint.ConstraintLayout>
@@ -336,27 +337,27 @@
                         android:contentDescription="@string/content_description_address_icon"
                         android:layout_width="wrap_content"
                         android:layout_height="0dp"
+                        android:layout_marginStart="8dp"
                         android:layout_marginEnd="16dp"
+                        android:src="@drawable/ic_place_black_24dp"
                         app:layout_constraintBottom_toBottomOf="@+id/address_text_view"
                         app:layout_constraintEnd_toStartOf="@+id/address_text_view"
-                        app:layout_constraintHorizontal_bias="0.42"
+                        app:layout_constraintHorizontal_bias="0"
                         app:layout_constraintHorizontal_chainStyle="packed"
                         app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toTopOf="@+id/address_text_view"
-                        android:src="@drawable/ic_place_black_24dp" />
+                        app:layout_constraintTop_toTopOf="@+id/address_text_view" />
 
                     <TextView
                         android:id="@+id/address_text_view"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_gravity="center_vertical"
                         android:paddingTop="10dp"
                         android:paddingBottom="10dp"
                         android:text="@string/wmbr_address"
                         android:textAppearance="@style/TextAppearance.AppCompat.Medium"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintHorizontal_bias="0.5"
+                        app:layout_constraintHorizontal_bias="0"
                         app:layout_constraintStart_toEndOf="@+id/address_icon"
                         app:layout_constraintTop_toTopOf="parent" />
 
@@ -413,27 +414,27 @@
                         android:contentDescription="@string/content_description_email_icon"
                         android:layout_width="wrap_content"
                         android:layout_height="0dp"
+                        android:layout_marginStart="8dp"
                         android:layout_marginEnd="16dp"
+                        android:src="@drawable/ic_email_black_24dp"
                         app:layout_constraintBottom_toBottomOf="@+id/music_dept_text_view"
                         app:layout_constraintEnd_toStartOf="@+id/music_dept_text_view"
-                        app:layout_constraintHorizontal_bias="0.42"
+                        app:layout_constraintHorizontal_bias="0"
                         app:layout_constraintHorizontal_chainStyle="packed"
                         app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toTopOf="@+id/music_dept_text_view"
-                        android:src="@drawable/ic_email_black_24dp" />
+                        app:layout_constraintTop_toTopOf="@+id/music_dept_text_view" />
 
                     <TextView
                         android:id="@+id/music_dept_text_view"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_gravity="center_vertical"
                         android:paddingTop="10dp"
                         android:paddingBottom="10dp"
                         android:text="@string/email_music"
                         android:textAppearance="@style/TextAppearance.AppCompat.Body1"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintHorizontal_bias="0.5"
+                        app:layout_constraintHorizontal_bias="0"
                         app:layout_constraintStart_toEndOf="@+id/music_dept_email_icon"
                         app:layout_constraintTop_toTopOf="parent" />
 
@@ -453,27 +454,27 @@
                         android:contentDescription="@string/content_description_email_icon"
                         android:layout_width="wrap_content"
                         android:layout_height="0dp"
+                        android:layout_marginStart="8dp"
                         android:layout_marginEnd="16dp"
+                        android:src="@drawable/ic_email_black_24dp"
                         app:layout_constraintBottom_toBottomOf="@+id/news_dept_text_view"
                         app:layout_constraintEnd_toStartOf="@+id/news_dept_text_view"
-                        app:layout_constraintHorizontal_bias="0.42"
+                        app:layout_constraintHorizontal_bias="0"
                         app:layout_constraintHorizontal_chainStyle="packed"
                         app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toTopOf="@+id/news_dept_text_view"
-                        android:src="@drawable/ic_email_black_24dp" />
+                        app:layout_constraintTop_toTopOf="@+id/news_dept_text_view" />
 
                     <TextView
                         android:id="@+id/news_dept_text_view"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_gravity="center_vertical"
                         android:paddingTop="10dp"
                         android:paddingBottom="10dp"
                         android:text="@string/email_news"
                         android:textAppearance="@style/TextAppearance.AppCompat.Body1"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintHorizontal_bias="0.5"
+                        app:layout_constraintHorizontal_bias="0"
                         app:layout_constraintStart_toEndOf="@+id/news_dept_email_icon"
                         app:layout_constraintTop_toTopOf="parent" />
 
@@ -493,27 +494,27 @@
                         android:contentDescription="@string/content_description_email_icon"
                         android:layout_width="wrap_content"
                         android:layout_height="0dp"
+                        android:layout_marginStart="8dp"
                         android:layout_marginEnd="16dp"
+                        android:src="@drawable/ic_email_black_24dp"
                         app:layout_constraintBottom_toBottomOf="@+id/psa_text_view"
                         app:layout_constraintEnd_toStartOf="@+id/psa_text_view"
-                        app:layout_constraintHorizontal_bias="0.42"
+                        app:layout_constraintHorizontal_bias="0"
                         app:layout_constraintHorizontal_chainStyle="packed"
                         app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toTopOf="@+id/psa_text_view"
-                        android:src="@drawable/ic_email_black_24dp" />
+                        app:layout_constraintTop_toTopOf="@+id/psa_text_view" />
 
                     <TextView
                         android:id="@+id/psa_text_view"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_gravity="center_vertical"
                         android:paddingTop="10dp"
                         android:paddingBottom="10dp"
                         android:text="@string/email_psa"
                         android:textAppearance="@style/TextAppearance.AppCompat.Body1"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintHorizontal_bias="0.5"
+                        app:layout_constraintHorizontal_bias="0"
                         app:layout_constraintStart_toEndOf="@+id/psa_email_icon"
                         app:layout_constraintTop_toTopOf="parent" />
 
@@ -533,27 +534,27 @@
                         android:contentDescription="@string/content_description_email_icon"
                         android:layout_width="wrap_content"
                         android:layout_height="0dp"
+                        android:layout_marginStart="8dp"
                         android:layout_marginEnd="16dp"
+                        android:src="@drawable/ic_email_black_24dp"
                         app:layout_constraintBottom_toBottomOf="@+id/guide_text_view"
                         app:layout_constraintEnd_toStartOf="@+id/guide_text_view"
-                        app:layout_constraintHorizontal_bias="0.42"
+                        app:layout_constraintHorizontal_bias="0"
                         app:layout_constraintHorizontal_chainStyle="packed"
                         app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toTopOf="@+id/guide_text_view"
-                        android:src="@drawable/ic_email_black_24dp" />
+                        app:layout_constraintTop_toTopOf="@+id/guide_text_view" />
 
                     <TextView
                         android:id="@+id/guide_text_view"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_gravity="center_vertical"
                         android:paddingTop="10dp"
                         android:paddingBottom="10dp"
                         android:text="@string/email_guide"
                         android:textAppearance="@style/TextAppearance.AppCompat.Body1"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintHorizontal_bias="0.5"
+                        app:layout_constraintHorizontal_bias="0"
                         app:layout_constraintStart_toEndOf="@+id/guide_email_icon"
                         app:layout_constraintTop_toTopOf="parent" />
 
@@ -573,27 +574,27 @@
                         android:contentDescription="@string/content_description_email_icon"
                         android:layout_width="wrap_content"
                         android:layout_height="0dp"
+                        android:layout_marginStart="8dp"
                         android:layout_marginEnd="16dp"
+                        android:src="@drawable/ic_email_black_24dp"
                         app:layout_constraintBottom_toBottomOf="@+id/webmaster_text_view"
                         app:layout_constraintEnd_toStartOf="@+id/webmaster_text_view"
-                        app:layout_constraintHorizontal_bias="0.42"
+                        app:layout_constraintHorizontal_bias="0"
                         app:layout_constraintHorizontal_chainStyle="packed"
                         app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toTopOf="@+id/webmaster_text_view"
-                        android:src="@drawable/ic_email_black_24dp" />
+                        app:layout_constraintTop_toTopOf="@+id/webmaster_text_view" />
 
                     <TextView
                         android:id="@+id/webmaster_text_view"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_gravity="center_vertical"
                         android:paddingTop="10dp"
                         android:paddingBottom="10dp"
                         android:text="@string/email_webmaster"
                         android:textAppearance="@style/TextAppearance.AppCompat.Body1"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintHorizontal_bias="0.5"
+                        app:layout_constraintHorizontal_bias="0"
                         app:layout_constraintStart_toEndOf="@+id/webmaster_email_icon"
                         app:layout_constraintTop_toTopOf="parent" />
 
@@ -613,27 +614,27 @@
                         android:contentDescription="@string/content_description_email_icon"
                         android:layout_width="wrap_content"
                         android:layout_height="0dp"
+                        android:layout_marginStart="8dp"
                         android:layout_marginEnd="16dp"
+                        android:src="@drawable/ic_email_black_24dp"
                         app:layout_constraintBottom_toBottomOf="@+id/management_text_view"
                         app:layout_constraintEnd_toStartOf="@+id/management_text_view"
-                        app:layout_constraintHorizontal_bias="0.42"
+                        app:layout_constraintHorizontal_bias="0"
                         app:layout_constraintHorizontal_chainStyle="packed"
                         app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toTopOf="@+id/management_text_view"
-                        android:src="@drawable/ic_email_black_24dp" />
+                        app:layout_constraintTop_toTopOf="@+id/management_text_view" />
 
                     <TextView
                         android:id="@+id/management_text_view"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_gravity="center_vertical"
                         android:paddingTop="10dp"
                         android:paddingBottom="10dp"
                         android:text="@string/email_mgmt"
                         android:textAppearance="@style/TextAppearance.AppCompat.Body1"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintHorizontal_bias="0.5"
+                        app:layout_constraintHorizontal_bias="0"
                         app:layout_constraintStart_toEndOf="@+id/management_email_icon"
                         app:layout_constraintTop_toTopOf="parent" />
 
