@@ -50,10 +50,12 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:background="?android:attr/selectableItemBackground"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:onClick="makeCall"
                     android:paddingLeft="5dp"
                     android:paddingRight="5dp"
-                    android:clickable="true"
-                    android:focusable="true">
+                    android:tag="request">
 
                     <ImageView
                         android:id="@+id/request_phone_icon"
@@ -94,7 +96,9 @@
                     android:paddingLeft="5dp"
                     android:paddingRight="5dp"
                     android:clickable="true"
-                    android:focusable="true">
+                    android:focusable="true"
+                    android:onClick="makeCall"
+                    android:tag="business">
 
                     <ImageView
                         android:id="@+id/business_phone_icon"

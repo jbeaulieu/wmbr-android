@@ -1,9 +1,15 @@
 package com.jbproductions.wmbr;
 
+import android.Manifest;
+import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.StrictMode;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
+import android.support.v4.app.ActivityCompat;
+import android.util.Log;
 import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.FragmentManager;
@@ -19,6 +25,9 @@ public class NavigationActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
     FragmentManager fragmentManager = getSupportFragmentManager();
+    private static final int REQUEST_CALL_PHONE_PERMISSION = 429;
+    private static final int REQUEST_SEND_SMS_PERMISSION = 501;
+    private static final int REQUEST_SEND_EMAIL_PERMISSION = 394;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -112,5 +121,39 @@ public class NavigationActivity extends AppCompatActivity
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
+        Log.d("PERMISSION GRANTED", Integer.toString(requestCode));
+    }
+
+    public void makeCall(View view) {
+        Log.d("TAG", "HERE");
+        String uri = null;
+
+        switch(view.getTag().toString()) {
+            case "request":
+                uri = "tel:6172538810";
+                break;
+            case "business":
+                uri = "tel:6172534000";
+                break;
+        }
+
+        Intent intent = new Intent(Intent.ACTION_CALL);
+        intent.setData(Uri.parse(uri));
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.CALL_PHONE) != PackageManager.PERMISSION_GRANTED) {
+            // TODO: Consider calling
+            //    ActivityCompat#requestPermissions
+            // here to request the missing permissions, and then overriding
+            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+            //                                          int[] grantResults)
+            // to handle the case where the user grants the permission. See the documentation
+            // for ActivityCompat#requestPermissions for more details.
+            ActivityCompat.requestPermissions(NavigationActivity.this, new String[]{Manifest.permission.CALL_PHONE}, REQUEST_CALL_PHONE_PERMISSION);
+            return;
+        }
+        startActivity(intent);
     }
 }
