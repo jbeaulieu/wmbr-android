@@ -156,6 +156,23 @@ public class NavigationActivity extends AppCompatActivity
         startActivity(intent);
     }
 
+
+    public void locateWMBR(View view) {
+
+        // The below is a hard-encoded URI of WMBR's physical (not mailing) address
+        // This allows map applications to pull up a pin for WMBR at Walker Memorial
+        Uri geolocation = Uri.parse("geo:0,0?q=WMBR%2088.1%20FM%2C%20142%20Memorial%20Drive%2C%20Cambridge%2C%20MA%2002142");
+
+        Intent intent = new Intent(Intent.ACTION_VIEW);
+        intent.setData(geolocation);
+
+        // Before passing the intent, we call resolveActivity make sure that there is at least one activity that can receive it
+        // This handles the edge case where a user does not have a map application installed on the phone
+        if (intent.resolveActivity(getPackageManager()) != null) {
+            startActivity(intent);
+        }
+    }
+
     public void sendEmail(View view) {
 
         String uri = null;

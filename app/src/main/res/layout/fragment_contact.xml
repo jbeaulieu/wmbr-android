@@ -334,7 +334,8 @@
                     android:paddingRight="5dp"
                     android:background="?android:attr/selectableItemBackground"
                     android:clickable="true"
-                    android:focusable="true">
+                    android:focusable="true"
+                    android:onClick="locateWMBR">
 
                     <ImageView
                         android:id="@+id/address_icon"
