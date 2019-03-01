@@ -4,29 +4,35 @@ import android.Manifest;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
 import android.os.StrictMode;
+import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentTransaction;
 import android.util.Log;
 import android.view.View;
 import android.support.design.widget.NavigationView;
-import android.support.v4.app.FragmentManager;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.view.Menu;
 import android.view.MenuItem;
 
 public class NavigationActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
-    FragmentManager fragmentManager = getSupportFragmentManager();
+    private final Handler mDrawerHandler = new Handler();
     DrawerLayout drawer;
     NavigationView navigationView;
     Toolbar toolbar;
+
+    private float toolbarElevation;
+
     private static final int REQUEST_CALL_PHONE_PERMISSION = 429;
 
     @Override
@@ -41,6 +47,27 @@ public class NavigationActivity extends AppCompatActivity
         toolbar = findViewById(R.id.toolbar);
 
         setSupportActionBar(toolbar);
+
+        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close)  {
+            @Override
+            public void onDrawerOpened(View drawerView) {
+                super.onDrawerOpened(drawerView);
+                super.onDrawerSlide(drawerView, 0); // disables the arrow @ completed tate
+            }
+
+            @Override
+            public void onDrawerSlide(View drawerView, float slideOffset) {
+                super.onDrawerSlide(drawerView, 0); // disables the animation
+            }
+        };
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            toolbarElevation = toolbar.getElevation();
+        }
+
+        drawer.addDrawerListener(toggle);
+        toggle.syncState();
+
         FloatingActionButton fab = findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -49,11 +76,6 @@ public class NavigationActivity extends AppCompatActivity
                         .setAction("Action", null).show();
             }
         });
-
-        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
-                this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
-        drawer.addDrawerListener(toggle);
-        toggle.syncState();
 
         navigationView.setNavigationItemSelectedListener(this);
     }
@@ -68,41 +90,50 @@ public class NavigationActivity extends AppCompatActivity
     }
 
     @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.navigation, menu);
+    public boolean onNavigationItemSelected(@NonNull final MenuItem menuItem) {
+        mDrawerHandler.removeCallbacksAndMessages(null);
+        mDrawerHandler.postDelayed(new Runnable() {
+            public void run() {
+                navigate(menuItem.getItemId());
+            }
+        }, 250);
+        drawer.closeDrawer(navigationView);
         return true;
     }
 
-
-    @SuppressWarnings("StatementWithEmptyBody")
-    @Override
-    public boolean onNavigationItemSelected(MenuItem item) {
+    public void navigate(int itemId) {
         // Handle navigation view item clicks
-        int id = item.getItemId();
+        navigationView.setCheckedItem(itemId);
 
-        if (id == R.id.nav_live_stream) {
-            StreamFragment streamFragment = new StreamFragment();
-            fragmentManager.beginTransaction().replace(R.id.defaultLayout, streamFragment, streamFragment.getTag()).commit();
-        } else if (id == R.id.nav_schedule) {
-            ScheduleFragment scheduleFragment = new ScheduleFragment();
-            fragmentManager.beginTransaction().replace(R.id.defaultLayout, scheduleFragment, scheduleFragment.getTag()).commit();
-        } else if (id == R.id.nav_archives) {
-            ArchiveFragment archiveFragment = new ArchiveFragment();
-            fragmentManager.beginTransaction().replace(R.id.defaultLayout, archiveFragment, archiveFragment.getTag()).commit();
-        } else if (id == R.id.nav_event_cal) {
-            EventsFragment eventsFragment = new EventsFragment();
-            fragmentManager.beginTransaction().replace(R.id.defaultLayout, eventsFragment, eventsFragment.getTag()).commit();
-        } else if (id == R.id.nav_contact) {
-            ContactFragment contactFragment = new ContactFragment();
-            fragmentManager.beginTransaction().replace(R.id.defaultLayout, contactFragment, contactFragment.getTag()).commit();
-        } else if (id == R.id.nav_settings) {
-
+        switch (itemId) {
+            case R.id.nav_live_stream:
+                displayFragment(new StreamFragment(), true);
+                break;
+            case R.id.nav_schedule:
+                displayFragment(new ScheduleFragment(), true);
+                break;
+            case R.id.nav_archives:
+                displayFragment(new ArchiveFragment(), true);
+                break;
+            case R.id.nav_event_cal:
+                displayFragment(new EventsFragment(), true);
+                break;
+            case R.id.nav_contact:
+                displayFragment(new ContactFragment(), true);
+                break;
+            case R.id.nav_settings:
+                //displayFragment(new StreamFragment(), true);
+                break;
         }
+    }
 
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-        drawer.closeDrawer(GravityCompat.START);
-        return true;
+    private void displayFragment(@NonNull Fragment navigationFragment, boolean setElevation) {
+        supportInvalidateOptionsMenu();
+        getSupportFragmentManager().beginTransaction().setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
+                .replace(R.id.defaultLayout, navigationFragment).commitNow();
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            toolbar.setElevation(setElevation ? toolbarElevation : 0);
+        }
     }
 
     @Override
