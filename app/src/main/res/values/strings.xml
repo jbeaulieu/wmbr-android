@@ -8,7 +8,32 @@
 
     <string name="stream_button_description">Start live stream</string>
     <string name="stop_button_description">Stop live stream</string>
+    <string name="content_description_phone_icon">Phone Icon</string>
+    <string name="content_description_email_icon">Email Icon</string>
+    <string name="content_description_address_icon">Location Icon</string>
+    <string name="content_description_fb_icon">Facebook Icon</string>
+    <string name="content_description_twitter_icon">Twitter Icon</string>
+    <string name="content_description_ig_icon">Instagram Icon</string>
 
     <string name="show_title_placeholder">Show Title</string>
     <string name="buffer_message">Just a sec, buffering</string>
+
+    <string name="contact_by_phone">By Phone</string>
+    <string name="request_phone_number">617–253–8810 (Request Line)</string>
+    <string name="business_phone_number">617–253–4000 (Business Line)</string>
+    <string name="contact_social_media">Social Media</string>
+    <string name="social_media_fb">Facebook</string>
+    <string name="social_media_twitter">Twitter</string>
+    <string name="social_media_ig">Instagram</string>
+    <string name="contact_email">By Email</string>
+    <string name="email_music">Music Dept: music@wmbr.org</string>
+    <string name="email_news">News Dept: press@wmbr.org</string>
+    <string name="email_psa">PSAs: psa@wmbr.org</string>
+    <string name="email_guide">Program Guide Requests: guide@wmbr.org</string>
+    <string name="email_webmaster">Webmaster: webmaster@wmbr.org</string>
+    <string name="email_mgmt">Management: management@wmbr.org</string>
+    <string name="contact_mail">By Mail</string>
+    <string name="wmbr_address">3 Ames Street\nCambridge, MA 02142</string>
+    <string name="studio_disclaimer">Please note that WMBR studios are used exclusively for our on-air broadcasting and are not available for booking. Please contact MIT A/V services to book studio time on MIT\'s campus</string>
+
 </resources>

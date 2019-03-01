@@ -1,9 +1,15 @@
 package com.jbproductions.wmbr;
 
+import android.Manifest;
+import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.StrictMode;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
+import android.support.v4.app.ActivityCompat;
+import android.util.Log;
 import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.FragmentManager;
@@ -19,6 +25,9 @@ public class NavigationActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
     FragmentManager fragmentManager = getSupportFragmentManager();
+    private static final int REQUEST_CALL_PHONE_PERMISSION = 429;
+    private static final int REQUEST_SEND_SMS_PERMISSION = 501;
+    private static final int REQUEST_SEND_EMAIL_PERMISSION = 394;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -112,5 +121,127 @@ public class NavigationActivity extends AppCompatActivity
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
+        Log.d("PERMISSION GRANTED", Integer.toString(requestCode));
+    }
+
+    public void makeCall(View view) {
+        String uri = null;
+
+        switch(view.getTag().toString()) {
+            case "request":
+                uri = "tel:6172538810";
+                break;
+            case "business":
+                uri = "tel:6172534000";
+                break;
+        }
+
+        Intent intent = new Intent(Intent.ACTION_CALL);
+        intent.setData(Uri.parse(uri));
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.CALL_PHONE) != PackageManager.PERMISSION_GRANTED) {
+            // TODO: Consider calling
+            //    ActivityCompat#requestPermissions
+            // here to request the missing permissions, and then overriding
+            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+            //                                          int[] grantResults)
+            // to handle the case where the user grants the permission. See the documentation
+            // for ActivityCompat#requestPermissions for more details.
+            ActivityCompat.requestPermissions(NavigationActivity.this, new String[]{Manifest.permission.CALL_PHONE}, REQUEST_CALL_PHONE_PERMISSION);
+            return;
+        }
+        startActivity(intent);
+    }
+
+
+    public void locateWMBR(View view) {
+
+        // The below is a hard-encoded URI of WMBR's physical (not mailing) address
+        // This allows map applications to pull up a pin for WMBR at Walker Memorial
+        Uri geolocation = Uri.parse("geo:0,0?q=WMBR%2088.1%20FM%2C%20142%20Memorial%20Drive%2C%20Cambridge%2C%20MA%2002142");
+
+        Intent intent = new Intent(Intent.ACTION_VIEW);
+        intent.setData(geolocation);
+
+        // Before passing the intent, we call resolveActivity make sure that there is at least one activity that can receive it
+        // This handles the edge case where a user does not have a map application installed on the phone
+        if (intent.resolveActivity(getPackageManager()) != null) {
+            startActivity(intent);
+        }
+    }
+
+    public void sendEmail(View view) {
+
+        String uri = null;
+
+        switch(view.getTag().toString()) {
+            case "music":
+                uri = "mailto:music@wmbr.org";
+                break;
+            case "news":
+                uri = "mailto:press@wmbr.org";
+                break;
+            case "psa":
+                uri = "mailto:psa@wmbr.org";
+                break;
+            case "guide":
+                uri = "mailto:guide@wmbr.org";
+                break;
+            case "webmaster":
+                uri = "mailto:webmaster@wmbr.org";
+                break;
+            case "management":
+                uri = "mailto:management@wmbr.org";
+                break;
+        }
+
+        Intent intent = new Intent(Intent.ACTION_SENDTO);
+        intent.setData(Uri.parse(uri));
+        startActivity(intent);
+    }
+
+    public void openFacebook(View view) {
+        Intent intent;
+        try {
+            // Check if Facebook app is installed and if so, open it to WMBR's page
+            this.getPackageManager().getPackageInfo("com.facebook.katana", 0);
+            intent = new Intent(Intent.ACTION_VIEW, Uri.parse("fb://page/22335947090"));
+            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        } catch (Exception e) {
+            // Facebook is not installed, open the browser instead
+            intent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://www.facebook.com/wmbrfm/"));
+        }
+        this.startActivity(intent);
+    }
+
+    public void openTwitter(View view) {
+        Intent intent;
+        try {
+            // Check if Twitter app is installed and if so, open it to WMBR's page
+            this.getPackageManager().getPackageInfo("com.twitter.android", 0);
+            intent = new Intent(Intent.ACTION_VIEW, Uri.parse("twitter://user?screen_name=wmbr"));
+            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        } catch (Exception e) {
+            // Twitter is not installed, open the browser instead
+            intent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://twitter.com/wmbr"));
+        }
+        this.startActivity(intent);
+    }
+
+    public void openInstagram(View view) {
+        Intent intent;
+        try {
+            // Check if IG app is installed and if so, open it to WMBR's page
+            this.getPackageManager().getPackageInfo("com.instagram.android", 0);
+            intent = new Intent(Intent.ACTION_VIEW, Uri.parse("instagram://user?username=wmbrfm"));
+            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        } catch (Exception e) {
+            // IG is not installed, open the browser instead
+            intent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://www.instagram.com/wmbrfm/"));
+        }
+        this.startActivity(intent);
     }
 }

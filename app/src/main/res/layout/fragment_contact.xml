@@ -1,4 +1,4 @@
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -7,170 +7,669 @@
     android:orientation="vertical"
     tools:context="com.jbproductions.wmbr.ContactFragment">
 
-    <!-- TODO: Update blank fragment layout -->
-
-    <ScrollView
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
 
-        <TableLayout
-            android:id="@+id/ContactDJTable"
+        <android.support.v7.widget.CardView
+            xmlns:card_view="http://schemas.android.com/apk/res-auto"
+            android:id="@+id/phone_card"
+            android:layout_gravity="center"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_margin="@dimen/fab_margin">
+            android:layout_marginStart="5dp"
+            android:layout_marginTop="4dp"
+            android:layout_marginEnd="5dp"
+            android:layout_marginBottom="4dp"
+            card_view:cardCornerRadius="4dp"
+            card_view:cardElevation="2dp"
+            card_view:cardUseCompatPadding="true"
+            card_view:cardPreventCornerOverlap="false">
 
-            <TableRow
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:background="#336699">
+                android:orientation="vertical">
 
                 <TextView
-                    android:id="@+id/ContactDJHeaderText"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:padding="4dp"
-                    android:text="Requests/Contact the DJ"
-                    android:textColor="#FFFFFF" />
-            </TableRow>
-
-            <TableRow
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:background="@drawable/border_blue">
-
-                <TextView
-                    android:id="@+id/contactDJPhone"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:padding="4dp"
-                    android:text="Call/Text: 617-253-8810\nIM: WMBRDJ" />
-            </TableRow>
-
-            <TableRow
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_marginTop="20dp"
-                android:background="#00522A">
-
-                <TextView
-                    android:id="@+id/SocialMediaHeader"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:padding="4dp"
-                    android:text="Connect with us on Social Media"
-                    android:textColor="#FFFFFF" />
-
-            </TableRow>
-
-            <TableRow
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:background="@drawable/border_green">
-
-                <LinearLayout
+                    android:id="@+id/phone_card_title"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:padding="8dp"
-                    android:orientation="horizontal">
+                    android:layout_gravity="center_vertical"
+                    android:paddingTop="10dp"
+                    android:paddingBottom="10dp"
+                    android:paddingLeft="5dp"
+                    android:paddingRight="5dp"
+                    android:text="@string/contact_by_phone"
+                    android:textColor="#FFFFFF"
+                    android:background="#1A73E8"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Headline"/>
+
+                <android.support.constraint.ConstraintLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="?android:attr/selectableItemBackground"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:onClick="makeCall"
+                    android:paddingLeft="5dp"
+                    android:paddingRight="5dp"
+                    android:tag="request">
 
                     <ImageView
-                        android:id="@+id/imageView2"
-                        android:layout_width="75dp"
-                        android:layout_height="75dp"
-                        android:layout_weight="1"
-                        android:src="@drawable/facebook_logo" />
+                        android:id="@+id/request_phone_icon"
+                        android:layout_width="wrap_content"
+                        android:layout_height="0dp"
+                        android:layout_marginStart="8dp"
+                        android:layout_marginEnd="16dp"
+                        android:contentDescription="@string/content_description_phone_icon"
+                        android:src="@drawable/ic_local_phone_black_24dp"
+                        app:layout_constraintBottom_toBottomOf="@+id/request_phone_text_view"
+                        app:layout_constraintEnd_toStartOf="@+id/request_phone_text_view"
+                        app:layout_constraintHorizontal_bias="0"
+                        app:layout_constraintHorizontal_chainStyle="packed"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="@+id/request_phone_text_view" />
+
+                    <TextView
+                        android:id="@+id/request_phone_text_view"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical"
+                        android:paddingTop="10dp"
+                        android:paddingBottom="10dp"
+                        android:text="@string/request_phone_number"
+                        android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintHorizontal_bias="0"
+                        app:layout_constraintStart_toEndOf="@+id/request_phone_icon"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                </android.support.constraint.ConstraintLayout>
+
+                <android.support.constraint.ConstraintLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="?android:attr/selectableItemBackground"
+                    android:paddingLeft="5dp"
+                    android:paddingRight="5dp"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:onClick="makeCall"
+                    android:tag="business">
 
                     <ImageView
-                        android:id="@+id/imageView4"
-                        android:layout_width="75dp"
-                        android:layout_height="75dp"
-                        android:layout_weight="1"
-                        android:src="@drawable/twitter_logo" />
+                        android:id="@+id/business_phone_icon"
+                        android:layout_width="wrap_content"
+                        android:layout_height="0dp"
+                        android:layout_marginStart="8dp"
+                        android:layout_marginEnd="16dp"
+                        android:contentDescription="@string/content_description_phone_icon"
+                        android:src="@drawable/ic_local_phone_black_24dp"
+                        app:layout_constraintBottom_toBottomOf="@+id/business_phone_text_view"
+                        app:layout_constraintEnd_toStartOf="@+id/business_phone_text_view"
+                        app:layout_constraintHorizontal_bias="0"
+                        app:layout_constraintHorizontal_chainStyle="packed"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="@+id/business_phone_text_view"/>
+
+                    <TextView
+                        android:id="@+id/business_phone_text_view"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:paddingTop="10dp"
+                        android:paddingBottom="10dp"
+                        android:text="@string/business_phone_number"
+                        android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintHorizontal_bias="0"
+                        app:layout_constraintStart_toEndOf="@+id/business_phone_icon"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                </android.support.constraint.ConstraintLayout>
+            </LinearLayout>
+        </android.support.v7.widget.CardView>
+
+        <android.support.v7.widget.CardView
+            xmlns:card_view="http://schemas.android.com/apk/res-auto"
+            android:id="@+id/media_card_view"
+            android:layout_gravity="center"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="5dp"
+            android:layout_marginTop="4dp"
+            android:layout_marginEnd="5dp"
+            android:layout_marginBottom="4dp"
+            card_view:cardCornerRadius="4dp"
+            card_view:cardElevation="2dp"
+            card_view:cardUseCompatPadding="true"
+            card_view:cardPreventCornerOverlap="false">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/media_card_title"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:paddingTop="10dp"
+                    android:paddingBottom="10dp"
+                    android:paddingLeft="5dp"
+                    android:paddingRight="5dp"
+                    android:text="@string/contact_social_media"
+                    android:textColor="#FFFFFF"
+                    android:background="#A4C639"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Headline"/>
+
+                <android.support.constraint.ConstraintLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="?android:attr/selectableItemBackground"
+                    android:paddingLeft="5dp"
+                    android:paddingRight="5dp"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:onClick="openFacebook">
 
                     <ImageView
-                        android:id="@+id/imageView5"
-                        android:layout_width="75dp"
-                        android:layout_height="75dp"
-                        android:layout_weight="1"
-                        android:src="@drawable/instagram_logo" />
+                        android:id="@+id/facebook_icon"
+                        android:layout_width="wrap_content"
+                        android:layout_height="0dp"
+                        android:layout_marginStart="8dp"
+                        android:layout_marginEnd="16dp"
+                        android:contentDescription="@string/content_description_fb_icon"
+                        android:src="@drawable/ic_facebook"
+                        android:tint="#3C5A99"
+                        app:layout_constraintBottom_toBottomOf="@+id/facebook_text_view"
+                        app:layout_constraintEnd_toStartOf="@+id/facebook_text_view"
+                        app:layout_constraintHorizontal_bias="0"
+                        app:layout_constraintHorizontal_chainStyle="packed"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="@+id/facebook_text_view" />
 
-                </LinearLayout>
+                    <TextView
+                        android:id="@+id/facebook_text_view"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:paddingTop="10dp"
+                        android:paddingBottom="10dp"
+                        android:text="@string/social_media_fb"
+                        android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintHorizontal_bias="0"
+                        app:layout_constraintStart_toEndOf="@+id/facebook_icon"
+                        app:layout_constraintTop_toTopOf="parent" />
 
-            </TableRow>
+                </android.support.constraint.ConstraintLayout>
 
-            <TableRow
+                <android.support.constraint.ConstraintLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="?android:attr/selectableItemBackground"
+                    android:paddingLeft="5dp"
+                    android:paddingRight="5dp"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:onClick="openTwitter">
+
+                    <ImageView
+                        android:id="@+id/twitter_icon"
+                        android:contentDescription="@string/content_description_twitter_icon"
+                        android:layout_width="wrap_content"
+                        android:layout_height="0dp"
+                        android:layout_marginStart="8dp"
+                        android:layout_marginEnd="16dp"
+                        android:src="@drawable/ic_twitter"
+                        android:tint="#38A1F3"
+                        app:layout_constraintBottom_toBottomOf="@+id/twitter_text_view"
+                        app:layout_constraintEnd_toStartOf="@+id/twitter_text_view"
+                        app:layout_constraintHorizontal_bias="0"
+                        app:layout_constraintHorizontal_chainStyle="packed"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="@+id/twitter_text_view" />
+
+                    <TextView
+                        android:id="@+id/twitter_text_view"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:paddingTop="10dp"
+                        android:paddingBottom="10dp"
+                        android:text="@string/social_media_twitter"
+                        android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintHorizontal_bias="0"
+                        app:layout_constraintStart_toEndOf="@+id/twitter_icon"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                </android.support.constraint.ConstraintLayout>
+
+                <android.support.constraint.ConstraintLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="?android:attr/selectableItemBackground"
+                    android:paddingLeft="5dp"
+                    android:paddingRight="5dp"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:onClick="openInstagram">
+
+                    <ImageView
+                        android:id="@+id/ig_icon"
+                        android:layout_width="wrap_content"
+                        android:layout_height="0dp"
+                        android:layout_marginStart="8dp"
+                        android:layout_marginEnd="16dp"
+                        android:contentDescription="@string/content_description_ig_icon"
+                        android:src="@drawable/ic_instagram"
+                        android:tint="#E95950"
+                        app:layout_constraintBottom_toBottomOf="@+id/ig_text_view"
+                        app:layout_constraintEnd_toStartOf="@+id/ig_text_view"
+                        app:layout_constraintHorizontal_bias="0"
+                        app:layout_constraintHorizontal_chainStyle="packed"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="@+id/ig_text_view" />
+
+                    <TextView
+                        android:id="@+id/ig_text_view"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:paddingTop="10dp"
+                        android:paddingBottom="10dp"
+                        android:text="@string/social_media_ig"
+                        android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintHorizontal_bias="0"
+                        app:layout_constraintStart_toEndOf="@+id/ig_icon"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                </android.support.constraint.ConstraintLayout>
+
+            </LinearLayout>
+
+        </android.support.v7.widget.CardView>
+
+        <android.support.v7.widget.CardView
+            xmlns:card_view="http://schemas.android.com/apk/res-auto"
+            android:id="@+id/address_card"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="5dp"
+            android:layout_marginTop="4dp"
+            android:layout_marginEnd="5dp"
+            android:layout_marginBottom="4dp"
+            card_view:cardCornerRadius="4dp"
+            card_view:cardElevation="2dp"
+            card_view:cardUseCompatPadding="true"
+            card_view:cardPreventCornerOverlap="false">
+
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_marginTop="20dp"
-                android:background="#993399">
+                android:orientation="vertical">
 
                 <TextView
-                    android:id="@+id/departmentEmailHeader"
-                    android:layout_width="wrap_content"
+                    android:id="@+id/address_card_title"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:padding="4dp"
-                    android:text="Departments by Email"
-                    android:textColor="#FFFFFF" />
+                    android:layout_gravity="center_vertical"
+                    android:paddingTop="10dp"
+                    android:paddingBottom="10dp"
+                    android:paddingLeft="5dp"
+                    android:paddingRight="5dp"
+                    android:text="@string/contact_mail"
+                    android:textColor="#FFFFFF"
+                    android:background="#931621"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Headline"/>
 
-            </TableRow>
+                <android.support.constraint.ConstraintLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:paddingLeft="5dp"
+                    android:paddingRight="5dp"
+                    android:background="?android:attr/selectableItemBackground"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:onClick="locateWMBR">
 
-            <TableRow
+                    <ImageView
+                        android:id="@+id/address_icon"
+                        android:contentDescription="@string/content_description_address_icon"
+                        android:layout_width="wrap_content"
+                        android:layout_height="0dp"
+                        android:layout_marginStart="8dp"
+                        android:layout_marginEnd="16dp"
+                        android:src="@drawable/ic_place_black_24dp"
+                        app:layout_constraintBottom_toBottomOf="@+id/address_text_view"
+                        app:layout_constraintEnd_toStartOf="@+id/address_text_view"
+                        app:layout_constraintHorizontal_bias="0"
+                        app:layout_constraintHorizontal_chainStyle="packed"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="@+id/address_text_view" />
+
+                    <TextView
+                        android:id="@+id/address_text_view"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:paddingTop="10dp"
+                        android:paddingBottom="10dp"
+                        android:text="@string/wmbr_address"
+                        android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintHorizontal_bias="0"
+                        app:layout_constraintStart_toEndOf="@+id/address_icon"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                </android.support.constraint.ConstraintLayout>
+
+            </LinearLayout>
+        </android.support.v7.widget.CardView>
+
+        <android.support.v7.widget.CardView
+            xmlns:card_view="http://schemas.android.com/apk/res-auto"
+            android:id="@+id/dept_emails_card"
+            android:layout_gravity="center"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="5dp"
+            android:layout_marginTop="4dp"
+            android:layout_marginEnd="5dp"
+            android:layout_marginBottom="4dp"
+            card_view:cardCornerRadius="4dp"
+            card_view:cardElevation="2dp"
+            card_view:cardUseCompatPadding="true"
+            card_view:cardPreventCornerOverlap="false">
+
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:background="@drawable/border_purple">
-
-
-                <TextView
-                    android:id="@+id/contactDJPhone4"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:padding="4dp"
-                    android:text="Music Dept.: music@wmbr.org\nNews Dept.: press@wmbr.org\nPSAs: psa@wmbr.org\nProgram Guide Request: guide@wmbr.org\nWebmaster: webmaster@wmbr.org\nManagement: management@wmbr.org" />
-            </TableRow>
-
-            <TableRow
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_marginTop="20dp"
-                android:background="#931621">
+                android:orientation="vertical">
 
                 <TextView
-                    android:id="@+id/otherContactHeader"
-                    android:layout_width="wrap_content"
+                    android:id="@+id/dept_emails_card_title"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:padding="4dp"
-                    android:text="Other Ways to Get in Touch"
-                    android:textColor="#FFFFFF" />
+                    android:layout_gravity="center_vertical"
+                    android:paddingTop="10dp"
+                    android:paddingBottom="10dp"
+                    android:paddingLeft="5dp"
+                    android:paddingRight="5dp"
+                    android:text="@string/contact_email"
+                    android:textColor="#FFFFFF"
+                    android:background="#FFBD07"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Headline"/>
 
-            </TableRow>
-
-            <TableRow
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:background="@drawable/border_red">
-
-
-                <TextView
-                    android:id="@+id/otherContactPane"
-                    android:layout_width="wrap_content"
+                <android.support.constraint.ConstraintLayout
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:padding="4dp"
-                    android:text="WMBR Radio\n3 Ames Street\nCambridge, MA 02139" />
+                    android:background="?android:attr/selectableItemBackground"
+                    android:paddingLeft="5dp"
+                    android:paddingRight="5dp"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:onClick="sendEmail"
+                    android:tag="music">
 
-            </TableRow>
+                    <ImageView
+                        android:id="@+id/music_dept_email_icon"
+                        android:contentDescription="@string/content_description_email_icon"
+                        android:layout_width="wrap_content"
+                        android:layout_height="0dp"
+                        android:layout_marginStart="8dp"
+                        android:layout_marginEnd="16dp"
+                        android:src="@drawable/ic_email_black_24dp"
+                        app:layout_constraintBottom_toBottomOf="@+id/music_dept_text_view"
+                        app:layout_constraintEnd_toStartOf="@+id/music_dept_text_view"
+                        app:layout_constraintHorizontal_bias="0"
+                        app:layout_constraintHorizontal_chainStyle="packed"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="@+id/music_dept_text_view" />
 
-            <TableRow
-                android:layout_width="match_parent"
-                android:layout_height="match_parent" >
+                    <TextView
+                        android:id="@+id/music_dept_text_view"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:paddingTop="10dp"
+                        android:paddingBottom="10dp"
+                        android:text="@string/email_music"
+                        android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintHorizontal_bias="0"
+                        app:layout_constraintStart_toEndOf="@+id/music_dept_email_icon"
+                        app:layout_constraintTop_toTopOf="parent" />
 
-                <TextView
-                    android:id="@+id/textView4"
-                    android:layout_width="wrap_content"
+                </android.support.constraint.ConstraintLayout>
+
+                <android.support.constraint.ConstraintLayout
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="Please note that WMBR studios are used exclusively for our on-air broadcasting and are not available for booking. Please contact MIT A/V Services to book studio time on MIT's campus." />
-            </TableRow>
+                    android:background="?android:attr/selectableItemBackground"
+                    android:paddingLeft="5dp"
+                    android:paddingRight="5dp"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:onClick="sendEmail"
+                    android:tag="news">
 
-        </TableLayout>
+                    <ImageView
+                        android:id="@+id/news_dept_email_icon"
+                        android:contentDescription="@string/content_description_email_icon"
+                        android:layout_width="wrap_content"
+                        android:layout_height="0dp"
+                        android:layout_marginStart="8dp"
+                        android:layout_marginEnd="16dp"
+                        android:src="@drawable/ic_email_black_24dp"
+                        app:layout_constraintBottom_toBottomOf="@+id/news_dept_text_view"
+                        app:layout_constraintEnd_toStartOf="@+id/news_dept_text_view"
+                        app:layout_constraintHorizontal_bias="0"
+                        app:layout_constraintHorizontal_chainStyle="packed"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="@+id/news_dept_text_view" />
 
-    </ScrollView>
-</LinearLayout>
+                    <TextView
+                        android:id="@+id/news_dept_text_view"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:paddingTop="10dp"
+                        android:paddingBottom="10dp"
+                        android:text="@string/email_news"
+                        android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintHorizontal_bias="0"
+                        app:layout_constraintStart_toEndOf="@+id/news_dept_email_icon"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                </android.support.constraint.ConstraintLayout>
+
+                <android.support.constraint.ConstraintLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="?android:attr/selectableItemBackground"
+                    android:paddingLeft="5dp"
+                    android:paddingRight="5dp"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:onClick="sendEmail"
+                    android:tag="psa">
+
+                    <ImageView
+                        android:id="@+id/psa_email_icon"
+                        android:contentDescription="@string/content_description_email_icon"
+                        android:layout_width="wrap_content"
+                        android:layout_height="0dp"
+                        android:layout_marginStart="8dp"
+                        android:layout_marginEnd="16dp"
+                        android:src="@drawable/ic_email_black_24dp"
+                        app:layout_constraintBottom_toBottomOf="@+id/psa_text_view"
+                        app:layout_constraintEnd_toStartOf="@+id/psa_text_view"
+                        app:layout_constraintHorizontal_bias="0"
+                        app:layout_constraintHorizontal_chainStyle="packed"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="@+id/psa_text_view" />
+
+                    <TextView
+                        android:id="@+id/psa_text_view"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:paddingTop="10dp"
+                        android:paddingBottom="10dp"
+                        android:text="@string/email_psa"
+                        android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintHorizontal_bias="0"
+                        app:layout_constraintStart_toEndOf="@+id/psa_email_icon"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                </android.support.constraint.ConstraintLayout>
+
+                <android.support.constraint.ConstraintLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="?android:attr/selectableItemBackground"
+                    android:paddingLeft="5dp"
+                    android:paddingRight="5dp"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:onClick="sendEmail"
+                    android:tag="guide">
+
+                    <ImageView
+                        android:id="@+id/guide_email_icon"
+                        android:contentDescription="@string/content_description_email_icon"
+                        android:layout_width="wrap_content"
+                        android:layout_height="0dp"
+                        android:layout_marginStart="8dp"
+                        android:layout_marginEnd="16dp"
+                        android:src="@drawable/ic_email_black_24dp"
+                        app:layout_constraintBottom_toBottomOf="@+id/guide_text_view"
+                        app:layout_constraintEnd_toStartOf="@+id/guide_text_view"
+                        app:layout_constraintHorizontal_bias="0"
+                        app:layout_constraintHorizontal_chainStyle="packed"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="@+id/guide_text_view" />
+
+                    <TextView
+                        android:id="@+id/guide_text_view"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:paddingTop="10dp"
+                        android:paddingBottom="10dp"
+                        android:text="@string/email_guide"
+                        android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintHorizontal_bias="0"
+                        app:layout_constraintStart_toEndOf="@+id/guide_email_icon"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                </android.support.constraint.ConstraintLayout>
+
+                <android.support.constraint.ConstraintLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="?android:attr/selectableItemBackground"
+                    android:paddingLeft="5dp"
+                    android:paddingRight="5dp"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:onClick="sendEmail"
+                    android:tag="webmaster">
+
+                    <ImageView
+                        android:id="@+id/webmaster_email_icon"
+                        android:contentDescription="@string/content_description_email_icon"
+                        android:layout_width="wrap_content"
+                        android:layout_height="0dp"
+                        android:layout_marginStart="8dp"
+                        android:layout_marginEnd="16dp"
+                        android:src="@drawable/ic_email_black_24dp"
+                        app:layout_constraintBottom_toBottomOf="@+id/webmaster_text_view"
+                        app:layout_constraintEnd_toStartOf="@+id/webmaster_text_view"
+                        app:layout_constraintHorizontal_bias="0"
+                        app:layout_constraintHorizontal_chainStyle="packed"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="@+id/webmaster_text_view" />
+
+                    <TextView
+                        android:id="@+id/webmaster_text_view"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:paddingTop="10dp"
+                        android:paddingBottom="10dp"
+                        android:text="@string/email_webmaster"
+                        android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintHorizontal_bias="0"
+                        app:layout_constraintStart_toEndOf="@+id/webmaster_email_icon"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                </android.support.constraint.ConstraintLayout>
+
+                <android.support.constraint.ConstraintLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="?android:attr/selectableItemBackground"
+                    android:paddingLeft="5dp"
+                    android:paddingRight="5dp"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:onClick="sendEmail"
+                    android:tag="management">
+
+                    <ImageView
+                        android:id="@+id/management_email_icon"
+                        android:contentDescription="@string/content_description_email_icon"
+                        android:layout_width="wrap_content"
+                        android:layout_height="0dp"
+                        android:layout_marginStart="8dp"
+                        android:layout_marginEnd="16dp"
+                        android:src="@drawable/ic_email_black_24dp"
+                        app:layout_constraintBottom_toBottomOf="@+id/management_text_view"
+                        app:layout_constraintEnd_toStartOf="@+id/management_text_view"
+                        app:layout_constraintHorizontal_bias="0"
+                        app:layout_constraintHorizontal_chainStyle="packed"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="@+id/management_text_view" />
+
+                    <TextView
+                        android:id="@+id/management_text_view"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:paddingTop="10dp"
+                        android:paddingBottom="10dp"
+                        android:text="@string/email_mgmt"
+                        android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintHorizontal_bias="0"
+                        app:layout_constraintStart_toEndOf="@+id/management_email_icon"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                </android.support.constraint.ConstraintLayout>
+            </LinearLayout>
+        </android.support.v7.widget.CardView>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="6dp"
+            android:layout_marginRight="6dp"
+            android:layout_marginBottom="64dp"
+            android:textAppearance="@style/TextAppearance.AppCompat.Caption"
+            android:text="@string/studio_disclaimer"/>
+
+    </LinearLayout>
+</ScrollView>
