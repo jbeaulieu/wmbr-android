@@ -174,7 +174,8 @@
                     android:paddingLeft="5dp"
                     android:paddingRight="5dp"
                     android:clickable="true"
-                    android:focusable="true">
+                    android:focusable="true"
+                    android:onClick="openFacebook">
 
                     <ImageView
                         android:id="@+id/facebook_icon"
@@ -215,7 +216,8 @@
                     android:paddingLeft="5dp"
                     android:paddingRight="5dp"
                     android:clickable="true"
-                    android:focusable="true">
+                    android:focusable="true"
+                    android:onClick="openTwitter">
 
                     <ImageView
                         android:id="@+id/twitter_icon"
@@ -256,7 +258,8 @@
                     android:paddingLeft="5dp"
                     android:paddingRight="5dp"
                     android:clickable="true"
-                    android:focusable="true">
+                    android:focusable="true"
+                    android:onClick="openInstagram">
 
                     <ImageView
                         android:id="@+id/ig_icon"

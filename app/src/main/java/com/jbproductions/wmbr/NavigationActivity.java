@@ -202,4 +202,46 @@ public class NavigationActivity extends AppCompatActivity
         intent.setData(Uri.parse(uri));
         startActivity(intent);
     }
+
+    public void openFacebook(View view) {
+        Intent intent;
+        try {
+            // Check if Facebook app is installed and if so, open it to WMBR's page
+            this.getPackageManager().getPackageInfo("com.facebook.katana", 0);
+            intent = new Intent(Intent.ACTION_VIEW, Uri.parse("fb://page/22335947090"));
+            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        } catch (Exception e) {
+            // Facebook is not installed, open the browser instead
+            intent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://www.facebook.com/wmbrfm/"));
+        }
+        this.startActivity(intent);
+    }
+
+    public void openTwitter(View view) {
+        Intent intent;
+        try {
+            // Check if Twitter app is installed and if so, open it to WMBR's page
+            this.getPackageManager().getPackageInfo("com.twitter.android", 0);
+            intent = new Intent(Intent.ACTION_VIEW, Uri.parse("twitter://user?screen_name=wmbr"));
+            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        } catch (Exception e) {
+            // Twitter is not installed, open the browser instead
+            intent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://twitter.com/wmbr"));
+        }
+        this.startActivity(intent);
+    }
+
+    public void openInstagram(View view) {
+        Intent intent;
+        try {
+            // Check if IG app is installed and if so, open it to WMBR's page
+            this.getPackageManager().getPackageInfo("com.instagram.android", 0);
+            intent = new Intent(Intent.ACTION_VIEW, Uri.parse("instagram://user?username=wmbrfm"));
+            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        } catch (Exception e) {
+            // IG is not installed, open the browser instead
+            intent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://www.instagram.com/wmbrfm/"));
+        }
+        this.startActivity(intent);
+    }
 }
