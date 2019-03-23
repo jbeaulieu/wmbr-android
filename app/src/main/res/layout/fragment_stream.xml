@@ -7,62 +7,82 @@
     android:orientation="vertical"
     tools:context="com.jbproductions.wmbr.StreamFragment">
 
-    <TextView
-        android:id="@+id/WMBRTitleTextView"
-        android:layout_width="wrap_content"
+    <android.support.design.card.MaterialCardView
+        android:id="@+id/phone_card"
+        android:layout_gravity="center"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="@string/app_name" />
+        android:layout_marginStart="5dp"
+        android:layout_marginTop="4dp"
+        android:layout_marginEnd="5dp"
+        android:layout_marginBottom="4dp">
 
-    <TextView
-        android:id="@+id/showNameTextView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/show_title_placeholder" />
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center_horizontal"
+            android:orientation="vertical">
 
-    <TextView
-        android:id="@+id/showHostsTextView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Loading..." />
+            <TextView
+                android:id="@+id/WMBRTitleTextView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/app_name" />
 
-    <ImageButton
-        android:id="@+id/streamButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:contentDescription="@string/stream_button_description"
-        android:src="@drawable/ic_play_arrow_black_24dp" />
+            <TextView
+                android:id="@+id/showNameTextView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/show_title_placeholder" />
 
-    <ImageButton
-        android:id="@+id/stopButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:contentDescription="@string/stop_button_description"
-        android:src="@drawable/ic_stop_black_24dp" />
+            <TextView
+                android:id="@+id/showHostsTextView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Loading..." />
 
-    <TextView
-        android:id="@+id/timeTextView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Loading..." />
+            <ImageButton
+                android:id="@+id/streamButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:contentDescription="@string/stream_button_description"
+                android:src="@drawable/ic_play_arrow_black_24dp" />
 
-    <TextView
-        android:id="@+id/temperatureTextView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Loading..." />
+            <ImageButton
+                android:id="@+id/stopButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:contentDescription="@string/stop_button_description"
+                android:src="@drawable/ic_stop_black_24dp" />
 
-    <TextView
-        android:id="@+id/weatherTextView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Loading..." />
+            <TextView
+                android:id="@+id/timeTextView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Loading..." />
+
+            <TextView
+                android:id="@+id/temperatureTextView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Loading..." />
+
+            <TextView
+                android:id="@+id/weatherTextView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Loading..." />
+
+        </LinearLayout>
+
+    </android.support.design.card.MaterialCardView>
 
     <ProgressBar
         android:id="@+id/bufferProgress"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:visibility="invisible"
+        android:layout_marginStart="14dp"
         android:layout_marginBottom="26dp"
-        android:layout_marginStart="14dp" />
+        android:visibility="invisible" />
 
 </LinearLayout>
