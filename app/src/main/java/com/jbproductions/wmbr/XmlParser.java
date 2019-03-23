@@ -1,13 +1,12 @@
 package com.jbproductions.wmbr;
 
 import android.util.SparseArray;
-
 import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserException;
 import org.xmlpull.v1.XmlPullParserFactory;
-
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.UnsupportedEncodingException;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.HashMap;
@@ -54,7 +53,16 @@ public class XmlParser {
                     } else if ("showurl".equals(tagName)) {
                         wmbrStatusMap.put("showUrl", parser.nextText());
                     } else if ("temp".equals(tagName)) {
-                        wmbrStatusMap.put("temperature", parser.nextText());
+                        /* Android interprets the degree symbol incorrectly because of its default text encoding.
+                        To get it to display properly, we pass the text bitstream to a new UTF-8 string */
+                        String utfString;
+                        try {
+                            utfString = new String(parser.nextText().getBytes("ISO-8859-1"), "UTF-8");
+                            wmbrStatusMap.put("temperature", utfString);
+                        } catch (UnsupportedEncodingException e) {
+                            wmbrStatusMap.put("temperature", parser.nextText());
+                            e.printStackTrace();
+                        }
                     } else if ("wx".equals(tagName)) {
                         wmbrStatusMap.put("wx", parser.nextText());
                     }
