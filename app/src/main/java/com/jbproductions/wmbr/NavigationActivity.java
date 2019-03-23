@@ -4,9 +4,7 @@ import android.Manifest;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.net.Uri;
-import android.os.Build;
 import android.os.Bundle;
-import android.os.Handler;
 import android.os.StrictMode;
 import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
@@ -62,12 +60,12 @@ public class NavigationActivity extends AppCompatActivity
         toggle.syncState();
 
         drawer.addDrawerListener(new DrawerLayout.DrawerListener() {
-            @Override public void onDrawerSlide(View drawerView, float slideOffset) {}
-            @Override public void onDrawerOpened(View drawerView) {}
+            @Override public void onDrawerSlide(@NonNull View drawerView, float slideOffset) {}
+            @Override public void onDrawerOpened(@NonNull View drawerView) {}
             @Override public void onDrawerStateChanged(int newState) {}
 
             @Override
-            public void onDrawerClosed(View drawerView) {
+            public void onDrawerClosed(@NonNull View drawerView) {
                 //Set your new fragment here
                 if (mFragmentToSet != null) {
                     getSupportFragmentManager()
@@ -126,7 +124,7 @@ public class NavigationActivity extends AppCompatActivity
     }
 
     @Override
-    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         Log.d("PERMISSION GRANTED", Integer.toString(requestCode));
     }
 
