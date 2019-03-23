@@ -1,13 +1,14 @@
 package com.jbproductions.wmbr;
 
+import android.content.res.Resources;
 import android.os.Bundle;
+import android.support.design.button.MaterialButton;
 import android.support.v4.app.Fragment;
-import android.util.Log;
+import android.support.v4.content.res.ResourcesCompat;
 import android.util.SparseArray;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageButton;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -23,7 +24,16 @@ public class StreamFragment extends Fragment {
         // Required empty public constructor
     }
 
+    Resources res;
+    private final String streamUrl = "http://wmbr.org:8000/hi";
     private StreamPlayer audioPlayer;
+    MaterialButton streamButton;
+    ProgressBar bufferProgressBar;
+    TextView showNameTextView;
+    TextView showHostsTextView;
+    TextView timeTextView;
+    TextView temperatureTextView;
+    TextView weatherTextView;
 
     private class streamAudioPlayerCallback implements StreamPlayer.StreamPlayerCallback {
         @Override
@@ -48,25 +58,13 @@ public class StreamFragment extends Fragment {
         }
     }
 
-    private final String streamUrl = "http://wmbr.org:8000/hi";
-
-    ImageButton streamButton;
-    ImageButton stopButton;
-    ProgressBar bufferProgressBar;
-    TextView showNameTextView;
-    TextView showHostsTextView;
-    TextView timeTextView;
-    TextView temperatureTextView;
-    TextView weatherTextView;
-
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view =  inflater.inflate(R.layout.fragment_stream, container, false);
-
+        res = getActivity().getResources();
         streamButton = view.findViewById(R.id.streamButton);
-        stopButton = view.findViewById(R.id.stopButton);
         bufferProgressBar = view.findViewById(R.id.bufferProgress);
         showNameTextView = view.findViewById(R.id.showNameTextView);
         showHostsTextView = view.findViewById(R.id.showHostsTextView);
@@ -87,27 +85,29 @@ public class StreamFragment extends Fragment {
 
         SparseArray<Show> showDB = XmlParser.getShowInfo();
 
-        /* Clicking the 'start button should start the stream, display the "buffering" message,
-            and show the progress wheel to indicate buffering
-         */
+        /* Clicking the play/stop button should toggle the stream on/off, switch the play/stop icon,
+            and display the "buffering" message and buffer wheel if we're toggling on */
         streamButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                audioPlayer.playItem(streamUrl);
-                showToast(getString(R.string.buffer_message));
-                showBufferProgress(true);
-            }
-        });
-
-        // Clicking the stop button should stop the stream - no other calls necessary atm
-        stopButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                audioPlayer.stop();
+                togglePlayback();
             }
         });
 
         return view;
+    }
+
+    private void togglePlayback() {
+        if(audioPlayer.isPlaying()) {
+            audioPlayer.stop();
+            streamButton.setIcon(ResourcesCompat.getDrawable(res, R.drawable.ic_play_arrow_black_24dp, null));
+        }
+        else {
+            audioPlayer.playItem(streamUrl);
+            showToast(getString(R.string.buffer_message));
+            showBufferProgress(true);
+            streamButton.setIcon(ResourcesCompat.getDrawable(res, R.drawable.ic_stop_black_24dp, null));
+        }
     }
 
     /**

@@ -41,19 +41,14 @@
                 android:layout_height="wrap_content"
                 android:text="Loading..." />
 
-            <ImageButton
+            <android.support.design.button.MaterialButton
                 android:id="@+id/streamButton"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:contentDescription="@string/stream_button_description"
-                android:src="@drawable/ic_play_arrow_black_24dp" />
-
-            <ImageButton
-                android:id="@+id/stopButton"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:contentDescription="@string/stop_button_description"
-                android:src="@drawable/ic_stop_black_24dp" />
+                app:backgroundTint="@color/colorPrimaryLight"
+                app:iconGravity="textStart"
+                app:iconPadding="0dp"
+                app:icon="@drawable/ic_play_arrow_black_24dp" />
 
             <TextView
                 android:id="@+id/timeTextView"
