@@ -25,9 +25,9 @@ public class StreamFragment extends Fragment {
         // Required empty public constructor
     }
 
-    Resources res;
     private final String streamUrl = "http://wmbr.org:8000/hi";
     private StreamPlayer audioPlayer;
+    Resources res;
     MaterialButton streamButton;
     ProgressBar bufferProgressBar;
     TextView showNameTextView;
@@ -64,7 +64,6 @@ public class StreamFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view =  inflater.inflate(R.layout.fragment_stream, container, false);
-        res = getActivity().getResources();
         streamButton = view.findViewById(R.id.streamButton);
         bufferProgressBar = view.findViewById(R.id.bufferProgress);
         showNameTextView = view.findViewById(R.id.showNameTextView);
@@ -73,16 +72,19 @@ public class StreamFragment extends Fragment {
         temperatureTextView = view.findViewById(R.id.temperatureTextView);
         weatherTextView = view.findViewById(R.id.weatherTextView);
 
+        // Get resources to dynamically set drawable objects
+        res = getActivity().getResources();
+
         // Set up new singleton instance of audioPlayer and add callbacks
         audioPlayer = StreamPlayer.Companion.getInstance(getContext());
         audioPlayer.addCallback(new streamAudioPlayerCallback());
 
+        //Download current metadata for show and host information
         new DownloadMetadataTask().execute();
 
         //SparseArray<Show> showDB = XmlParser.getShowInfo();
 
-        /* When the page loads, it needs to check if the stream is already playing, and if so, set
-        the stream button to the stop icon*/
+        // Check if the stream is already playing. If it is, change the button icon to 'stop'
         if(audioPlayer.isPlaying()) {
             streamButton.setIcon(ResourcesCompat.getDrawable(res, R.drawable.ic_stop_black_24dp, null));
         }
@@ -99,6 +101,11 @@ public class StreamFragment extends Fragment {
         return view;
     }
 
+    /**
+     * Toggles livestream playback on/off
+     * Used by the play/stop button within this fragment. This function starts/stops the stream, changes the button
+     * icon to stop/play respectively, and if necessary displays the buffering icon & message
+     */
     private void togglePlayback() {
         if(audioPlayer.isPlaying()) {
             audioPlayer.stop();
@@ -132,6 +139,11 @@ public class StreamFragment extends Fragment {
         Toast.makeText(getActivity(), message, Toast.LENGTH_LONG).show();
     }
 
+    /**
+     * ASyncTask to obtain & display metadata about what's playing on WMBR.
+     * The actual downloading and parsing is handled in the XmlParser class to avoid duplicate
+     * methods across different parsing tasks.
+      */
     private class DownloadMetadataTask extends AsyncTask<Void, Void, Boolean> {
 
         Map wmbrStatus;
@@ -152,12 +164,12 @@ public class StreamFragment extends Fragment {
 
         @Override
         protected void onPostExecute(Boolean downloadSuccess) {
-            bufferProgressBar.setVisibility(INVISIBLE);
             showNameTextView.setText(wmbrStatus.get("showName").toString());
             showHostsTextView.setText(wmbrStatus.get("showHosts").toString());
             timeTextView.setText(wmbrStatus.get("time").toString());
             temperatureTextView.setText(wmbrStatus.get("temperature").toString());
             weatherTextView.setText(wmbrStatus.get("wx").toString());
+            bufferProgressBar.setVisibility(INVISIBLE);
         }
     }
 }
