@@ -24,49 +24,100 @@
             android:orientation="vertical">
 
             <TextView
-                android:id="@+id/WMBRTitleTextView"
+                android:id="@+id/NowPlayingTextView"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/app_name" />
+                android:layout_margin="5dp"
+                android:text="@string/now_playing_message"
+                android:textAppearance="@style/TextAppearance.MaterialComponents.Overline" />
 
             <TextView
                 android:id="@+id/showNameTextView"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/show_title_placeholder" />
+                android:layout_margin="5dp"
+                android:gravity="center_horizontal"
+                android:text="@string/loading_placeholder"
+                android:textAppearance="@style/TextAppearance.MaterialComponents.Headline5" />
+
+            <TextView
+                android:id="@+id/HostedByTextView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="5dp"
+                android:text="@string/hosted_by_message"
+                android:textAppearance="@style/TextAppearance.MaterialComponents.Overline" />
 
             <TextView
                 android:id="@+id/showHostsTextView"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Loading..." />
+                android:layout_margin="5dp"
+                android:gravity="center_horizontal"
+                android:text="@string/loading_placeholder"
+                android:textAppearance="@style/TextAppearance.MaterialComponents.Headline6" />
 
             <android.support.design.button.MaterialButton
                 android:id="@+id/streamButton"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_margin="5dp"
                 app:backgroundTint="@color/colorPrimaryLight"
+                app:icon="@drawable/ic_play_arrow_black_24dp"
                 app:iconGravity="textStart"
-                app:iconPadding="0dp"
-                app:icon="@drawable/ic_play_arrow_black_24dp" />
+                app:iconPadding="0dp" />
+
+        </LinearLayout>
+
+    </android.support.design.card.MaterialCardView>
+
+    <android.support.design.card.MaterialCardView
+        android:id="@+id/wmbr_state_card"
+        android:layout_gravity="center"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="5dp"
+        android:layout_marginTop="4dp"
+        android:layout_marginEnd="5dp"
+        android:layout_marginBottom="4dp">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center_horizontal"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/wmbr_state_title_View"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center_horizontal"
+                android:text="@string/current_cambridge_message"
+                android:textAppearance="@style/TextAppearance.MaterialComponents.Subtitle1" />
 
             <TextView
                 android:id="@+id/timeTextView"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Loading..." />
+                android:gravity="center_horizontal"
+                android:text="@string/loading_placeholder"
+                android:textAppearance="@style/TextAppearance.MaterialComponents.Tab" />
 
             <TextView
                 android:id="@+id/temperatureTextView"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Loading..." />
+                android:gravity="center_horizontal"
+                android:text="@string/loading_placeholder"
+                android:textAppearance="@style/TextAppearance.MaterialComponents.Tab" />
 
             <TextView
                 android:id="@+id/weatherTextView"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Loading..." />
+                android:gravity="center_horizontal"
+                android:text="@string/loading_placeholder"
+                android:textAppearance="@style/TextAppearance.MaterialComponents.Tab" />
 
         </LinearLayout>
 
