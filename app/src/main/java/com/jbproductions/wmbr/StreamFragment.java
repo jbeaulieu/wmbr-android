@@ -85,6 +85,12 @@ public class StreamFragment extends Fragment {
 
         SparseArray<Show> showDB = XmlParser.getShowInfo();
 
+        /* When the page loads, it needs to check if the stream is already playing, and if so, set
+        the stream button to the stop icon*/
+        if(audioPlayer.isPlaying()) {
+            streamButton.setIcon(ResourcesCompat.getDrawable(res, R.drawable.ic_stop_black_24dp, null));
+        }
+
         /* Clicking the play/stop button should toggle the stream on/off, switch the play/stop icon,
             and display the "buffering" message and buffer wheel if we're toggling on */
         streamButton.setOnClickListener(new View.OnClickListener() {
