@@ -1,6 +1,7 @@
 package com.jbproductions.wmbr;
 
 import android.content.res.Resources;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.design.button.MaterialButton;
 import android.support.v4.app.Fragment;
@@ -76,14 +77,9 @@ public class StreamFragment extends Fragment {
         audioPlayer = StreamPlayer.Companion.getInstance(getContext());
         audioPlayer.addCallback(new streamAudioPlayerCallback());
 
-        Map wmbrStatus = XmlParser.getStreamMetadata();
-        showNameTextView.setText(wmbrStatus.get("showName").toString());
-        showHostsTextView.setText(wmbrStatus.get("showHosts").toString());
-        timeTextView.setText(wmbrStatus.get("time").toString());
-        temperatureTextView.setText(wmbrStatus.get("temperature").toString());
-        weatherTextView.setText(wmbrStatus.get("wx").toString());
+        new DownloadMetadataTask().execute();
 
-        SparseArray<Show> showDB = XmlParser.getShowInfo();
+        //SparseArray<Show> showDB = XmlParser.getShowInfo();
 
         /* When the page loads, it needs to check if the stream is already playing, and if so, set
         the stream button to the stop icon*/
@@ -134,5 +130,34 @@ public class StreamFragment extends Fragment {
      */
     private void showToast(String message) {
         Toast.makeText(getActivity(), message, Toast.LENGTH_LONG).show();
+    }
+
+    private class DownloadMetadataTask extends AsyncTask<Void, Void, Boolean> {
+
+        Map wmbrStatus;
+
+        @Override
+        protected void onPreExecute() {
+            bufferProgressBar.setVisibility(VISIBLE);
+        }
+
+        @Override
+        protected Boolean doInBackground(Void... voids) {
+            wmbrStatus = XmlParser.getStreamMetadata();
+            return Boolean.TRUE;
+        }
+
+        @Override
+        protected void onProgressUpdate(Void... values) {}
+
+        @Override
+        protected void onPostExecute(Boolean downloadSuccess) {
+            bufferProgressBar.setVisibility(INVISIBLE);
+            showNameTextView.setText(wmbrStatus.get("showName").toString());
+            showHostsTextView.setText(wmbrStatus.get("showHosts").toString());
+            timeTextView.setText(wmbrStatus.get("time").toString());
+            temperatureTextView.setText(wmbrStatus.get("temperature").toString());
+            weatherTextView.setText(wmbrStatus.get("wx").toString());
+        }
     }
 }
