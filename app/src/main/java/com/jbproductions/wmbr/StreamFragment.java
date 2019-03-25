@@ -181,12 +181,51 @@ public class StreamFragment extends Fragment {
     private void LoadWeatherIcon(String w) {
 
         String weather = w.toLowerCase();
+        int drawable = R.drawable.wx_unknown;
 
         switch (weather) {
+            case "sunny":
+                drawable = R.drawable.wx_sunny;
+                break;
+            case "clear":
+                drawable = R.drawable.wx_nt_clear;
+                break;
             case "cloudy":
             case "overcast":
-                weatherIcon.setImageResource(R.drawable.wx_cloudy);
+                drawable = R.drawable.wx_cloudy;
+                break;
+            case "mostly clear":
+                drawable = R.drawable.wx_nt_mostlysunny;
+                break;
+            case "mostly cloudy":
+                drawable = R.drawable.wx_mostlycloudy;
+                break;
+            case "mostly sunny":
+            case "fair":
+                drawable = R.drawable.wx_mostlysunny;
+                break;
+            case "partly cloudy":
+                drawable = R.drawable.wx_partlycloudy;
+                break;
+            case "partly sunny":
+                drawable = R.drawable.wx_partlysunny;
+                break;
+            case "light rain":
+            case "showers":
+                drawable = R.drawable.wx_chancerain;
+                break;
+            case "rain":
+                drawable = R.drawable.wx_rain;
+                break;
+            case "snow":
+                drawable = R.drawable.wx_snow;
+                break;
+            case "thunderstorms":
+            case "thundershowers":
+                drawable = R.drawable.wx_tstorms;
                 break;
         }
+
+        weatherIcon.setImageResource(drawable);
     }
 }
