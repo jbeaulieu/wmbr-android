@@ -10,6 +10,7 @@ import android.util.SparseArray;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -35,6 +36,7 @@ public class StreamFragment extends Fragment {
     TextView timeTextView;
     TextView temperatureTextView;
     TextView weatherTextView;
+    ImageView weatherIcon;
 
     private class streamAudioPlayerCallback implements StreamPlayer.StreamPlayerCallback {
         @Override
@@ -71,6 +73,7 @@ public class StreamFragment extends Fragment {
         timeTextView = view.findViewById(R.id.timeTextView);
         temperatureTextView = view.findViewById(R.id.temperatureTextView);
         weatherTextView = view.findViewById(R.id.weatherTextView);
+        weatherIcon = view.findViewById(R.id.weatherImageView);
 
         // Get resources to dynamically set drawable objects
         res = getActivity().getResources();
@@ -168,8 +171,22 @@ public class StreamFragment extends Fragment {
             showHostsTextView.setText(wmbrStatus.get("showHosts").toString());
             timeTextView.setText(wmbrStatus.get("time").toString());
             temperatureTextView.setText(wmbrStatus.get("temperature").toString());
-            weatherTextView.setText(wmbrStatus.get("wx").toString());
+            String weather = wmbrStatus.get("wx").toString();
+            weatherTextView.setText(weather);
+            LoadWeatherIcon(weather);
             bufferProgressBar.setVisibility(INVISIBLE);
+        }
+    }
+
+    private void LoadWeatherIcon(String w) {
+
+        String weather = w.toLowerCase();
+
+        switch (weather) {
+            case "cloudy":
+            case "overcast":
+                weatherIcon.setImageResource(R.drawable.wx_cloudy);
+                break;
         }
     }
 }
