@@ -15,7 +15,9 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.util.Calendar;
 import java.util.Map;
+import java.util.TimeZone;
 
 import static android.view.View.VISIBLE;
 import static android.view.View.INVISIBLE;
@@ -181,41 +183,56 @@ public class StreamFragment extends Fragment {
     private void LoadWeatherIcon(String w) {
 
         String weather = w.toLowerCase();
+        String parseWeather = (weather.indexOf(',') == -1) ? weather : weather.substring(0, weather.indexOf(','));
         int drawable = R.drawable.wx_unknown;
+        boolean useNightIcons = false;
 
-        switch (weather) {
+        // If the current time in EDT is prior to 5am or after 8pm, use the night icons
+        TimeZone edt = TimeZone.getTimeZone("GMT-04:00");
+        Calendar cal = Calendar.getInstance(edt);
+        if(cal.get(Calendar.HOUR_OF_DAY) < 5 || cal.get(Calendar.HOUR_OF_DAY) > 20) {
+            useNightIcons = true;
+        }
+
+        switch (parseWeather) {
             case "sunny":
                 drawable = R.drawable.wx_sunny;
                 break;
             case "clear":
-                drawable = R.drawable.wx_nt_clear;
+                drawable = useNightIcons ? R.drawable.wx_nt_clear : R.drawable.wx_sunny;
                 break;
             case "cloudy":
             case "overcast":
                 drawable = R.drawable.wx_cloudy;
                 break;
-            case "mostly clear":
-                drawable = R.drawable.wx_nt_mostlysunny;
-                break;
             case "mostly cloudy":
-                drawable = R.drawable.wx_mostlycloudy;
+            case "partly sunny":
+            case "partly clear":
+                drawable = useNightIcons ? R.drawable.wx_nt_mostlycloudy : R.drawable.wx_mostlycloudy;
                 break;
             case "mostly sunny":
-            case "fair":
-                drawable = R.drawable.wx_mostlysunny;
-                break;
+            case "mostly clear":
             case "partly cloudy":
-                drawable = R.drawable.wx_partlycloudy;
-                break;
-            case "partly sunny":
-                drawable = R.drawable.wx_partlysunny;
+            case "fair":
+                drawable = useNightIcons ? R.drawable.wx_nt_mostlysunny : R.drawable.wx_mostlysunny;
                 break;
             case "light rain":
+            case "chance of rain":
             case "showers":
                 drawable = R.drawable.wx_chancerain;
                 break;
             case "rain":
                 drawable = R.drawable.wx_rain;
+                break;
+            case "chance of flurries":
+                drawable = R.drawable.wx_chanceflurries;
+                break;
+            case "light snow":
+            case "flurries":
+                drawable = R.drawable.wx_flurries;
+                break;
+            case "chance of snow":
+                drawable = R.drawable.wx_chancesnow;
                 break;
             case "snow":
                 drawable = R.drawable.wx_snow;
@@ -224,6 +241,24 @@ public class StreamFragment extends Fragment {
             case "thundershowers":
                 drawable = R.drawable.wx_tstorms;
                 break;
+            case "isolated thunderstorms":
+            case "chance of thunderstorms":
+            case "chance of thundershowers":
+                drawable = R.drawable.wx_chancetstorms;
+                break;
+            case "sleet":
+            case "hail":
+                drawable = R.drawable.wx_sleet;
+                break;
+            case "chance of sleet":
+            case "chance of hail":
+                drawable = R.drawable.wx_chancesleet;
+                break;
+            case "fog":
+            case "foggy":
+            case "haze":
+            case "hazy":
+                drawable = R.drawable.wx_fog;
         }
 
         weatherIcon.setImageResource(drawable);
