@@ -15,12 +15,11 @@
     <string name="content_description_twitter_icon">Twitter Icon</string>
     <string name="content_description_ig_icon">Instagram Icon</string>
 
-
-    <string name="loading_placeholder">Loading…</string>
     <string name="buffer_message">Just a sec, buffering</string>
     <string name="now_playing_message">Now Playing</string>
     <string name="hosted_by_message">Hosted By</string>
     <string name="current_cambridge_message">Currently at WMBR in Cambridge, MA</string>
+    <string name="wx_unknown">Unknown</string>
 
     <string name="contact_by_phone">By Phone</string>
     <string name="request_phone_number">617–253–8810 (Request Line)</string>

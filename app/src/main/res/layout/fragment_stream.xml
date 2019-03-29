@@ -5,17 +5,19 @@
     android:layout_height="match_parent"
     android:gravity="center_horizontal"
     android:orientation="vertical"
+    android:animateLayoutChanges="true"
     tools:context="com.jbproductions.wmbr.StreamFragment">
 
     <android.support.design.card.MaterialCardView
-        android:id="@+id/phone_card"
+        android:id="@+id/streaming_card"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:layout_marginStart="5dp"
         android:layout_marginTop="4dp"
         android:layout_marginEnd="5dp"
-        android:layout_marginBottom="4dp">
+        android:layout_marginBottom="4dp"
+        android:visibility="gone">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -37,7 +39,6 @@
                 android:layout_height="wrap_content"
                 android:layout_margin="5dp"
                 android:gravity="center_horizontal"
-                android:text="@string/loading_placeholder"
                 android:textAppearance="@style/TextAppearance.MaterialComponents.Headline5" />
 
             <TextView
@@ -54,7 +55,6 @@
                 android:layout_height="wrap_content"
                 android:layout_margin="5dp"
                 android:gravity="center_horizontal"
-                android:text="@string/loading_placeholder"
                 android:textAppearance="@style/TextAppearance.MaterialComponents.Headline6" />
 
             <android.support.design.button.MaterialButton
@@ -79,7 +79,8 @@
         android:layout_marginStart="5dp"
         android:layout_marginTop="4dp"
         android:layout_marginEnd="5dp"
-        android:layout_marginBottom="4dp">
+        android:layout_marginBottom="4dp"
+        android:visibility="gone">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -122,7 +123,6 @@
                         android:layout_height="wrap_content"
                         android:layout_margin="5dp"
                         android:gravity="center_horizontal"
-                        android:text="@string/loading_placeholder"
                         android:textAppearance="@style/TextAppearance.MaterialComponents.Tab" />
 
                     <TextView
@@ -131,7 +131,7 @@
                         android:layout_height="wrap_content"
                         android:layout_margin="5dp"
                         android:gravity="center_horizontal"
-                        android:text="@string/loading_placeholder"
+                        android:text="@string/wx_unknown"
                         android:textAppearance="@style/TextAppearance.MaterialComponents.Tab" />
 
                     <TextView
@@ -140,7 +140,6 @@
                         android:layout_height="wrap_content"
                         android:layout_margin="5dp"
                         android:gravity="center_horizontal"
-                        android:text="@string/loading_placeholder"
                         android:textAppearance="@style/TextAppearance.MaterialComponents.Tab" />
 
                 </LinearLayout>
@@ -151,11 +150,17 @@
 
     </android.support.design.card.MaterialCardView>
 
-    <ProgressBar
-        android:id="@+id/bufferProgress"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="26dp"
-        android:visibility="invisible" />
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="center">
+
+        <ProgressBar
+            android:id="@+id/bufferProgress"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:visibility="gone" />
+
+    </LinearLayout>
 
 </LinearLayout>

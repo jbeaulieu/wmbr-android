@@ -4,6 +4,7 @@ import android.content.res.Resources;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.design.button.MaterialButton;
+import android.support.design.card.MaterialCardView;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.res.ResourcesCompat;
 import android.util.SparseArray;
@@ -31,6 +32,8 @@ public class StreamFragment extends Fragment {
     private final String streamUrl = "http://wmbr.org:8000/hi";
     private StreamPlayer audioPlayer;
     Resources res;
+    MaterialCardView streamCard;
+    MaterialCardView wxCard;
     MaterialButton streamButton;
     ProgressBar bufferProgressBar;
     TextView showNameTextView;
@@ -68,6 +71,8 @@ public class StreamFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view =  inflater.inflate(R.layout.fragment_stream, container, false);
+        streamCard = view.findViewById(R.id.streaming_card);
+        wxCard = view.findViewById(R.id.wmbr_state_card);
         streamButton = view.findViewById(R.id.streamButton);
         bufferProgressBar = view.findViewById(R.id.bufferProgress);
         showNameTextView = view.findViewById(R.id.showNameTextView);
@@ -176,7 +181,9 @@ public class StreamFragment extends Fragment {
             String weather = wmbrStatus.get("wx").toString();
             weatherTextView.setText(weather);
             LoadWeatherIcon(weather);
-            bufferProgressBar.setVisibility(INVISIBLE);
+            bufferProgressBar.setVisibility(View.GONE);
+            streamCard.setVisibility(VISIBLE);
+            wxCard.setVisibility(VISIBLE);
         }
     }
 
