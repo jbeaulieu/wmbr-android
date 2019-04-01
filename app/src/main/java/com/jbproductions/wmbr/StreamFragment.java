@@ -29,7 +29,7 @@ public class StreamFragment extends Fragment {
         // Required empty public constructor
     }
 
-    private final String streamUrl = "http://wmbr.org:8000/hi";
+    private final String STREAM_URL = "http://wmbr.org:8000/hi";
     private StreamPlayer audioPlayer;
     Resources res;
     MaterialCardView streamCard;
@@ -67,8 +67,7 @@ public class StreamFragment extends Fragment {
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view =  inflater.inflate(R.layout.fragment_stream, container, false);
         streamCard = view.findViewById(R.id.streaming_card);
@@ -122,7 +121,7 @@ public class StreamFragment extends Fragment {
             streamButton.setIcon(ResourcesCompat.getDrawable(res, R.drawable.ic_play_arrow_black_24dp, null));
         }
         else {
-            audioPlayer.playItem(streamUrl);
+            audioPlayer.playItem(STREAM_URL);
             showToast(getString(R.string.buffer_message));
             showBufferProgress(true);
             streamButton.setIcon(ResourcesCompat.getDrawable(res, R.drawable.ic_stop_black_24dp, null));
@@ -190,6 +189,7 @@ public class StreamFragment extends Fragment {
     private void LoadWeatherIcon(String w) {
 
         String weather = w.toLowerCase();
+        // Crop any extra weather descriptors that come after a comma
         String parseWeather = (weather.indexOf(',') == -1) ? weather : weather.substring(0, weather.indexOf(','));
         int drawable = R.drawable.wx_unknown;
         boolean useNightIcons = false;
