@@ -224,7 +224,10 @@ public class StreamFragment extends Fragment {
                 drawable = useNightIcons ? R.drawable.wx_nt_mostlysunny : R.drawable.wx_mostlysunny;
                 break;
             case "light rain":
+            case "light drizzle":
             case "chance of rain":
+            case "chance of showers":
+            case "drizzle":
             case "showers":
                 drawable = R.drawable.wx_chancerain;
                 break;
@@ -253,6 +256,7 @@ public class StreamFragment extends Fragment {
             case "chance of thundershowers":
                 drawable = R.drawable.wx_chancetstorms;
                 break;
+            case "freezing rain":
             case "sleet":
             case "hail":
                 drawable = R.drawable.wx_sleet;
@@ -265,6 +269,7 @@ public class StreamFragment extends Fragment {
             case "foggy":
             case "haze":
             case "hazy":
+            case "mist":
                 drawable = R.drawable.wx_fog;
         }
 
