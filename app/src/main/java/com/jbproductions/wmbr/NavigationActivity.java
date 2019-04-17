@@ -88,6 +88,9 @@ public class NavigationActivity extends AppCompatActivity
         });
 
         navigationView.setNavigationItemSelectedListener(this);
+
+        // At the end of setup, load a Stream Fragment, since it functions as the main app screen
+        getSupportFragmentManager().beginTransaction().replace(R.id.defaultLayout, new StreamFragment()).commitNow();
     }
 
     @Override
