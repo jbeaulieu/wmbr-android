@@ -19,19 +19,19 @@ public class XmlParser {
 
     }
 
-    private static final String streamMeta = "http://wmbr.org/cgi-bin/xmlinfo";
-    private static final String archiveMeta = "http://wmbr.org/cgi-bin/xmlarch";
-    private static final String scheduleMeta = "http://wmbr.org/cgi-bin/xmlsched";
-    private static final String trackblasterMeta = "http://www.track-blaster.com/wmbr/pl_recent_songs.php";
+    private static final String CURRENT_INFO_URL = "https://wmbr.org/cgi-bin/xmlinfo";
+    private static final String ARCHIVE_URL = "https://wmbr.org/cgi-bin/xmlarch";
+    private static final String SCHEDULE_URL = "https://wmbr.org/cgi-bin/xmlsched";
+    private static final String TRACK_BLASTER_URL = "https://www.track-blaster.com/wmbr/pl_recent_songs.php";
 
 
     /**
      * Pulls in current information (show, host, weather, etc) from WMBR's xml API.
-     * @return HashMap with values mapped to their tags as seen at 'http://wmbr.org/cgi-bin/xmlinfo'
+     * @return HashMap with values mapped to their tags as seen at 'https://wmbr.org/cgi-bin/xmlinfo'
      */
     static Map getStreamMetadata() {
         Map<String, String> wmbrStatusMap = new HashMap<>();
-        XmlPullParser parser = setupXmlParser(streamMeta);
+        XmlPullParser parser = setupXmlParser(CURRENT_INFO_URL);
 
         try {
             int eventType = parser.getEventType();
@@ -102,7 +102,7 @@ public class XmlParser {
 
     static SparseArray<Show> getShowInfo() {
         SparseArray<Show> showDB = new SparseArray<>();
-        XmlPullParser parser = setupXmlParser(scheduleMeta);
+        XmlPullParser parser = setupXmlParser(SCHEDULE_URL);
         Show currentShow = null;
         int showid;
 
