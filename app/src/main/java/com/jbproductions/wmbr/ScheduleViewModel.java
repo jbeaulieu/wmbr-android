@@ -3,7 +3,6 @@ package com.jbproductions.wmbr;
 import android.arch.lifecycle.LiveData;
 import android.arch.lifecycle.MutableLiveData;
 import android.arch.lifecycle.ViewModel;
-import android.util.SparseArray;
 
 import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserException;
@@ -17,20 +16,20 @@ class ScheduleViewModel extends ViewModel {
 
     private static final String SCHEDULE_URL = "https://wmbr.org/cgi-bin/xmlsched";
 
-    private MutableLiveData<SparseArray<Show>> showDB;
+    private MutableLiveData<ShowDatabase> showDatabase;
 
-    LiveData<SparseArray<Show>> getShows() {
-        if(showDB == null) {
-            showDB = new MutableLiveData<>();
+    LiveData<ShowDatabase> getShowDatabase() {
+        if(showDatabase == null) {
+            showDatabase = new MutableLiveData<>();
             loadShows();
         }
-        return showDB;
+        return showDatabase;
     }
 
     // Asynchronous operation to fetch show data
     private void loadShows() {
 
-        SparseArray<Show> scheduleArray = new SparseArray<>();
+        ShowDatabase db = new ShowDatabase();
         XmlPullParser parser = XmlParser.setupXmlParser(SCHEDULE_URL);
         Show currentShow = null;
         int showid;
@@ -49,7 +48,7 @@ class ScheduleViewModel extends ViewModel {
                         currentShow = new Show();
                         showid = Integer.parseInt(parser.getAttributeValue(0));
                         currentShow.setID(showid);
-                        scheduleArray.put(showid, currentShow);
+                        db.put(showid, currentShow);
                     } else if (currentShow != null) {
 
                         if("name".equals(tagName)) {
@@ -84,6 +83,6 @@ class ScheduleViewModel extends ViewModel {
             e.printStackTrace();
         }
 
-        showDB.setValue(scheduleArray);
+        showDatabase.setValue(db);
     }
 }
