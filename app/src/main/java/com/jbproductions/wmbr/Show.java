@@ -31,11 +31,18 @@ public class Show {
     }
 
     /**
-     * Sets the start time for the given show
-     * @param showTime String value of the show's start time, scraped from wmbr.org
+     * Sets the start time for the given show.
+     * This function is necessary because the WMBR website keeps track of show start times as an
+     * expression of the number of minutes into the day that the show starts. For example, a show
+     * listed with a start time of 480 equates to 8:00am, or 480 minutes into the day.
+     * The below function converts the aforementioned integer to an int in range [0,2399] to
+     * represent 24-hour time. On a personal note, this method of timekeeping on the WMBR website
+     * seems exceptionally silly and I look forward to it being changed.
+     * @param startTime int value of the show's start time, scraped from wmbr.org
+     * @return int in the range [0,2400] representing the show's start time
      */
-    public void setTime(String showTime) {
-        time = convertTo24HourTime(showTime);
+    public void setTime(int startTime) {
+        time = startTime * 10 / 6;
     }
 
     /**
@@ -226,39 +233,5 @@ public class Show {
      */
     public String getDescription() {
         return description;
-    }
-
-    /**
-     * This function is necessary because the WMBR website keeps track of showtimes as strings
-     * with a colon and a suffix of "a", "p", "m", or "n" for AM, PM, midnight, and noon.
-     * Examples: "7:00a" -> 0700 hours
-     *          "10:30p" -> 2230 hours
-     *          "12:00m" -> 0000 hours (midnight)
-     *          "12:00n" -> 1200 hours (noon)
-     * The below function converts the aforementioned time string to an integer representation of
-     * a 24-hour time. On a personal note, this method of timekeeping on the WMBR seems website
-     * seems exceptionally silly and I look forward to it being changed.
-     * @param showTime String value of the show's start time, scraped from wmbr.org
-     * @return int in the range [0,2400] representing the show's start time
-     */
-    private int convertTo24HourTime(String showTime) {
-
-        // Deal with hardcoded "12:00m" or "12:00n" values for noon and midnight shows
-        if(showTime == "12:00m") {
-            return 0;
-        }
-        else if(showTime == "12:00n") {
-            return 1200;
-        }
-        else {
-            String removeColon = showTime.replace(":", "");
-            int time = Integer.parseInt(removeColon.substring(0, removeColon.length()-1));
-
-            if(removeColon.substring(removeColon.length()-1).equals("p")) {
-                time += 1200;
-            }
-
-            return time;
-        }
     }
 }

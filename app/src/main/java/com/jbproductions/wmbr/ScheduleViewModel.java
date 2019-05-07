@@ -55,8 +55,8 @@ class ScheduleViewModel extends ViewModel {
                             currentShow.setName(parser.nextText());
                         } else if ("day".equals(tagName)) {
                             currentShow.setDay(Integer.parseInt(parser.nextText()));
-                        } else if ("time_str".equals(tagName)) {
-                            currentShow.setTime(parser.nextText());
+                        } else if ("time".equals(tagName)) {
+                            currentShow.setTime(Integer.parseInt(parser.nextText()));
                         } else if ("length".equals(tagName)) {
                             currentShow.setLength(Integer.parseInt(parser.nextText()));
                         } else if ("alternates".equals(tagName)) {
