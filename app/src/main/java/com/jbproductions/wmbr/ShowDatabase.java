@@ -3,12 +3,10 @@ package com.jbproductions.wmbr;
 import android.util.SparseArray;
 
 import java.util.ArrayList;
-import java.util.List;
 
 public class ShowDatabase extends SparseArray<Show> {
 
-    public ShowDatabase() {
-    }
+    public ShowDatabase() {}
 
     /***
      * Returns a List of all Shows which air on a particular day of the week.
@@ -30,34 +28,9 @@ public class ShowDatabase extends SparseArray<Show> {
         return returnList;
     }
 
-    public SparseArray<Show> getOrderedShowsOnDayOfWeek(int dayOfWeek) {
-        SparseArray<Show> returnArray = new SparseArray<>();
-
-        for(int i=0; i < size(); i++) {
-            Show show = valueAt(i);
-            if(show.getDay() == dayOfWeek) {        // If show day equals input day, add to returnList
-                if(show.getAlternates() == 2) {
-                    returnArray.put(show.getTime() + 2, show);
-                }
-                else {
-                    returnArray.put(show.getTime(), show);
-                }
-            } else if(show.getDay() == 7 && dayOfWeek > 0 && dayOfWeek < 6) {       // If show airs on weekdays and user requested a weekday [Monday-Friday], add show to returnList
-                if(show.getAlternates() == 2) {
-                    returnArray.put(show.getTime() + 2, show);
-                }
-                else {
-                    returnArray.put(show.getTime(), show);
-                }
-            }
-        }
-
-        return returnArray;
-    }
-
     /***
      * Compiles array of daily show lists, by calling getShowsOnDayOfWeek 7 times, once per day of the week.
-     * @return Array of length 7, where each entry is a List<Show> representing all shows airing on the nth day of the week
+     * @return Array of length 7, where each entry is an ArrayList<Show> representing all shows airing on the nth day of the week
      */
     public ArrayList<Show>[] buildWeeklyScheduleArray() {
 
