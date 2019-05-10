@@ -1,11 +1,14 @@
 package com.jbproductions.wmbr;
 
 import android.support.annotation.NonNull;
+import android.support.design.card.MaterialCardView;
 import android.support.v7.util.SortedList;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageButton;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import java.util.List;
@@ -103,6 +106,7 @@ public class ShowAdapter extends RecyclerView.Adapter<ShowAdapter.ViewHolder> {
         holder.nameTextView.setText(show.getName());
         holder.hostTextView.setText(show.getHosts());
         holder.timeTextView.setText(Integer.toString(show.getTime()));
+        holder.descriptionTextView.setText(show.getDescription());
     }
 
     @Override
@@ -111,13 +115,47 @@ public class ShowAdapter extends RecyclerView.Adapter<ShowAdapter.ViewHolder> {
     }
 
     class ViewHolder extends RecyclerView.ViewHolder {
-        TextView nameTextView, hostTextView, timeTextView;
+        MaterialCardView showCardView;
+        TextView nameTextView, hostTextView, timeTextView, descriptionTextView;
+        ImageButton toggleImageButton;
 
         public ViewHolder(View itemView) {
             super(itemView);
+            showCardView = itemView.findViewById(R.id.card_view_show);
             nameTextView = itemView.findViewById(R.id.text_view_name);
             hostTextView = itemView.findViewById(R.id.text_view_host);
             timeTextView = itemView.findViewById(R.id.text_view_time);
+            descriptionTextView = itemView.findViewById(R.id.text_view_description);
+            toggleImageButton = itemView.findViewById(R.id.toggle_show_button);
+
+            showCardView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    if(descriptionTextView.getVisibility() == View.VISIBLE) {
+                        descriptionTextView.setVisibility(View.GONE);
+                        toggleImageButton.setImageResource(R.drawable.ic_keyboard_arrow_down_black_24dp);
+                    }
+                    else {
+                        descriptionTextView.setVisibility(View.VISIBLE);
+                        toggleImageButton.setImageResource(R.drawable.ic_keyboard_arrow_up_black_24dp);
+                    }
+                }
+            });
+
+            toggleImageButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    if(descriptionTextView.getVisibility() == View.VISIBLE) {
+                        descriptionTextView.setVisibility(View.GONE);
+                        toggleImageButton.setImageResource(R.drawable.ic_keyboard_arrow_down_black_24dp);
+                    }
+                    else {
+                        descriptionTextView.setVisibility(View.VISIBLE);
+                        toggleImageButton.setImageResource(R.drawable.ic_keyboard_arrow_up_black_24dp);
+                    }
+                }
+            });
+
         }
     }
 }
