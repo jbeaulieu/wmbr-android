@@ -101,6 +101,7 @@ public class ShowAdapter extends RecyclerView.Adapter<ShowAdapter.ViewHolder> {
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         Show show = list.get(position);
         holder.nameTextView.setText(show.getName());
+        holder.hostTextView.setText(show.getHosts());
         holder.timeTextView.setText(Integer.toString(show.getTime()));
     }
 
@@ -110,11 +111,12 @@ public class ShowAdapter extends RecyclerView.Adapter<ShowAdapter.ViewHolder> {
     }
 
     class ViewHolder extends RecyclerView.ViewHolder {
-        TextView nameTextView, timeTextView;
+        TextView nameTextView, hostTextView, timeTextView;
 
         public ViewHolder(View itemView) {
             super(itemView);
             nameTextView = itemView.findViewById(R.id.text_view_name);
+            hostTextView = itemView.findViewById(R.id.text_view_host);
             timeTextView = itemView.findViewById(R.id.text_view_time);
         }
     }
