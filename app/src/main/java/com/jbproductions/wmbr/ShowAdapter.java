@@ -105,7 +105,7 @@ public class ShowAdapter extends RecyclerView.Adapter<ShowAdapter.ViewHolder> {
         Show show = list.get(position);
         holder.nameTextView.setText(show.getName());
         holder.hostTextView.setText(show.getHosts());
-        holder.timeTextView.setText(Integer.toString(show.getTime()));
+        holder.timeTextView.setText(show.getTimeString());
         holder.descriptionTextView.setText(show.getDescription());
         holder.urlTextView.setText(show.getUrl());
         holder.emailTextView.setText(show.getEmail());
