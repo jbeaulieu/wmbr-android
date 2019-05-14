@@ -107,6 +107,12 @@ public class ShowAdapter extends RecyclerView.Adapter<ShowAdapter.ViewHolder> {
         holder.hostTextView.setText(show.getHosts());
         holder.timeTextView.setText(Integer.toString(show.getTime()));
         holder.descriptionTextView.setText(show.getDescription());
+        holder.urlTextView.setText(show.getUrl());
+        holder.emailTextView.setText(show.getEmail());
+
+        if(show.getAlternates() != 0) {
+            holder.alternatesTextView.setText("Alternates Weekly");
+        }
     }
 
     @Override
@@ -116,7 +122,7 @@ public class ShowAdapter extends RecyclerView.Adapter<ShowAdapter.ViewHolder> {
 
     class ViewHolder extends RecyclerView.ViewHolder {
         MaterialCardView showCardView;
-        TextView nameTextView, hostTextView, timeTextView, descriptionTextView;
+        TextView nameTextView, hostTextView, timeTextView, descriptionTextView, urlTextView, emailTextView, alternatesTextView;
         ImageButton toggleImageButton;
 
         public ViewHolder(View itemView) {
@@ -126,18 +132,27 @@ public class ShowAdapter extends RecyclerView.Adapter<ShowAdapter.ViewHolder> {
             hostTextView = itemView.findViewById(R.id.text_view_host);
             timeTextView = itemView.findViewById(R.id.text_view_time);
             descriptionTextView = itemView.findViewById(R.id.text_view_description);
+            urlTextView = itemView.findViewById(R.id.text_view_url);
+            emailTextView = itemView.findViewById(R.id.text_view_email);
+            alternatesTextView = itemView.findViewById(R.id.text_view_alternates);
             toggleImageButton = itemView.findViewById(R.id.toggle_show_button);
 
             showCardView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
                     if(descriptionTextView.getVisibility() == View.VISIBLE) {
-                        descriptionTextView.setVisibility(View.GONE);
                         toggleImageButton.setImageResource(R.drawable.ic_keyboard_arrow_down_black_24dp);
+                        descriptionTextView.setVisibility(View.GONE);
+                        urlTextView.setVisibility(View.GONE);
+                        emailTextView.setVisibility(View.GONE);
+                        alternatesTextView.setVisibility(View.GONE);
                     }
                     else {
-                        descriptionTextView.setVisibility(View.VISIBLE);
                         toggleImageButton.setImageResource(R.drawable.ic_keyboard_arrow_up_black_24dp);
+                        descriptionTextView.setVisibility(View.VISIBLE);
+                        if(!"".equals(urlTextView.getText())) {urlTextView.setVisibility(View.VISIBLE);}
+                        if(!"".equals(emailTextView.getText())) {emailTextView.setVisibility(View.VISIBLE);}
+                        if(!"".equals(alternatesTextView.getText())) {alternatesTextView.setVisibility(View.VISIBLE);}
                     }
                 }
             });
@@ -146,12 +161,18 @@ public class ShowAdapter extends RecyclerView.Adapter<ShowAdapter.ViewHolder> {
                 @Override
                 public void onClick(View view) {
                     if(descriptionTextView.getVisibility() == View.VISIBLE) {
-                        descriptionTextView.setVisibility(View.GONE);
                         toggleImageButton.setImageResource(R.drawable.ic_keyboard_arrow_down_black_24dp);
+                        descriptionTextView.setVisibility(View.GONE);
+                        urlTextView.setVisibility(View.GONE);
+                        emailTextView.setVisibility(View.GONE);
+                        alternatesTextView.setVisibility(View.GONE);
                     }
                     else {
-                        descriptionTextView.setVisibility(View.VISIBLE);
                         toggleImageButton.setImageResource(R.drawable.ic_keyboard_arrow_up_black_24dp);
+                        descriptionTextView.setVisibility(View.VISIBLE);
+                        if(!"".equals(urlTextView.getText())) {urlTextView.setVisibility(View.VISIBLE);}
+                        if(!"".equals(emailTextView.getText())) {emailTextView.setVisibility(View.VISIBLE);}
+                        if(!"".equals(alternatesTextView.getText())) {alternatesTextView.setVisibility(View.VISIBLE);}
                     }
                 }
             });
