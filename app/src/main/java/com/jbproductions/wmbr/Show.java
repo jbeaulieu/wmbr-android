@@ -111,10 +111,10 @@ public class Show {
         if(showEmail.contains("@")) {
             email = showEmail;
         }
-        else {
+        else if(!"".equals(showEmail)) {
+            // If the email parameter does not contain "@" but isn't an empty string, append the wmbr suffix
             email = showEmail + "@wmbr.org";
         }
-
     }
 
     /**
