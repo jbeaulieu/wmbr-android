@@ -112,7 +112,7 @@ public class ScheduleFragment extends Fragment {
         int mNum;
 
         RecyclerView recyclerView;
-        ShowAdapter showAdapter = new ShowAdapter();
+        ShowAdapter showAdapter;
 
         /**
          * Create a new instance of RecyclerViewFragment, providing "num"
@@ -135,6 +135,7 @@ public class ScheduleFragment extends Fragment {
         @Override
         public void onCreate(Bundle savedInstanceState) {
             super.onCreate(savedInstanceState);
+            showAdapter = new ShowAdapter(getActivity());
             mNum = getArguments() != null ? getArguments().getInt("num") : 1;
         }
 

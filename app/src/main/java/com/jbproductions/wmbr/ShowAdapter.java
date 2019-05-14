@@ -1,5 +1,8 @@
 package com.jbproductions.wmbr;
 
+import android.content.Context;
+import android.content.Intent;
+import android.net.Uri;
 import android.support.annotation.NonNull;
 import android.support.design.card.MaterialCardView;
 import android.support.v7.util.SortedList;
@@ -8,7 +11,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import java.util.List;
@@ -18,9 +20,11 @@ import java.util.List;
  */
 public class ShowAdapter extends RecyclerView.Adapter<ShowAdapter.ViewHolder> {
 
+    private Context context;
     private SortedList<Show> list;
 
-    ShowAdapter() {
+    ShowAdapter(Context c) {
+        context = c;
         list = new SortedList<>(Show.class, new SortedList.Callback<Show>() {
             @Override
             public int compare(Show show1, Show show2) {
@@ -137,7 +141,7 @@ public class ShowAdapter extends RecyclerView.Adapter<ShowAdapter.ViewHolder> {
             alternatesTextView = itemView.findViewById(R.id.text_view_alternates);
             toggleImageButton = itemView.findViewById(R.id.toggle_show_button);
 
-            showCardView.setOnClickListener(new View.OnClickListener() {
+            View.OnClickListener expandShowCardViewListener = new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
                     if(descriptionTextView.getVisibility() == View.VISIBLE) {
@@ -155,28 +159,28 @@ public class ShowAdapter extends RecyclerView.Adapter<ShowAdapter.ViewHolder> {
                         if(!"".equals(alternatesTextView.getText())) {alternatesTextView.setVisibility(View.VISIBLE);}
                     }
                 }
-            });
+            };
 
-            toggleImageButton.setOnClickListener(new View.OnClickListener() {
+            showCardView.setOnClickListener(expandShowCardViewListener);
+            toggleImageButton.setOnClickListener(expandShowCardViewListener);
+
+            emailTextView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    if(descriptionTextView.getVisibility() == View.VISIBLE) {
-                        toggleImageButton.setImageResource(R.drawable.ic_keyboard_arrow_down_black_24dp);
-                        descriptionTextView.setVisibility(View.GONE);
-                        urlTextView.setVisibility(View.GONE);
-                        emailTextView.setVisibility(View.GONE);
-                        alternatesTextView.setVisibility(View.GONE);
-                    }
-                    else {
-                        toggleImageButton.setImageResource(R.drawable.ic_keyboard_arrow_up_black_24dp);
-                        descriptionTextView.setVisibility(View.VISIBLE);
-                        if(!"".equals(urlTextView.getText())) {urlTextView.setVisibility(View.VISIBLE);}
-                        if(!"".equals(emailTextView.getText())) {emailTextView.setVisibility(View.VISIBLE);}
-                        if(!"".equals(alternatesTextView.getText())) {alternatesTextView.setVisibility(View.VISIBLE);}
-                    }
+                    String uri = "mailto:" + emailTextView.getText().toString();
+                    Intent intent = new Intent(Intent.ACTION_SENDTO);
+                    intent.setData(Uri.parse(uri));
+                    context.startActivity(intent);
                 }
             });
 
+            urlTextView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(urlTextView.getText().toString()));
+                    context.startActivity(intent);
+                }
+            });
         }
     }
 }

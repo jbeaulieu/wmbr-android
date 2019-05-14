@@ -46,6 +46,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_below="@id/text_view_description"
+            android:textColor="@color/hyperlinkBlue"
             android:visibility="gone"/>
 
         <TextView
@@ -53,6 +54,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_below="@id/text_view_url"
+            android:textColor="@color/hyperlinkBlue"
             android:visibility="gone"/>
 
         <TextView

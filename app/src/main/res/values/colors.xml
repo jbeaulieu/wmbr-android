@@ -7,4 +7,5 @@
     <color name="colorBlueLight">#3B8EA5</color>
     <color name="colorBlueMedium">#2D728F</color>
     <color name="colorBlueDark">#1F5673</color>
+    <color name="hyperlinkBlue">#0000FF</color>
 </resources>
