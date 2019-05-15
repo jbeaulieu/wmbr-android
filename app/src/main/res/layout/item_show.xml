@@ -34,37 +34,43 @@
             android:layout_height="wrap_content"
             android:layout_alignParentRight="true"/>
 
-        <TextView
-            android:id="@+id/text_view_description"
+        <LinearLayout
+            android:id="@+id/expand_layout"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_below="@id/text_view_host"
-            android:visibility="gone"/>
+            android:orientation="vertical"
+            android:visibility="gone">
 
-        <TextView
-            android:id="@+id/text_view_url"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/text_view_description"
-            android:textColor="@color/hyperlinkBlue"
-            android:visibility="gone"/>
+            <TextView
+                android:id="@+id/text_view_description"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"/>
 
-        <TextView
-            android:id="@+id/text_view_email"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/text_view_url"
-            android:textColor="@color/hyperlinkBlue"
-            android:visibility="gone"/>
+            <TextView
+                android:id="@+id/text_view_url"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/hyperlinkBlue"
+                android:visibility="gone"/>
 
-        <TextView
-            android:id="@+id/text_view_alternates"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/text_view_email"
-            android:textStyle="italic"
-            android:visibility="gone"/>
-        
+            <TextView
+                android:id="@+id/text_view_email"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/hyperlinkBlue"
+                android:visibility="gone"/>
+
+            <TextView
+                android:id="@+id/text_view_alternates"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/alternates_message"
+                android:textStyle="italic"
+                android:visibility="gone"/>
+
+        </LinearLayout>
+
         <ImageButton
             android:id="@+id/toggle_show_button"
             android:layout_width="wrap_content"

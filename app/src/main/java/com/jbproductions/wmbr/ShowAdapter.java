@@ -10,7 +10,10 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.Animation;
+import android.view.animation.Transformation;
 import android.widget.ImageButton;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import java.util.List;
@@ -111,11 +114,22 @@ public class ShowAdapter extends RecyclerView.Adapter<ShowAdapter.ViewHolder> {
         holder.hostTextView.setText(show.getHosts());
         holder.timeTextView.setText(show.getTimeString());
         holder.descriptionTextView.setText(show.getDescription());
-        holder.urlTextView.setText(show.getUrl());
-        holder.emailTextView.setText(show.getEmail());
 
+        // If a show has a url set, enable the visibility of the TextView and set the text
+        if(!"".equals(show.getUrl())) {
+            holder.urlTextView.setVisibility(View.VISIBLE);
+            holder.urlTextView.setText(show.getUrl());
+        }
+
+        // If a show has an email set, enable the visibility of the TextView and set the text
+        if(!"".equals(show.getEmail())) {
+            holder.emailTextView.setVisibility(View.VISIBLE);
+            holder.emailTextView.setText(show.getEmail());
+        }
+
+        // If a show alternates weekly, enable the visibility of the TextView
         if(show.getAlternates() != 0) {
-            holder.alternatesTextView.setText("Alternates Weekly");
+            holder.alternatesTextView.setVisibility(View.VISIBLE);
         }
     }
 
@@ -126,12 +140,14 @@ public class ShowAdapter extends RecyclerView.Adapter<ShowAdapter.ViewHolder> {
 
     class ViewHolder extends RecyclerView.ViewHolder {
         MaterialCardView showCardView;
+        LinearLayout expandableLayout;
         TextView nameTextView, hostTextView, timeTextView, descriptionTextView, urlTextView, emailTextView, alternatesTextView;
         ImageButton toggleImageButton;
 
-        public ViewHolder(View itemView) {
+        ViewHolder(View itemView) {
             super(itemView);
             showCardView = itemView.findViewById(R.id.card_view_show);
+            expandableLayout = itemView.findViewById(R.id.expand_layout);
             nameTextView = itemView.findViewById(R.id.text_view_name);
             hostTextView = itemView.findViewById(R.id.text_view_host);
             timeTextView = itemView.findViewById(R.id.text_view_time);
@@ -141,29 +157,32 @@ public class ShowAdapter extends RecyclerView.Adapter<ShowAdapter.ViewHolder> {
             alternatesTextView = itemView.findViewById(R.id.text_view_alternates);
             toggleImageButton = itemView.findViewById(R.id.toggle_show_button);
 
+            /*
+             * OnClickListener to toggle expanding/collapsing additional show details, including
+             * descriptions, urls, emails, and info about alternating (as applicable). Uses the
+             * current visible state of expandableLayout to either call expand() or collapse, and
+             * changes the drop-down arrow to a upward-facing collapse arrow if expanding.
+             */
             View.OnClickListener expandShowCardViewListener = new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    if(descriptionTextView.getVisibility() == View.VISIBLE) {
+                    if(expandableLayout.getVisibility() == View.VISIBLE) {
                         toggleImageButton.setImageResource(R.drawable.ic_keyboard_arrow_down_black_24dp);
-                        descriptionTextView.setVisibility(View.GONE);
-                        urlTextView.setVisibility(View.GONE);
-                        emailTextView.setVisibility(View.GONE);
-                        alternatesTextView.setVisibility(View.GONE);
+                        collapse(expandableLayout);
                     }
                     else {
                         toggleImageButton.setImageResource(R.drawable.ic_keyboard_arrow_up_black_24dp);
-                        descriptionTextView.setVisibility(View.VISIBLE);
-                        if(!"".equals(urlTextView.getText())) {urlTextView.setVisibility(View.VISIBLE);}
-                        if(!"".equals(emailTextView.getText())) {emailTextView.setVisibility(View.VISIBLE);}
-                        if(!"".equals(alternatesTextView.getText())) {alternatesTextView.setVisibility(View.VISIBLE);}
+                        expand(expandableLayout);
                     }
                 }
             };
-
             showCardView.setOnClickListener(expandShowCardViewListener);
             toggleImageButton.setOnClickListener(expandShowCardViewListener);
 
+            /*
+             * OnClickListener to handle clicking on email address for a show.
+             * Starts an email intent to send mail to the show's listed address
+             */
             emailTextView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
@@ -174,6 +193,10 @@ public class ShowAdapter extends RecyclerView.Adapter<ShowAdapter.ViewHolder> {
                 }
             });
 
+            /*
+             * OnClickListener to handle clicking on url for a show.
+             * Starts an URL intent to open a browser to the show's listed url
+             */
             urlTextView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
@@ -181,6 +204,72 @@ public class ShowAdapter extends RecyclerView.Adapter<ShowAdapter.ViewHolder> {
                     context.startActivity(intent);
                 }
             });
+        }
+
+        /**
+         * Function to smoothly expand a View object via animation. Used to expand CardViews on the
+         * schedule and display their extra details (description, contact info, alternates)
+         * @param v View object to be expanded
+         */
+        void expand(final View v) {
+            int matchParentMeasureSpec = View.MeasureSpec.makeMeasureSpec(((View) v.getParent()).getWidth(), View.MeasureSpec.EXACTLY);
+            int wrapContentMeasureSpec = View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED);
+            v.measure(matchParentMeasureSpec, wrapContentMeasureSpec);
+            final int targetHeight = v.getMeasuredHeight();
+
+            // Older versions of android (pre API 21) cancel animations for views with a height of 0.
+            v.getLayoutParams().height = 1;
+            v.setVisibility(View.VISIBLE);
+            Animation a = new Animation()
+            {
+                @Override
+                protected void applyTransformation(float interpolatedTime, Transformation t) {
+                    v.getLayoutParams().height = interpolatedTime == 1
+                            ? ViewGroup.LayoutParams.WRAP_CONTENT
+                            : (int)(targetHeight * interpolatedTime);
+                    v.requestLayout();
+                }
+
+                @Override
+                public boolean willChangeBounds() {
+                    return true;
+                }
+            };
+
+            // 4dp/ms
+            a.setDuration(((int)(targetHeight / v.getContext().getResources().getDisplayMetrics().density))*4);
+            v.startAnimation(a);
+        }
+
+        /**
+         * Function to smoothly collapse a View object via animation. Used to collapse CardViews on
+         * the schedule and hide their extra details (description, contact info, alternates)
+         * @param v View object to be collapsed
+         */
+        void collapse(final View v) {
+            final int initialHeight = v.getMeasuredHeight();
+
+            Animation a = new Animation()
+            {
+                @Override
+                protected void applyTransformation(float interpolatedTime, Transformation t) {
+                    if(interpolatedTime == 1){
+                        v.setVisibility(View.GONE);
+                    }else{
+                        v.getLayoutParams().height = initialHeight - (int)(initialHeight * interpolatedTime);
+                        v.requestLayout();
+                    }
+                }
+
+                @Override
+                public boolean willChangeBounds() {
+                    return true;
+                }
+            };
+
+            // 4dp/ms
+            a.setDuration(((int)(initialHeight / v.getContext().getResources().getDisplayMetrics().density))*4);
+            v.startAnimation(a);
         }
     }
 }
