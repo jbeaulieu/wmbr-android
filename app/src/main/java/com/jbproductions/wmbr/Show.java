@@ -115,6 +115,9 @@ public class Show {
             // If the email parameter does not contain "@" but isn't an empty string, append the wmbr suffix
             email = showEmail + "@wmbr.org";
         }
+        else {
+            email = "";
+        }
     }
 
     /**
