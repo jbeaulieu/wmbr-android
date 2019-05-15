@@ -40,5 +40,6 @@
     <string name="studio_disclaimer">Please note that WMBR studios are used exclusively for our on-air broadcasting and are not available for booking. Please contact MIT A/V services to book studio time on MIT\'s campus</string>
 
     <string name="alternates_message">Alternates Weekly</string>
+    <string name="expand_button_description">Expand and collapse show details</string>
 
 </resources>
