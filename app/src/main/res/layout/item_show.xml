@@ -24,17 +24,27 @@
 
             <TextView
                 android:id="@+id/text_view_name"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:textSize="16sp"
                 android:textStyle="bold"
                 android:layout_weight="9"/>
 
-            <TextView
-                android:id="@+id/text_view_time"
-                android:layout_width="wrap_content"
+            <LinearLayout
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"/>
+                android:gravity="end"
+                android:layout_weight="1">
+
+                <ImageButton
+                    android:id="@+id/toggle_show_button"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="?attr/selectableItemBackgroundBorderless"
+                    android:src="@drawable/ic_keyboard_arrow_down_black_24dp"
+                    android:contentDescription="@string/expand_button_description"/>
+
+            </LinearLayout>
 
         </TableRow>
 
@@ -47,18 +57,22 @@
 
             <TextView
                 android:id="@+id/text_view_host"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_weight="9"/>
+                android:layout_weight="8"/>
 
-            <ImageButton
-                android:id="@+id/toggle_show_button"
-                android:layout_width="wrap_content"
+            <LinearLayout
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:background="?attr/selectableItemBackgroundBorderless"
-                android:src="@drawable/ic_keyboard_arrow_down_black_24dp"
-                android:contentDescription="@string/expand_button_description"
-                android:layout_weight="1"/>
+                android:gravity="end"
+                android:layout_weight="2">
+
+                <TextView
+                    android:id="@+id/text_view_time"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"/>
+
+            </LinearLayout>
 
         </TableRow>
 
@@ -99,6 +113,24 @@
                 android:text="@string/alternates_message"
                 android:textStyle="italic"
                 android:visibility="gone"/>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <android.support.design.button.MaterialButton
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Web"
+                    style="@style/Widget.MaterialComponents.Button.TextButton"/>
+
+                <android.support.design.button.MaterialButton
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Email"
+                    style="@style/Widget.MaterialComponents.Button.TextButton"/>
+
+            </LinearLayout>
 
         </LinearLayout>
 
