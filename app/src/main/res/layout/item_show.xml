@@ -116,7 +116,10 @@
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+                android:layout_height="wrap_content"
+                android:divider="@color/colorAccent"
+                android:dividerPadding="@dimen/activity_vertical_margin"
+                android:showDividers="middle">
 
                 <android.support.design.button.MaterialButton
                     android:layout_width="wrap_content"
