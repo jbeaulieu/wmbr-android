@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.support.annotation.NonNull;
+import android.support.design.button.MaterialButton;
 import android.support.design.card.MaterialCardView;
 import android.support.v7.util.SortedList;
 import android.support.v7.widget.RecyclerView;
@@ -109,22 +110,42 @@ public class ShowAdapter extends RecyclerView.Adapter<ShowAdapter.ViewHolder> {
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-        Show show = list.get(position);
+        final Show show = list.get(position);
         holder.nameTextView.setText(show.getName());
         holder.hostTextView.setText(show.getHosts());
         holder.timeTextView.setText(show.getTimeString());
         holder.descriptionTextView.setText(show.getDescription());
 
-        // If a show has a url set, enable the visibility of the TextView and set the text
+        /*
+         * If a show has a url set, enable the visibility of the appropriate button icon
+         * and assign an OnClickListener to handle opening the show's URL via the browser
+         */
         if(!"".equals(show.getUrl())) {
-            holder.urlTextView.setVisibility(View.VISIBLE);
-            holder.urlTextView.setText(show.getUrl());
+            holder.webButton.setVisibility(View.VISIBLE);
+            holder.webButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(show.getUrl()));
+                    context.startActivity(intent);
+                }
+            });
         }
 
-        // If a show has an email set, enable the visibility of the TextView and set the text
+        /*
+         * If a show has an email set, enable the visibility of the appropriate button icon and
+         * assign an OnClickListener to handle sending an email via the user's choice of email app
+         */
         if(!"".equals(show.getEmail())) {
-            holder.emailTextView.setVisibility(View.VISIBLE);
-            holder.emailTextView.setText(show.getEmail());
+            holder.emailButton.setVisibility(View.VISIBLE);
+            holder.emailButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    String uri = "mailto:" + show.getEmail();
+                    Intent intent = new Intent(Intent.ACTION_SENDTO);
+                    intent.setData(Uri.parse(uri));
+                    context.startActivity(intent);
+                }
+            });
         }
 
         // If a show alternates weekly, enable the visibility of the TextView
@@ -140,9 +161,10 @@ public class ShowAdapter extends RecyclerView.Adapter<ShowAdapter.ViewHolder> {
 
     class ViewHolder extends RecyclerView.ViewHolder {
         MaterialCardView showCardView;
-        LinearLayout expandableLayout;
-        TextView nameTextView, hostTextView, timeTextView, descriptionTextView, urlTextView, emailTextView, alternatesTextView;
-        ImageButton toggleImageButton;
+        LinearLayout expandableLayout, expandButtonLayout;
+        TextView nameTextView, hostTextView, timeTextView, descriptionTextView, alternatesTextView;
+        ImageButton expandImageButton;
+        MaterialButton webButton, emailButton, reminderButton, collapseButton;
 
         ViewHolder(View itemView) {
             super(itemView);
@@ -152,10 +174,14 @@ public class ShowAdapter extends RecyclerView.Adapter<ShowAdapter.ViewHolder> {
             hostTextView = itemView.findViewById(R.id.text_view_host);
             timeTextView = itemView.findViewById(R.id.text_view_time);
             descriptionTextView = itemView.findViewById(R.id.text_view_description);
-            urlTextView = itemView.findViewById(R.id.text_view_url);
-            emailTextView = itemView.findViewById(R.id.text_view_email);
             alternatesTextView = itemView.findViewById(R.id.text_view_alternates);
-            toggleImageButton = itemView.findViewById(R.id.toggle_show_button);
+            expandImageButton = itemView.findViewById(R.id.expand_button);
+            expandButtonLayout = itemView.findViewById(R.id.expand_button_layout);
+
+            webButton = itemView.findViewById(R.id.url_button);
+            emailButton = itemView.findViewById(R.id.email_button);
+            reminderButton = itemView.findViewById(R.id.reminder_button);
+            collapseButton = itemView.findViewById(R.id.collapse_button);
 
             /*
              * OnClickListener to toggle expanding/collapsing additional show details, including
@@ -167,43 +193,18 @@ public class ShowAdapter extends RecyclerView.Adapter<ShowAdapter.ViewHolder> {
                 @Override
                 public void onClick(View view) {
                     if(expandableLayout.getVisibility() == View.VISIBLE) {
-                        toggleImageButton.setImageResource(R.drawable.ic_keyboard_arrow_down_black_24dp);
+                        expandButtonLayout.setVisibility(View.VISIBLE);
                         collapse(expandableLayout);
                     }
                     else {
-                        toggleImageButton.setImageResource(R.drawable.ic_keyboard_arrow_up_black_24dp);
+                        expandButtonLayout.setVisibility(View.INVISIBLE);
                         expand(expandableLayout);
                     }
                 }
             };
             showCardView.setOnClickListener(expandShowCardViewListener);
-            toggleImageButton.setOnClickListener(expandShowCardViewListener);
-
-            /*
-             * OnClickListener to handle clicking on email address for a show.
-             * Starts an email intent to send mail to the show's listed address
-             */
-            emailTextView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    String uri = "mailto:" + emailTextView.getText().toString();
-                    Intent intent = new Intent(Intent.ACTION_SENDTO);
-                    intent.setData(Uri.parse(uri));
-                    context.startActivity(intent);
-                }
-            });
-
-            /*
-             * OnClickListener to handle clicking on url for a show.
-             * Starts an URL intent to open a browser to the show's listed url
-             */
-            urlTextView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(urlTextView.getText().toString()));
-                    context.startActivity(intent);
-                }
-            });
+            expandImageButton.setOnClickListener(expandShowCardViewListener);
+            collapseButton.setOnClickListener(expandShowCardViewListener);
         }
 
         /**
