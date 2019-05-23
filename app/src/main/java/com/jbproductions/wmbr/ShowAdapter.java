@@ -161,10 +161,10 @@ public class ShowAdapter extends RecyclerView.Adapter<ShowAdapter.ViewHolder> {
 
     class ViewHolder extends RecyclerView.ViewHolder {
         MaterialCardView showCardView;
-        LinearLayout expandableLayout, expandButtonLayout;
+        LinearLayout expandableLayout;
         TextView nameTextView, hostTextView, timeTextView, descriptionTextView, alternatesTextView;
         ImageButton expandImageButton;
-        MaterialButton webButton, emailButton, reminderButton, collapseButton;
+        MaterialButton webButton, emailButton, reminderButton;
 
         ViewHolder(View itemView) {
             super(itemView);
@@ -176,12 +176,10 @@ public class ShowAdapter extends RecyclerView.Adapter<ShowAdapter.ViewHolder> {
             descriptionTextView = itemView.findViewById(R.id.text_view_description);
             alternatesTextView = itemView.findViewById(R.id.text_view_alternates);
             expandImageButton = itemView.findViewById(R.id.expand_button);
-            expandButtonLayout = itemView.findViewById(R.id.expand_button_layout);
 
             webButton = itemView.findViewById(R.id.url_button);
             emailButton = itemView.findViewById(R.id.email_button);
             reminderButton = itemView.findViewById(R.id.reminder_button);
-            collapseButton = itemView.findViewById(R.id.collapse_button);
 
             /*
              * OnClickListener to toggle expanding/collapsing additional show details, including
@@ -193,18 +191,17 @@ public class ShowAdapter extends RecyclerView.Adapter<ShowAdapter.ViewHolder> {
                 @Override
                 public void onClick(View view) {
                     if(expandableLayout.getVisibility() == View.VISIBLE) {
-                        expandButtonLayout.setVisibility(View.VISIBLE);
+                        expandImageButton.setImageResource(R.drawable.ic_keyboard_arrow_down_black_24dp);
                         collapse(expandableLayout);
                     }
                     else {
-                        expandButtonLayout.setVisibility(View.INVISIBLE);
+                        expandImageButton.setImageResource(R.drawable.ic_keyboard_arrow_up_black_24dp);
                         expand(expandableLayout);
                     }
                 }
             };
             showCardView.setOnClickListener(expandShowCardViewListener);
             expandImageButton.setOnClickListener(expandShowCardViewListener);
-            collapseButton.setOnClickListener(expandShowCardViewListener);
         }
 
         /**
