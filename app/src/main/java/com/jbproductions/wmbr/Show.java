@@ -1,5 +1,7 @@
 package com.jbproductions.wmbr;
 
+import java.util.List;
+
 public class Show {
 
     public Show() {
@@ -9,6 +11,7 @@ public class Show {
     private int id, day, time, length, alternates;
     private String name, hosts, producers, url, email, description;
     private String[] daysOfWeekArray = {"Sunday","Monday","Tuesday","Wednesday","Thursday","Friday","Saturday","Weekdays"};
+    private List<Archive> archiveList;
 
     /**
      * Sets a show's unique ID number
@@ -126,6 +129,14 @@ public class Show {
      */
     public void setDescription(String showDescription) {
         description = showDescription;
+    }
+
+    /**
+     * Adds a single Archive object to the show's internal Archive list
+     * @param archive Archive to be added
+     */
+    public void addArchive(Archive archive) {
+        archiveList.add(archive);
     }
 
     /**
@@ -257,5 +268,13 @@ public class Show {
      */
     public String getDescription() {
         return description;
+    }
+
+    /**
+     * Retrieves a list of Archives available for a Show
+     * @return List of Archive objects belonging to the Show
+     */
+    public List<Archive> getArchiveList() {
+        return archiveList;
     }
 }
