@@ -43,6 +43,12 @@ public class ScheduleFragment extends Fragment {
         return view;
     }
 
+    @Override
+    public void onStart() {
+        super.onStart();
+        requireActivity().setTitle(R.string.schedule);
+    }
+
     /**
      * AsyncTask to pull and parse schedule data from wmbr.org.
      * Calls to ScheduleParser for xml parsing operations.

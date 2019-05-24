@@ -4,7 +4,12 @@
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
 
-    <string name="action_settings">Settings</string>
+    <string name="wmbr">WMBR</string>
+    <string name="schedule">Schedule</string>
+    <string name="archives">Archives</string>
+    <string name="events">Events</string>
+    <string name="contact">Contact Us</string>
+    <string name="settings">Settings</string>
 
     <string name="stream_button_description">Start live stream</string>
     <string name="stop_button_description">Stop live stream</string>

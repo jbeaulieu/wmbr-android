@@ -19,4 +19,9 @@ public class ArchiveFragment extends Fragment {
         return inflater.inflate(R.layout.fragment_archive, container, false);
     }
 
+    @Override
+    public void onStart() {
+        super.onStart();
+        requireActivity().setTitle(R.string.archives);
+    }
 }

@@ -110,6 +110,12 @@ public class StreamFragment extends Fragment {
         return view;
     }
 
+    @Override
+    public void onStart() {
+        super.onStart();
+        requireActivity().setTitle(R.string.wmbr);
+    }
+
     /**
      * Toggles livestream playback on/off
      * Used by the play/stop button within this fragment. This function starts/stops the stream, changes the button

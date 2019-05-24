@@ -19,4 +19,9 @@ public class EventsFragment extends Fragment {
         return inflater.inflate(R.layout.fragment_event, container, false);
     }
 
+    @Override
+    public void onStart() {
+        super.onStart();
+        requireActivity().setTitle(R.string.events);
+    }
 }
