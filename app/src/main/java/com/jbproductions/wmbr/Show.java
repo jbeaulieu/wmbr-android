@@ -1,5 +1,6 @@
 package com.jbproductions.wmbr;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class Show {
@@ -11,7 +12,7 @@ public class Show {
     private int id, day, time, length, alternates;
     private String name, hosts, producers, url, email, description;
     private String[] daysOfWeekArray = {"Sunday","Monday","Tuesday","Wednesday","Thursday","Friday","Saturday","Weekdays"};
-    private List<Archive> archiveList;
+    private List<Archive> archiveList = new ArrayList<>();
 
     /**
      * Sets a show's unique ID number

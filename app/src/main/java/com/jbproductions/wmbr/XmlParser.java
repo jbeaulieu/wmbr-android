@@ -19,7 +19,6 @@ public class XmlParser {
     }
 
     private static final String CURRENT_INFO_URL = "https://wmbr.org/cgi-bin/xmlinfo";
-    private static final String ARCHIVE_URL = "https://wmbr.org/cgi-bin/xmlarch";
     private static final String TRACK_BLASTER_URL = "https://www.track-blaster.com/wmbr/pl_recent_songs.php";
 
 
