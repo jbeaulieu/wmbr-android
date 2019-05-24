@@ -153,6 +153,10 @@ public class ShowAdapter extends RecyclerView.Adapter<ShowAdapter.ViewHolder> {
         if(show.getAlternates() != 0) {
             holder.alternatesTextView.setVisibility(View.VISIBLE);
         }
+        else if(show.getDay() == 7) {
+            holder.alternatesTextView.setText(R.string.weekday_message);
+            holder.alternatesTextView.setVisibility(View.VISIBLE);
+        }
     }
 
     @Override
