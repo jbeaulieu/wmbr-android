@@ -66,9 +66,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
+            android:paddingTop="4dp"
             android:visibility="gone">
-
-            <View style="@style/Divider"/>
 
             <TextView
                 android:id="@+id/text_view_description"
