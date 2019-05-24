@@ -66,10 +66,9 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:divider="@color/colorAccent"
-            android:dividerPadding="@dimen/activity_horizontal_margin"
-            android:showDividers="beginning"
             android:visibility="gone">
+
+            <View style="@style/Divider"/>
 
             <TextView
                 android:id="@+id/text_view_description"
