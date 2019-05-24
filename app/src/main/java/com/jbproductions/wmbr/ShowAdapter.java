@@ -16,6 +16,7 @@ import android.view.animation.Transformation;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.List;
 
@@ -202,6 +203,14 @@ public class ShowAdapter extends RecyclerView.Adapter<ShowAdapter.ViewHolder> {
             };
             showCardView.setOnClickListener(expandShowCardViewListener);
             expandImageButton.setOnClickListener(expandShowCardViewListener);
+
+            View.OnClickListener reminderListener = new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Toast.makeText(context, "Reminders coming soon!", Toast.LENGTH_SHORT).show();
+                }
+            };
+            reminderButton.setOnClickListener(reminderListener);
         }
 
         /**

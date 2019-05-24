@@ -112,6 +112,7 @@
                     android:id="@+id/reminder_button"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:visibility="gone"
                     app:icon="@drawable/ic_add_alert_black_24dp"
                     style="@style/IconOnlyButton"/>
 
