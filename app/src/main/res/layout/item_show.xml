@@ -1,13 +1,135 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.design.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/card_view_show"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="vertical"
-    android:padding="8dp">
+    android:layout_marginStart="5dp"
+    android:layout_marginTop="4dp"
+    android:layout_marginEnd="5dp"
+    android:layout_marginBottom="4dp">
 
-    <TextView
-        android:id="@+id/text_view_show"
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:padding="10dp">
 
-</LinearLayout>
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+            android:paddingBottom="4dp"
+            android:weightSum="10">
+
+            <TextView
+                android:id="@+id/text_view_name"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:textSize="16sp"
+                android:textStyle="bold"
+                android:layout_weight="8"/>
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:gravity="end"
+                android:layout_weight="2">
+
+                <TextView
+                    android:id="@+id/text_view_time"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"/>
+
+            </LinearLayout>
+
+        </TableRow>
+
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+            android:paddingBottom="4dp"
+            android:weightSum="10">
+
+            <TextView
+                android:id="@+id/text_view_host"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="9"/>
+
+        </TableRow>
+
+        <LinearLayout
+            android:id="@+id/expand_layout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:visibility="gone">
+
+            <TextView
+                android:id="@+id/text_view_description"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingTop="4dp"
+                android:paddingBottom="4dp"/>
+
+            <TextView
+                android:id="@+id/text_view_alternates"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingTop="4dp"
+                android:paddingBottom="4dp"
+                android:text="@string/alternates_message"
+                android:textStyle="italic"
+                android:visibility="gone"/>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:divider="@color/colorAccent"
+                android:dividerPadding="@dimen/activity_vertical_margin"
+                android:showDividers="middle">
+
+                <android.support.design.button.MaterialButton
+                    android:id="@+id/url_button"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:visibility="gone"
+                    app:icon="@drawable/ic_web_black_24dp"
+                    style="@style/IconOnlyButton"/>
+
+                <android.support.design.button.MaterialButton
+                    android:id="@+id/email_button"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:visibility="gone"
+                    app:icon="@drawable/ic_email_black_24dp"
+                    style="@style/IconOnlyButton"/>
+
+                <android.support.design.button.MaterialButton
+                    android:id="@+id/reminder_button"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:visibility="gone"
+                    app:icon="@drawable/ic_add_alert_black_24dp"
+                    style="@style/IconOnlyButton"/>
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+    <ImageButton
+        android:id="@+id/expand_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="end|bottom"
+        android:layout_margin="10dp"
+        android:background="?attr/selectableItemBackgroundBorderless"
+        android:src="@drawable/ic_keyboard_arrow_down_black_24dp"
+        android:contentDescription="@string/expand_button_description"/>
+
+</android.support.design.card.MaterialCardView>

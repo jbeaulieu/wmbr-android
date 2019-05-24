@@ -39,4 +39,9 @@
     <string name="wmbr_address">3 Ames Street\nCambridge, MA 02142</string>
     <string name="studio_disclaimer">Please note that WMBR studios are used exclusively for our on-air broadcasting and are not available for booking. Please contact MIT A/V services to book studio time on MIT\'s campus</string>
 
+    <string name="alternates_message">Alternates Weekly</string>
+    <string name="weekday_message">Airs Weekdays</string>
+    <string name="expand_button_description">Expand show details</string>
+    <string name="collapse_button_description">Collapse show details</string>
+
 </resources>

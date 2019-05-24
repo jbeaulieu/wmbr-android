@@ -1,36 +1,49 @@
 package com.jbproductions.wmbr;
 
-import android.arch.lifecycle.LiveData;
-import android.arch.lifecycle.MutableLiveData;
-import android.arch.lifecycle.ViewModel;
-
 import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserException;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
-/**
- * ViewModel class enabling access to WMBR schedule data from multiple places within the app
- */
-class ScheduleViewModel extends ViewModel {
+class ScheduleParser {
 
     private static final String SCHEDULE_URL = "https://wmbr.org/cgi-bin/xmlsched";
 
-    private MutableLiveData<ShowDatabase> showDatabase;
+    static ArrayList<Show>[] getWeekScheduleArray() {
+        ArrayList[] weeklyScheduleArray = new ArrayList[7];
+        Show selectedShow;
 
-    LiveData<ShowDatabase> getShowDatabase() {
-        if(showDatabase == null) {
-            showDatabase = new MutableLiveData<>();
-            loadShows();
+        List<Show> fullShowList = parseFullShowList();
+
+        // First need to initialize each arrayList in weeklyScheduleArray
+        for(int i=0; i<7; i++) {
+            weeklyScheduleArray[i] = new ArrayList<Show>();
         }
-        return showDatabase;
+
+        for(int i=0; i < fullShowList.size(); i++) {     // Iterate through all shows in the showDatabase
+            selectedShow = fullShowList.get(i);
+            if(selectedShow.getDay() == 7)
+            {
+                // If a show has getDay() == 7 (weekdays), add it to the list for Monday-Friday
+                for(int j=1; j<=5; j++){
+                    weeklyScheduleArray[j].add(selectedShow);
+                }
+            }
+            else {
+                // Otherwise, add it to the list for the day that it airs
+                weeklyScheduleArray[selectedShow.getDay()].add(selectedShow);
+            }
+        }
+
+        return weeklyScheduleArray;
     }
 
-    // Asynchronous operation to fetch show data
-    private void loadShows() {
+    static List<Show> parseFullShowList() {
 
-        ShowDatabase db = new ShowDatabase();
         XmlPullParser parser = XmlParser.setupXmlParser(SCHEDULE_URL);
+        List<Show> returnList = new ArrayList<>();
         Show currentShow = null;
         int showid;
 
@@ -48,7 +61,7 @@ class ScheduleViewModel extends ViewModel {
                         currentShow = new Show();
                         showid = Integer.parseInt(parser.getAttributeValue(0));
                         currentShow.setID(showid);
-                        db.put(showid, currentShow);
+                        returnList.add(currentShow);
                     } else if (currentShow != null) {
 
                         if("name".equals(tagName)) {
@@ -83,6 +96,6 @@ class ScheduleViewModel extends ViewModel {
             e.printStackTrace();
         }
 
-        showDatabase.setValue(db);
+        return returnList;
     }
 }

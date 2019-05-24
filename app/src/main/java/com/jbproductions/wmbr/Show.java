@@ -111,10 +111,13 @@ public class Show {
         if(showEmail.contains("@")) {
             email = showEmail;
         }
-        else {
+        else if(!"".equals(showEmail)) {
+            // If the email parameter does not contain "@" but isn't an empty string, append the wmbr suffix
             email = showEmail + "@wmbr.org";
         }
-
+        else {
+            email = "";
+        }
     }
 
     /**
@@ -168,6 +171,27 @@ public class Show {
      */
     public int getTime() {
         return time;
+    }
+
+    /**
+     * Gets a human-readable String of the show's start time
+     * @return String of the show's start time, expressed in 12-hour AM/PM time
+     */
+    public String getTimeString() {
+        String returnTime;
+
+        if(time == 0) { return "12:00 AM"; }
+        else if (time == 1200) { return "12:00PM"; }
+        else if(time < 1200) {
+            returnTime = Integer.toString(time);
+            returnTime = new StringBuilder(returnTime).insert(returnTime.length()-2, ":").append(" AM").toString();
+        }
+        else {
+            returnTime = Integer.toString(time - 1200);
+            returnTime = new StringBuilder(returnTime).insert(returnTime.length()-2, ":").append(" PM").toString();
+        }
+
+        return returnTime;
     }
 
     /**
