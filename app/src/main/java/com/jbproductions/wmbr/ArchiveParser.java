@@ -49,6 +49,9 @@ public class ArchiveParser {
                             tagName = parser.getName();
                             while(!("archive".equals(tagName) && eventType == XmlPullParser.END_TAG)) {
                                 if("url".equals(tagName)) {
+                                    if ("".equals(currentArchive.getUrl())) {
+                                        break;
+                                    }
                                     currentArchive.setUrl(parser.nextText());
                                 } else if ("date".equals(tagName)) {
                                     currentArchive.setDate(parser.nextText());
@@ -56,7 +59,9 @@ public class ArchiveParser {
                                 eventType = parser.next();
                                 tagName = parser.getName();
                             }
-                            currentShow.addArchive(currentArchive);
+                            if (!"".equals(currentArchive.getUrl())) {
+                                currentShow.addArchive(currentArchive);
+                            }
                         }
                     }
                 }

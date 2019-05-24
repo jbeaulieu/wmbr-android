@@ -57,6 +57,9 @@ public class ArchiveFragment extends Fragment {
         protected void onPostExecute(Boolean downloadSuccess) {
             for(Show show:showArchives) {
                 archiveText.append("\n" + show.getName() + "\t" + show.getArchiveList().size());
+                for(Archive archive:show.getArchiveList()) {
+                    archiveText.append("\n" + archive.getUrl());
+                }
             }
         }
     }
