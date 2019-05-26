@@ -43,7 +43,6 @@ public class ArchiveParser {
                         } else if ("hosts".equals(tagName)) {
                             currentShow.setHosts(parser.nextText());
                         } else if ("archive".equals(tagName)) {
-                            Log.d("Archive", "Found new Archive");
                             currentArchive = new Archive();
                             parser.next();
                             tagName = parser.getName();
