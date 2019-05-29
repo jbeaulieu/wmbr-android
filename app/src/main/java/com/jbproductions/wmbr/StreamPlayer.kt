@@ -2,11 +2,14 @@ package com.jbproductions.wmbr
 
 import android.content.Context
 import android.media.AudioAttributes
+import android.media.AudioFocusRequest
 import android.media.AudioManager
 import android.media.MediaPlayer
+import android.os.Handler
 import android.os.PowerManager
 import android.util.Log
 import java.io.File
+import java.util.concurrent.TimeUnit
 
 class StreamPlayer
 
@@ -15,22 +18,25 @@ class StreamPlayer
         private var mMediaPlayer: MediaPlayer? = null
         private var currentContext: Context? = null
         private val callbacks = ArrayList<StreamPlayerCallback>()
+        private val audioManager: AudioManager = context.getSystemService(Context.AUDIO_SERVICE) as AudioManager
+        private var focusRequest: AudioFocusRequest? = null
+        private val handler = Handler()
 
         private val mediaPlayer: MediaPlayer?
-        get() {
-            if (mMediaPlayer == null) {
-                val attributes = AudioAttributes.Builder()
-                        .setLegacyStreamType(AudioManager.STREAM_MUSIC)
-                        .build()
-                mMediaPlayer = MediaPlayer()
-                mMediaPlayer?.setWakeMode(currentContext, PowerManager.PARTIAL_WAKE_LOCK)
-                mMediaPlayer?.setAudioAttributes(attributes)
-                mMediaPlayer?.setOnCompletionListener(mediaPlayerCompletionListener)
-                mMediaPlayer?.setOnPreparedListener(mediaPlayerPreparedListener)
-                mMediaPlayer?.setOnErrorListener(mediaPlayerErrorListener)
+            get() {
+                if (mMediaPlayer == null) {
+                    val attributes = AudioAttributes.Builder()
+                            .setLegacyStreamType(AudioManager.STREAM_MUSIC)
+                            .build()
+                    mMediaPlayer = MediaPlayer()
+                    mMediaPlayer?.setWakeMode(currentContext, PowerManager.PARTIAL_WAKE_LOCK)
+                    mMediaPlayer?.setAudioAttributes(attributes)
+                    mMediaPlayer?.setOnCompletionListener(mediaPlayerCompletionListener)
+                    mMediaPlayer?.setOnPreparedListener(mediaPlayerPreparedListener)
+                    mMediaPlayer?.setOnErrorListener(mediaPlayerErrorListener)
+                }
+                return mMediaPlayer
             }
-            return mMediaPlayer
-        }
         /**
          * Once mediaplayer completes, inform all the callbacks
          */
@@ -58,6 +64,34 @@ class StreamPlayer
                 callback.playerError()
             }
             false
+        }
+
+        private val afChangeListener = AudioManager.OnAudioFocusChangeListener { focusChange ->
+            when (focusChange) {
+                AudioManager.AUDIOFOCUS_LOSS -> {
+                    // Permanent loss of audio focus
+                    // Pause playback immediately
+                    mediaPlayer!!.pause()
+                    //mediaController.transportControls.pause()
+                    // Wait 30 seconds before stopping playback
+                    handler.postDelayed(delayedStopRunnable, TimeUnit.SECONDS.toMillis(30))
+                }
+                AudioManager.AUDIOFOCUS_LOSS_TRANSIENT -> {
+                    // Pause playback
+                }
+                AudioManager.AUDIOFOCUS_LOSS_TRANSIENT_CAN_DUCK -> {
+                    // Lower the volume, keep playing
+                }
+                AudioManager.AUDIOFOCUS_GAIN -> {
+                    // Your app has been granted audio focus again
+                    // Raise volume to normal, restart playback if necessary
+                }
+            }
+        }
+
+        private var delayedStopRunnable = Runnable {
+            mediaPlayer!!.stop()
+            //mediaController.transportControls.stop()
         }
 
         // Set the context
@@ -91,13 +125,63 @@ class StreamPlayer
             //Set the url to play
             mediaPlayer!!.setDataSource(url)
 
-            //prepare the player, once prepared the respective listner is called
-            try {
-                mediaPlayer!!.prepareAsync()
-            } catch (e: IllegalStateException) {
+            //prepare the player, once prepared the respective listener is called
+            requestAudioFocus()
+        }
 
+        private fun requestAudioFocus() {
+
+            if(android.os.Build.VERSION.SDK_INT < android.os.Build.VERSION_CODES.O) {
+                // Request audio focus for playback
+                val result: Int = audioManager.requestAudioFocus(
+                        afChangeListener,
+                        // Use the music stream.
+                        AudioManager.STREAM_MUSIC,
+                        // Request permanent focus.
+                        AudioManager.AUDIOFOCUS_GAIN
+                )
+
+                if (result == AudioManager.AUDIOFOCUS_REQUEST_GRANTED) {
+                    // Start playback
+                }
+
+            } else {
+                focusRequest = AudioFocusRequest.Builder(AudioManager.AUDIOFOCUS_GAIN).run {
+                    setAudioAttributes(AudioAttributes.Builder().run {
+                        setUsage(AudioAttributes.USAGE_GAME)
+                        setContentType(AudioAttributes.CONTENT_TYPE_MUSIC)
+                        build()
+                    })
+                    setAcceptsDelayedFocusGain(true)
+                    setOnAudioFocusChangeListener(afChangeListener, handler)
+                    build()
+                }
+                val focusLock = Any()
+
+                var playbackDelayed = false
+                var playbackNowAuthorized = false
+
+
+                val res = audioManager.requestAudioFocus(focusRequest!!)
+                synchronized(focusLock) {
+                    playbackNowAuthorized = when (res) {
+                        AudioManager.AUDIOFOCUS_REQUEST_FAILED -> false
+                        AudioManager.AUDIOFOCUS_REQUEST_GRANTED -> {
+                            try {
+                                mediaPlayer!!.prepareAsync()
+                            } catch (e: IllegalStateException) {
+
+                            }
+                            true
+                        }
+                        AudioManager.AUDIOFOCUS_REQUEST_DELAYED -> {
+                            playbackDelayed = true
+                            false
+                        }
+                        else -> false
+                    }
+                }
             }
-
         }
 
         /**
@@ -118,6 +202,9 @@ class StreamPlayer
          * Public function to stop playback
          */
         fun stop() {
+            if(android.os.Build.VERSION.SDK_INT < android.os.Build.VERSION_CODES.O) {
+                audioManager.abandonAudioFocus(afChangeListener)
+            }
             mediaPlayer!!.stop()
         }
 
