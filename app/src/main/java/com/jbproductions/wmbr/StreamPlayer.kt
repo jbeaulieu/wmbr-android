@@ -15,6 +15,11 @@ class StreamPlayer
 
     constructor(context: Context){
 
+        private val MEDIA_VOLUME_DEFAULT: Float = 1.0f
+        private val MEDIA_VOLUME_DUCK: Float = 0.2f
+
+        private var mPlayOnAudioFocus: Boolean = false
+
         private var mMediaPlayer: MediaPlayer? = null
         private var currentContext: Context? = null
         private val callbacks = ArrayList<StreamPlayerCallback>()
@@ -71,20 +76,33 @@ class StreamPlayer
                 AudioManager.AUDIOFOCUS_LOSS -> {
                     // Permanent loss of audio focus
                     // Pause playback immediately
-                    mediaPlayer!!.pause()
+                    //audioManager.abandonAudioFocus()
+                    mPlayOnAudioFocus = false
+                    mediaPlayer!!.stop()
                     //mediaController.transportControls.pause()
                     // Wait 30 seconds before stopping playback
                     handler.postDelayed(delayedStopRunnable, TimeUnit.SECONDS.toMillis(30))
                 }
                 AudioManager.AUDIOFOCUS_LOSS_TRANSIENT -> {
                     // Pause playback
+                    if(mediaPlayer!!.isPlaying) {
+                        mPlayOnAudioFocus = true
+                        mediaPlayer!!.pause()
+                    }
                 }
                 AudioManager.AUDIOFOCUS_LOSS_TRANSIENT_CAN_DUCK -> {
                     // Lower the volume, keep playing
+                    mediaPlayer!!.setVolume(MEDIA_VOLUME_DUCK, MEDIA_VOLUME_DUCK)
                 }
                 AudioManager.AUDIOFOCUS_GAIN -> {
                     // Your app has been granted audio focus again
                     // Raise volume to normal, restart playback if necessary
+                    if (mPlayOnAudioFocus && !mediaPlayer!!.isPlaying) {
+                        mediaPlayer!!.prepareAsync()
+                    } else if (mediaPlayer!!.isPlaying) {
+                        mediaPlayer!!.setVolume(MEDIA_VOLUME_DEFAULT, MEDIA_VOLUME_DEFAULT)
+                    }
+                    mPlayOnAudioFocus = false
                 }
             }
         }
@@ -143,6 +161,7 @@ class StreamPlayer
 
                 if (result == AudioManager.AUDIOFOCUS_REQUEST_GRANTED) {
                     // Start playback
+                    mediaPlayer!!.prepareAsync()
                 }
 
             } else {
