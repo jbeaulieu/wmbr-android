@@ -74,6 +74,7 @@ class StreamPlayer
         private val afChangeListener = AudioManager.OnAudioFocusChangeListener { focusChange ->
             when (focusChange) {
                 AudioManager.AUDIOFOCUS_LOSS -> {
+                    Log.d("AUDIOFOCUS CHANGE", "LOSS")
                     // Permanent loss of audio focus
                     // Pause playback immediately
                     //audioManager.abandonAudioFocus()
@@ -84,6 +85,7 @@ class StreamPlayer
                     handler.postDelayed(delayedStopRunnable, TimeUnit.SECONDS.toMillis(30))
                 }
                 AudioManager.AUDIOFOCUS_LOSS_TRANSIENT -> {
+                    Log.d("AUDIOFOCUS CHANGE", "LOSS_TRANSIENT")
                     // Pause playback
                     if(mediaPlayer!!.isPlaying) {
                         mPlayOnAudioFocus = true
@@ -91,10 +93,12 @@ class StreamPlayer
                     }
                 }
                 AudioManager.AUDIOFOCUS_LOSS_TRANSIENT_CAN_DUCK -> {
+                    Log.d("AUDIOFOCUS CHANGE", "LOSS_TRANSIENT_CAN_DUCK")
                     // Lower the volume, keep playing
                     mediaPlayer!!.setVolume(MEDIA_VOLUME_DUCK, MEDIA_VOLUME_DUCK)
                 }
                 AudioManager.AUDIOFOCUS_GAIN -> {
+                    Log.d("AUDIOFOCUS CHANGE", "GAIN")
                     // Your app has been granted audio focus again
                     // Raise volume to normal, restart playback if necessary
                     if (mPlayOnAudioFocus && !mediaPlayer!!.isPlaying) {
@@ -149,9 +153,11 @@ class StreamPlayer
 
         private fun requestAudioFocus() {
 
+            val result: Int
+
             if(android.os.Build.VERSION.SDK_INT < android.os.Build.VERSION_CODES.O) {
-                // Request audio focus for playback
-                val result: Int = audioManager.requestAudioFocus(
+                // If running on Android N or below, we request audio focus through AudioManager's built-in function
+                result = audioManager.requestAudioFocus(
                         afChangeListener,
                         // Use the music stream.
                         AudioManager.STREAM_MUSIC,
@@ -159,12 +165,8 @@ class StreamPlayer
                         AudioManager.AUDIOFOCUS_GAIN
                 )
 
-                if (result == AudioManager.AUDIOFOCUS_REQUEST_GRANTED) {
-                    // Start playback
-                    mediaPlayer!!.prepareAsync()
-                }
-
             } else {
+                // If running on Android O or above, first use an AudioFocusRequest Builder to create the request
                 focusRequest = AudioFocusRequest.Builder(AudioManager.AUDIOFOCUS_GAIN).run {
                     setAudioAttributes(AudioAttributes.Builder().run {
                         setUsage(AudioAttributes.USAGE_GAME)
@@ -175,32 +177,37 @@ class StreamPlayer
                     setOnAudioFocusChangeListener(afChangeListener, handler)
                     build()
                 }
-                val focusLock = Any()
 
-                var playbackDelayed = false
-                var playbackNowAuthorized = false
+                result = audioManager.requestAudioFocus(focusRequest!!)
+            }
 
+            val focusLock = Any()
 
-                val res = audioManager.requestAudioFocus(focusRequest!!)
-                synchronized(focusLock) {
-                    playbackNowAuthorized = when (res) {
-                        AudioManager.AUDIOFOCUS_REQUEST_FAILED -> false
-                        AudioManager.AUDIOFOCUS_REQUEST_GRANTED -> {
-                            try {
-                                mediaPlayer!!.prepareAsync()
-                            } catch (e: IllegalStateException) {
+            var playbackDelayed = false
+            var playbackNowAuthorized = false
 
-                            }
-                            true
+            synchronized(focusLock) {
+                playbackNowAuthorized = when (result) {
+                    AudioManager.AUDIOFOCUS_REQUEST_FAILED -> false
+                    AudioManager.AUDIOFOCUS_REQUEST_GRANTED -> {
+                        try {
+                            mediaPlayer!!.prepareAsync()
+                        } catch (e: IllegalStateException) {
+
                         }
-                        AudioManager.AUDIOFOCUS_REQUEST_DELAYED -> {
-                            playbackDelayed = true
-                            false
-                        }
-                        else -> false
+                        true
                     }
+                    AudioManager.AUDIOFOCUS_REQUEST_DELAYED -> {
+                        playbackDelayed = true
+                        false
+                    }
+                    else -> false
                 }
             }
+        }
+
+        private fun abandonAudioFocus() {
+
         }
 
         /**
