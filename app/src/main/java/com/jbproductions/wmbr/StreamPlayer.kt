@@ -109,6 +109,9 @@ class StreamPlayer
                     mPlayOnAudioFocus = false
                 }
             }
+            for (callback in callbacks) {
+                callback.audioFocusChange()
+            }
         }
 
         private var delayedStopRunnable = Runnable {
@@ -286,6 +289,7 @@ class StreamPlayer
             fun playerProgress(offsetInMilliseconds: Long, percent: Float)
             fun itemComplete()
             fun playerError()
+            fun audioFocusChange()
         }
         //endregion
 

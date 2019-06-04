@@ -64,6 +64,11 @@ public class StreamFragment extends Fragment {
         public void playerError() {
             //TODO("not implemented") - error while playing
         }
+
+        @Override
+        public void audioFocusChange() {
+            //TODO("not implemented") - audioFocus changed
+        }
     }
 
     @Override
