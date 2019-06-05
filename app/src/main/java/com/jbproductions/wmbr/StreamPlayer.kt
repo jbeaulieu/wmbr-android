@@ -1,12 +1,15 @@
 package com.jbproductions.wmbr
 
 import android.content.Context
+import android.content.Intent
 import android.media.AudioAttributes
 import android.media.AudioFocusRequest
 import android.media.AudioManager
 import android.media.MediaPlayer
+import android.media.session.MediaSession
 import android.os.Handler
 import android.os.PowerManager
+import android.support.v4.media.session.MediaSessionCompat
 import android.util.Log
 import java.io.File
 import java.util.concurrent.TimeUnit
@@ -20,13 +23,13 @@ class StreamPlayer
 
         private var mPlayOnAudioFocus: Boolean = false
 
-        private var mMediaPlayer: MediaPlayer? = null
         private var currentContext: Context? = null
         private val callbacks = ArrayList<StreamPlayerCallback>()
         private val audioManager: AudioManager = context.getSystemService(Context.AUDIO_SERVICE) as AudioManager
         private var focusRequest: AudioFocusRequest? = null
         private val handler = Handler()
 
+        private var mMediaPlayer: MediaPlayer? = null
         private val mediaPlayer: MediaPlayer?
             get() {
                 if (mMediaPlayer == null) {
@@ -42,6 +45,18 @@ class StreamPlayer
                 }
                 return mMediaPlayer
             }
+
+        private var mMediaSession: MediaSessionCompat? = null
+        private val mediaSession : MediaSessionCompat?
+            get() {
+                if(mMediaSession == null) {
+                    mMediaSession = MediaSessionCompat(currentContext, "MusicService")
+                    mMediaSession?.setFlags(MediaSessionCompat.FLAG_HANDLES_MEDIA_BUTTONS)
+                    //mMediaSession?.setCallback(object : MediaSessionCompat.Callback() { })
+                }
+                return mMediaSession
+            }
+
         /**
          * Once mediaplayer completes, inform all the callbacks
          */
