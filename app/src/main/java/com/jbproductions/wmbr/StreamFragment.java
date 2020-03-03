@@ -1,12 +1,19 @@
 package com.jbproductions.wmbr;
 
+import android.content.ComponentName;
+import android.content.Context;
+import android.content.Intent;
+import android.content.ServiceConnection;
 import android.content.res.Resources;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.IBinder;
+import android.support.annotation.NonNull;
 import android.support.design.button.MaterialButton;
 import android.support.design.card.MaterialCardView;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.res.ResourcesCompat;
+import android.util.Log;
 import android.util.SparseArray;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -42,6 +49,26 @@ public class StreamFragment extends Fragment {
     TextView temperatureTextView;
     TextView weatherTextView;
     ImageView weatherIcon;
+
+    private MediaPlayerService player;
+    boolean serviceBound = false;
+
+    private ServiceConnection serviceConnection = new ServiceConnection() {
+        @Override
+        public void onServiceConnected(ComponentName componentName, IBinder iBinder) {
+            // We've bound to LocalService, cast the IBinder and get LocalService instance
+            MediaPlayerService.LocalBinder binder = (MediaPlayerService.LocalBinder) iBinder;
+            player = binder.getService();
+            serviceBound = true;
+
+            Toast.makeText(getActivity(), "Service Bound", Toast.LENGTH_SHORT).show();
+        }
+
+        @Override
+        public void onServiceDisconnected(ComponentName componentName) {
+            serviceBound = false;
+        }
+    };
 
     private class streamAudioPlayerCallback implements StreamPlayer.StreamPlayerCallback {
         @Override
@@ -127,15 +154,27 @@ public class StreamFragment extends Fragment {
      * icon to stop/play respectively, and if necessary displays the buffering icon & message
      */
     private void togglePlayback() {
-        if(audioPlayer.isPlaying()) {
-            audioPlayer.stop();
-            streamButton.setIcon(ResourcesCompat.getDrawable(res, R.drawable.ic_play_arrow_black_24dp, null));
+//        if(audioPlayer.isPlaying()) {
+//            audioPlayer.stop();
+//            streamButton.setIcon(ResourcesCompat.getDrawable(res, R.drawable.ic_play_arrow_black_24dp, null));
+//        }
+//        else {
+//            audioPlayer.playItem(STREAM_URL);
+//            showToast(getString(R.string.buffer_message));
+//            showBufferProgress(true);
+//            streamButton.setIcon(ResourcesCompat.getDrawable(res, R.drawable.ic_stop_black_24dp, null));
+//        }
+
+        if(!serviceBound) {
+            Intent playerIntent = new Intent(getActivity(), MediaPlayerService.class);
+            getActivity().startService(playerIntent);
+            getActivity().bindService(playerIntent, serviceConnection, Context.BIND_AUTO_CREATE);
+            Log.d("ServiceBound", "False");
         }
         else {
-            audioPlayer.playItem(STREAM_URL);
-            showToast(getString(R.string.buffer_message));
-            showBufferProgress(true);
-            streamButton.setIcon(ResourcesCompat.getDrawable(res, R.drawable.ic_stop_black_24dp, null));
+            Log.d("ServiceBound", "True");
+            //Service is active
+            //Send media with BroadcastReceiver
         }
     }
 
@@ -148,6 +187,15 @@ public class StreamFragment extends Fragment {
             this.bufferProgressBar.setVisibility(VISIBLE);
         } else {
             this.bufferProgressBar.setVisibility(INVISIBLE);
+        }
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        if(serviceBound) {
+            getActivity().unbindService(serviceConnection);
+            player.stopSelf();
         }
     }
 
