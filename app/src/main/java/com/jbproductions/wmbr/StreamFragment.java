@@ -1,5 +1,6 @@
 package com.jbproductions.wmbr;
 
+import android.app.Activity;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
@@ -178,6 +179,12 @@ public class StreamFragment extends Fragment {
         }
     }
 
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        showToast("onDestroyVIEW Called");
+    }
+
     /**
      * Hide/Unhide the progress bar used to show that the stream is buffering
      * @param visible Boolean for if the bar should display or not
@@ -195,6 +202,7 @@ public class StreamFragment extends Fragment {
         super.onDestroy();
         if(serviceBound) {
             getActivity().unbindService(serviceConnection);
+            showToast("onDestroy Called");
             player.stopSelf();
         }
     }
