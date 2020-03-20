@@ -166,7 +166,9 @@ public class StreamFragment extends Fragment {
 //            streamButton.setIcon(ResourcesCompat.getDrawable(res, R.drawable.ic_stop_black_24dp, null));
 //        }
 
-        if(!serviceBound) {
+        ((NavigationActivity) getActivity()).playAudio("https://wmbr.org/archive/Music_by_Dead_People____3_11_20_8%3A58_PM.mp3");
+
+/*        if(!serviceBound) {
             Intent playerIntent = new Intent(getActivity(), MediaPlayerService.class);
             getActivity().startService(playerIntent);
             getActivity().bindService(playerIntent, serviceConnection, Context.BIND_AUTO_CREATE);
@@ -176,13 +178,7 @@ public class StreamFragment extends Fragment {
             Log.d("ServiceBound", "True");
             //Service is active
             //Send media with BroadcastReceiver
-        }
-    }
-
-    @Override
-    public void onDestroyView() {
-        super.onDestroyView();
-        showToast("onDestroyVIEW Called");
+        }*/
     }
 
     /**
@@ -194,16 +190,6 @@ public class StreamFragment extends Fragment {
             this.bufferProgressBar.setVisibility(VISIBLE);
         } else {
             this.bufferProgressBar.setVisibility(INVISIBLE);
-        }
-    }
-
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
-        if(serviceBound) {
-            getActivity().unbindService(serviceConnection);
-            showToast("onDestroy Called");
-            player.stopSelf();
         }
     }
 

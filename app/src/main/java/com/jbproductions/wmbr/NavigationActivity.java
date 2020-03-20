@@ -1,10 +1,14 @@
 package com.jbproductions.wmbr;
 
 import android.Manifest;
+import android.content.ComponentName;
+import android.content.Context;
 import android.content.Intent;
+import android.content.ServiceConnection;
 import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.IBinder;
 import android.os.StrictMode;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
@@ -18,6 +22,7 @@ import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
+import android.widget.Toast;
 
 public class NavigationActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
@@ -28,6 +33,51 @@ public class NavigationActivity extends AppCompatActivity
 
     private static final int REQUEST_CALL_PHONE_PERMISSION = 429;
     Fragment mFragmentToSet = null;
+
+    MediaPlayerService player;
+    boolean serviceBound = false;
+
+    @Override
+    public boolean onNavigationItemSelected(@NonNull final MenuItem menuItem) {
+        // Handle navigation view item clicks
+        switch (menuItem.getItemId()) {
+            case R.id.nav_live_stream:
+                mFragmentToSet = new StreamFragment();
+                break;
+            case R.id.nav_schedule:
+                mFragmentToSet = new ScheduleFragment();
+                break;
+            case R.id.nav_archives:
+                mFragmentToSet = new ArchiveFragment();
+                break;
+            case R.id.nav_event_cal:
+                mFragmentToSet = new EventsFragment();
+                break;
+            case R.id.nav_contact:
+                mFragmentToSet = new ContactFragment();
+                break;
+        }
+        drawer.closeDrawer(navigationView);
+        return true;
+    }
+
+    //Binding this Client to the AudioPlayer Service
+    private ServiceConnection serviceConnection = new ServiceConnection() {
+        @Override
+        public void onServiceConnected(ComponentName name, IBinder service) {
+            // We've bound to LocalService, cast the IBinder and get LocalService instance
+            MediaPlayerService.LocalBinder binder = (MediaPlayerService.LocalBinder) service;
+            player = binder.getService();
+            serviceBound = true;
+
+            Toast.makeText(NavigationActivity.this, "Service Bound", Toast.LENGTH_SHORT).show();
+        }
+
+        @Override
+        public void onServiceDisconnected(ComponentName name) {
+            serviceBound = false;
+        }
+    };
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -91,28 +141,17 @@ public class NavigationActivity extends AppCompatActivity
         }
     }
 
-    @Override
-    public boolean onNavigationItemSelected(@NonNull final MenuItem menuItem) {
-        // Handle navigation view item clicks
-        switch (menuItem.getItemId()) {
-            case R.id.nav_live_stream:
-                mFragmentToSet = new StreamFragment();
-                break;
-            case R.id.nav_schedule:
-                mFragmentToSet = new ScheduleFragment();
-                break;
-            case R.id.nav_archives:
-                mFragmentToSet = new ArchiveFragment();
-                break;
-            case R.id.nav_event_cal:
-                mFragmentToSet = new EventsFragment();
-                break;
-            case R.id.nav_contact:
-                mFragmentToSet = new ContactFragment();
-                break;
+    public void playAudio(String media) {
+        //Check is service is active
+        if (!serviceBound) {
+            Intent playerIntent = new Intent(this, MediaPlayerService.class);
+            playerIntent.putExtra("media", media);
+            startService(playerIntent);
+            bindService(playerIntent, serviceConnection, Context.BIND_AUTO_CREATE);
+        } else {
+            //Service is active
+            //Send media with BroadcastReceiver
         }
-        drawer.closeDrawer(navigationView);
-        return true;
     }
 
     @Override
@@ -235,5 +274,27 @@ public class NavigationActivity extends AppCompatActivity
             intent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://www.instagram.com/wmbrfm/"));
         }
         this.startActivity(intent);
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle savedInstanceState) {
+        savedInstanceState.putBoolean("ServiceState", serviceBound);
+        super.onSaveInstanceState(savedInstanceState);
+    }
+
+    @Override
+    public void onRestoreInstanceState(Bundle savedInstanceState) {
+        super.onRestoreInstanceState(savedInstanceState);
+        serviceBound = savedInstanceState.getBoolean("ServiceState");
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        if (serviceBound) {
+            unbindService(serviceConnection);
+            //service is active
+            player.stopSelf();
+        }
     }
 }
