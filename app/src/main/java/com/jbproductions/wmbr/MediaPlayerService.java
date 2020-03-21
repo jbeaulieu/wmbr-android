@@ -1,6 +1,8 @@
 package com.jbproductions.wmbr;
 
 import android.annotation.SuppressLint;
+import android.app.Notification;
+import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.app.Service;
@@ -16,6 +18,7 @@ import android.media.AudioManager;
 import android.media.MediaPlayer;
 import android.media.session.MediaSessionManager;
 import android.os.Binder;
+import android.os.Build;
 import android.os.IBinder;
 import android.os.RemoteException;
 import android.provider.ContactsContract;
@@ -63,6 +66,9 @@ public class MediaPlayerService extends Service implements MediaPlayer.OnComplet
     private MediaSessionCompat mediaSession;
     private MediaControllerCompat.TransportControls transportControls;
 
+    // Notification manager
+    private NotificationManager notificationManager;
+
     // AudioPlayer notification ID
     private static final int NOTIFICATION_ID = 101;
 
@@ -81,6 +87,9 @@ public class MediaPlayerService extends Service implements MediaPlayer.OnComplet
         //ACTION_AUDIO_BECOMING_NOISY -- change in audio outputs -- BroadcastReceiver
         registerBecomingNoisyReceiver();
 
+        notificationManager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
+
+        createNotificationChannel();
     }
 
     @Override
@@ -131,7 +140,7 @@ public class MediaPlayerService extends Service implements MediaPlayer.OnComplet
             telephonyManager.listen(phoneStateListener, PhoneStateListener.LISTEN_NONE);
         }
 
-        //removeNotification();
+        removeNotification();
 
         //unregister BroadcastReceivers
         unregisterReceiver(becomingNoisyReceiver);
@@ -305,7 +314,7 @@ public class MediaPlayerService extends Service implements MediaPlayer.OnComplet
         @Override
         public void onReceive(Context context, Intent intent) {
             pauseMedia();
-            //buildNotification(PlaybackStatus.PAUSED);
+            buildNotification(PlaybackStatus.PAUSED);
         }
     };
 
@@ -410,18 +419,37 @@ public class MediaPlayerService extends Service implements MediaPlayer.OnComplet
     }
 
     private void updateMetaData() {
-        Bitmap albumArt = BitmapFactory.decodeResource(getResources(),
-                R.drawable.ic_instagram); //replace with medias albumArt
+        // Replace with album art
+        //Bitmap albumArt = BitmapFactory.decodeResource(getResources(), R.drawable.folder);
+
         // Update the current metadata
         mediaSession.setMetadata(new MediaMetadataCompat.Builder()
-                .putBitmap(MediaMetadataCompat.METADATA_KEY_ALBUM_ART, albumArt)
+                //.putBitmap(MediaMetadataCompat.METADATA_KEY_ALBUM_ART, albumArt)
                 .putString(MediaMetadataCompat.METADATA_KEY_ARTIST, "WMBR")     // activeAudio.getArtist()
                 .putString(MediaMetadataCompat.METADATA_KEY_ALBUM, "Live")      // activeAudio.getAlbum())
                 .putString(MediaMetadataCompat.METADATA_KEY_TITLE, "Now Playing")   // activeAudio.getTitle())
                 .build());
     }
 
+    private void createNotificationChannel() {
+        // Create the NotificationChannel, but only on API 26+ because
+        // the NotificationChannel class is new and not in the support library
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            CharSequence name = getString(R.string.channel_name);
+            String description = getString(R.string.channel_description);
+            int importance = NotificationManager.IMPORTANCE_DEFAULT;
+            NotificationChannel channel = new NotificationChannel("wmbr_playback", name, importance);
+            channel.setDescription(description);
+            // Register the channel with the system; you can't change the importance
+            // or other notification behaviors after this
+            NotificationManager notificationManager = getSystemService(NotificationManager.class);
+            notificationManager.createNotificationChannel(channel);
+        }
+    }
+
     private void buildNotification(PlaybackStatus playbackStatus) {
+
+        Log.d("Notification", "entering build");
 
         int notificationAction = android.R.drawable.ic_media_pause;//needs to be initialized
         PendingIntent play_pauseAction = null;
@@ -437,11 +465,11 @@ public class MediaPlayerService extends Service implements MediaPlayer.OnComplet
             play_pauseAction = playbackAction(0);
         }
 
-        Bitmap largeIcon = BitmapFactory.decodeResource(getResources(),
-                R.drawable.ic_instagram); //replace with your own image
+/*        Bitmap largeIcon = BitmapFactory.decodeResource(getResources(),
+                R.drawable.folder);*/
 
         // Create a new Notification
-        NotificationCompat.Builder notificationBuilder = (NotificationCompat.Builder) new NotificationCompat.Builder(this)
+        NotificationCompat.Builder notificationBuilder = new NotificationCompat.Builder(this, "wmbr_playback")
                 .setShowWhen(false)
                 // Set the Notification style
                 .setStyle(new android.support.v4.media.app.NotificationCompat.MediaStyle()
@@ -452,11 +480,12 @@ public class MediaPlayerService extends Service implements MediaPlayer.OnComplet
                 // Set the Notification color
                 .setColor(getResources().getColor(R.color.colorPrimary))
                 // Set the large and small icons
-                .setLargeIcon(largeIcon)
+                //.setLargeIcon(largeIcon)
                 .setSmallIcon(android.R.drawable.stat_sys_headset)
                 // Set Notification content information
                 .setContentText("WMBR")     // activeAudio.getArtist()
                 .setContentTitle("Live")      // activeAudio.getAlbum())
+                .setChannelId("wmbr_playback")
                 .setContentInfo("Now Playing")   // activeAudio.getTitle())
                 // Add playback actions
                 .addAction(android.R.drawable.ic_media_previous, "previous", playbackAction(3))
@@ -464,6 +493,8 @@ public class MediaPlayerService extends Service implements MediaPlayer.OnComplet
                 .addAction(android.R.drawable.ic_media_next, "next", playbackAction(2));
 
         ((NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE)).notify(NOTIFICATION_ID, notificationBuilder.build());
+
+        Log.d("Notification", "finished build");
     }
 
     private void removeNotification() {
