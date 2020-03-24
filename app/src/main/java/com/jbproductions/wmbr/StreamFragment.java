@@ -1,9 +1,11 @@
 package com.jbproductions.wmbr;
 
 import android.app.Activity;
+import android.content.BroadcastReceiver;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.ServiceConnection;
 import android.content.res.Resources;
 import android.os.AsyncTask;
@@ -37,7 +39,12 @@ public class StreamFragment extends Fragment {
         // Required empty public constructor
     }
 
-    private final String STREAM_URL = "http://wmbr.org:8000/hi";
+    // Temporary testing url
+    private final String STREAM_URL = "https://wmbr.org/archive/Music_by_Dead_People____3_11_20_8%3A58_PM.mp3";     //"http://wmbr.org:8000/hi";
+
+    // Action identifiers
+    public static final String ACTION_PREPARED = "PLAYER_PREPARED";
+
     private StreamPlayer audioPlayer;
     Resources res;
     MaterialCardView streamCard;
@@ -70,6 +77,18 @@ public class StreamFragment extends Fragment {
             serviceBound = false;
         }
     };
+
+    private class MediaPlayerBroadcastReceiver extends android.content.BroadcastReceiver {
+
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            Log.d("BROADCAST RECEIVED", intent.getAction());
+
+            if(intent.getAction().equals(ACTION_PREPARED)) {
+                showBufferProgress(false);
+            }
+        }
+    }
 
     private class streamAudioPlayerCallback implements StreamPlayer.StreamPlayerCallback {
         @Override
@@ -127,9 +146,18 @@ public class StreamFragment extends Fragment {
         //SparseArray<Show> showDB = XmlParser.getShowInfo();
 
         // Check if the stream is already playing. If it is, change the button icon to 'stop'
-        if(audioPlayer.isPlaying()) {
+/*        if(audioPlayer.isPlaying()) {
+            streamButton.setIcon(ResourcesCompat.getDrawable(res, R.drawable.ic_stop_black_24dp, null));
+        }*/
+
+        if(((NavigationActivity) getActivity()).isPlaying()) {
             streamButton.setIcon(ResourcesCompat.getDrawable(res, R.drawable.ic_stop_black_24dp, null));
         }
+
+        BroadcastReceiver broadcastReceiver = new MediaPlayerBroadcastReceiver();
+        IntentFilter intentFilter = new IntentFilter();
+        intentFilter.addAction(ACTION_PREPARED);
+        getContext().registerReceiver(broadcastReceiver, intentFilter);
 
         /* Clicking the play/stop button should toggle the stream on/off, switch the play/stop icon,
             and display the "buffering" message and buffer wheel if we're toggling on */
@@ -166,7 +194,8 @@ public class StreamFragment extends Fragment {
 //            streamButton.setIcon(ResourcesCompat.getDrawable(res, R.drawable.ic_stop_black_24dp, null));
 //        }
 
-        ((NavigationActivity) getActivity()).playAudio("https://wmbr.org/archive/Music_by_Dead_People____3_11_20_8%3A58_PM.mp3");
+        ((NavigationActivity) getActivity()).playAudio(STREAM_URL);
+        showBufferProgress(true);
 
 /*        if(!serviceBound) {
             Intent playerIntent = new Intent(getActivity(), MediaPlayerService.class);
@@ -183,10 +212,10 @@ public class StreamFragment extends Fragment {
 
     /**
      * Hide/Unhide the progress bar used to show that the stream is buffering
-     * @param visible Boolean for if the bar should display or not
+     * @param showProgress Boolean for if the bar should display or not
      */
-    private void showBufferProgress(Boolean visible) {
-        if(visible) {
+    private void showBufferProgress(Boolean showProgress) {
+        if(showProgress) {
             this.bufferProgressBar.setVisibility(VISIBLE);
         } else {
             this.bufferProgressBar.setVisibility(INVISIBLE);

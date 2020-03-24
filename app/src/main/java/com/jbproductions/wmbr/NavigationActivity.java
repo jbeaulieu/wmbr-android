@@ -34,7 +34,7 @@ public class NavigationActivity extends AppCompatActivity
     private static final int REQUEST_CALL_PHONE_PERMISSION = 429;
     Fragment mFragmentToSet = null;
 
-    MediaPlayerService player;
+    MediaPlayerService playerService;
     boolean serviceBound = false;
 
     @Override
@@ -67,7 +67,7 @@ public class NavigationActivity extends AppCompatActivity
         public void onServiceConnected(ComponentName name, IBinder service) {
             // We've bound to LocalService, cast the IBinder and get LocalService instance
             MediaPlayerService.LocalBinder binder = (MediaPlayerService.LocalBinder) service;
-            player = binder.getService();
+            playerService = binder.getService();
             serviceBound = true;
 
             Toast.makeText(NavigationActivity.this, "Service Bound", Toast.LENGTH_SHORT).show();
@@ -151,6 +151,15 @@ public class NavigationActivity extends AppCompatActivity
         } else {
             //Service is active
             //Send media with BroadcastReceiver
+        }
+    }
+
+    public boolean isPlaying() {
+        if(serviceBound) {
+            return playerService.isPlaying();
+        }
+        else {
+            return false;
         }
     }
 
@@ -289,12 +298,19 @@ public class NavigationActivity extends AppCompatActivity
     }
 
     @Override
+    protected void onStop() {
+        super.onStop();
+        unbindService(serviceConnection);
+        serviceBound = false;
+    }
+
+    @Override
     protected void onDestroy() {
         super.onDestroy();
         if (serviceBound) {
             unbindService(serviceConnection);
             //service is active
-            player.stopSelf();
+            playerService.stopSelf();
         }
     }
 }

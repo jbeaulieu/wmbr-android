@@ -43,7 +43,6 @@ public class MediaPlayerService extends Service implements MediaPlayer.OnComplet
     private MediaPlayer mediaPlayer;
     private String mediaFile;
     private AudioManager audioManager;
-    private final String STREAM_URL = "http://wmbr.org:8000/hi";
     private final float MEDIA_VOLUME_DEFAULT = 1.0f;
     private final float MEDIA_VOLUME_DUCK = 0.1f;
 
@@ -55,6 +54,7 @@ public class MediaPlayerService extends Service implements MediaPlayer.OnComplet
     private TelephonyManager telephonyManager;
 
     // Action identifiers
+    public static final String ACTION_PREPARED = "PLAYER_PREPARED";
     public static final String ACTION_PLAY = "com.jbproductions.wmbr.ACTION_PLAY";
     public static final String ACTION_PAUSE = "com.jbproductions.wmbr.ACTION_PAUSE";
     public static final String ACTION_PREVIOUS = "com.jbproductions.wmbr.ACTION_PREVIOUS";
@@ -249,6 +249,7 @@ public class MediaPlayerService extends Service implements MediaPlayer.OnComplet
 
     @Override
     public void onPrepared(MediaPlayer mediaPlayer) {
+        broadcastData(this, ACTION_PREPARED);
         playMedia();
     }
 
@@ -261,6 +262,13 @@ public class MediaPlayerService extends Service implements MediaPlayer.OnComplet
         public MediaPlayerService getService() {
             return MediaPlayerService.this;
         }
+    }
+
+    private void broadcastData(Context context, String action) {
+        Intent intent = new Intent();
+        intent.setAction(action);
+        //intent.putExtra("message", message);
+        context.sendBroadcast(intent);
     }
 
     private void initMediaPlayer() {
@@ -542,5 +550,9 @@ public class MediaPlayerService extends Service implements MediaPlayer.OnComplet
         } else if (actionString.equalsIgnoreCase(ACTION_STOP)) {
             transportControls.stop();
         }
+    }
+
+    public boolean isPlaying() {
+        return mediaPlayer.isPlaying();
     }
 }
