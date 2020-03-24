@@ -1,23 +1,17 @@
 package com.jbproductions.wmbr;
 
-import android.app.Activity;
 import android.content.BroadcastReceiver;
-import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.content.ServiceConnection;
 import android.content.res.Resources;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.os.IBinder;
-import android.support.annotation.NonNull;
 import android.support.design.button.MaterialButton;
 import android.support.design.card.MaterialCardView;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.res.ResourcesCompat;
 import android.util.Log;
-import android.util.SparseArray;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -25,11 +19,9 @@ import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import java.util.Calendar;
 import java.util.Map;
 import java.util.TimeZone;
-
 import static android.view.View.VISIBLE;
 import static android.view.View.INVISIBLE;
 
@@ -45,7 +37,7 @@ public class StreamFragment extends Fragment {
     // Action identifiers
     public static final String ACTION_PREPARED = "PLAYER_PREPARED";
 
-    private StreamPlayer audioPlayer;
+    NavigationActivity mainActivity;
     Resources res;
     MaterialCardView streamCard;
     MaterialCardView wxCard;
@@ -58,26 +50,6 @@ public class StreamFragment extends Fragment {
     TextView weatherTextView;
     ImageView weatherIcon;
 
-    private MediaPlayerService player;
-    boolean serviceBound = false;
-
-    private ServiceConnection serviceConnection = new ServiceConnection() {
-        @Override
-        public void onServiceConnected(ComponentName componentName, IBinder iBinder) {
-            // We've bound to LocalService, cast the IBinder and get LocalService instance
-            MediaPlayerService.LocalBinder binder = (MediaPlayerService.LocalBinder) iBinder;
-            player = binder.getService();
-            serviceBound = true;
-
-            Toast.makeText(getActivity(), "Service Bound", Toast.LENGTH_SHORT).show();
-        }
-
-        @Override
-        public void onServiceDisconnected(ComponentName componentName) {
-            serviceBound = false;
-        }
-    };
-
     private class MediaPlayerBroadcastReceiver extends android.content.BroadcastReceiver {
 
         @Override
@@ -87,34 +59,6 @@ public class StreamFragment extends Fragment {
             if(intent.getAction().equals(ACTION_PREPARED)) {
                 showBufferProgress(false);
             }
-        }
-    }
-
-    private class streamAudioPlayerCallback implements StreamPlayer.StreamPlayerCallback {
-        @Override
-        public void playerPrepared() {
-            // Player is prepared, hide the buffer progress wheel
-            showBufferProgress(false);
-        }
-
-        @Override
-        public void playerProgress(long offsetInMilliseconds, float percent) {
-            //TODO("not implemented") - progress record
-        }
-
-        @Override
-        public void itemComplete() {
-            //TODO("not implemented") - finished playing
-        }
-
-        @Override
-        public void playerError() {
-            //TODO("not implemented") - error while playing
-        }
-
-        @Override
-        public void audioFocusChange() {
-            //TODO("not implemented") - audioFocus changed
         }
     }
 
@@ -133,24 +77,17 @@ public class StreamFragment extends Fragment {
         weatherTextView = view.findViewById(R.id.weatherTextView);
         weatherIcon = view.findViewById(R.id.weatherImageView);
 
+        // Get Activity to access MediaPlayerService functionality
+        mainActivity = (NavigationActivity) getActivity();
+
         // Get resources to dynamically set drawable objects
         res = getActivity().getResources();
-
-        // Set up new singleton instance of audioPlayer and add callbacks
-        audioPlayer = StreamPlayer.Companion.getInstance(getContext());
-        audioPlayer.addCallback(new streamAudioPlayerCallback());
 
         //Download current metadata for show and host information
         new DownloadMetadataTask().execute();
 
-        //SparseArray<Show> showDB = XmlParser.getShowInfo();
-
         // Check if the stream is already playing. If it is, change the button icon to 'stop'
-/*        if(audioPlayer.isPlaying()) {
-            streamButton.setIcon(ResourcesCompat.getDrawable(res, R.drawable.ic_stop_black_24dp, null));
-        }*/
-
-        if(((NavigationActivity) getActivity()).isPlaying()) {
+        if(mainActivity.isPlaying()) {
             streamButton.setIcon(ResourcesCompat.getDrawable(res, R.drawable.ic_stop_black_24dp, null));
         }
 
@@ -183,31 +120,16 @@ public class StreamFragment extends Fragment {
      * icon to stop/play respectively, and if necessary displays the buffering icon & message
      */
     private void togglePlayback() {
-//        if(audioPlayer.isPlaying()) {
-//            audioPlayer.stop();
-//            streamButton.setIcon(ResourcesCompat.getDrawable(res, R.drawable.ic_play_arrow_black_24dp, null));
-//        }
-//        else {
-//            audioPlayer.playItem(STREAM_URL);
-//            showToast(getString(R.string.buffer_message));
-//            showBufferProgress(true);
-//            streamButton.setIcon(ResourcesCompat.getDrawable(res, R.drawable.ic_stop_black_24dp, null));
-//        }
-
-        ((NavigationActivity) getActivity()).playAudio(STREAM_URL);
-        showBufferProgress(true);
-
-/*        if(!serviceBound) {
-            Intent playerIntent = new Intent(getActivity(), MediaPlayerService.class);
-            getActivity().startService(playerIntent);
-            getActivity().bindService(playerIntent, serviceConnection, Context.BIND_AUTO_CREATE);
-            Log.d("ServiceBound", "False");
+        if(mainActivity.isPlaying()) {
+            // Stop the player and switch to a play button
         }
         else {
-            Log.d("ServiceBound", "True");
-            //Service is active
-            //Send media with BroadcastReceiver
-        }*/
+            // Start the player, alert to buffering, and switch to a stop button
+            mainActivity.playAudio(STREAM_URL);
+            showToast(getString(R.string.buffer_message));
+            showBufferProgress(true);
+            streamButton.setIcon(ResourcesCompat.getDrawable(res, R.drawable.ic_stop_black_24dp, null));
+        }
     }
 
     /**
@@ -261,14 +183,14 @@ public class StreamFragment extends Fragment {
             temperatureTextView.setText(wmbrStatus.get("temperature").toString());
             String weather = wmbrStatus.get("wx").toString();
             weatherTextView.setText(weather);
-            LoadWeatherIcon(weather);
+            loadWeatherIcon(weather);
             bufferProgressBar.setVisibility(View.GONE);
             streamCard.setVisibility(VISIBLE);
             wxCard.setVisibility(VISIBLE);
         }
     }
 
-    private void LoadWeatherIcon(String w) {
+    private void loadWeatherIcon(String w) {
 
         String weather = w.toLowerCase();
         // Crop any extra weather descriptors that come after a comma
