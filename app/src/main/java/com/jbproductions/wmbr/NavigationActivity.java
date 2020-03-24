@@ -298,13 +298,6 @@ public class NavigationActivity extends AppCompatActivity
     }
 
     @Override
-    protected void onStop() {
-        super.onStop();
-        unbindService(serviceConnection);
-        serviceBound = false;
-    }
-
-    @Override
     protected void onDestroy() {
         super.onDestroy();
         if (serviceBound) {

@@ -133,7 +133,7 @@ public class MediaPlayerService extends Service implements MediaPlayer.OnComplet
             mediaPlayer.release();
         }
 
-        removeAudioFocus();
+        //removeAudioFocus();
 
         //Disable the PhoneStateListener
         if (phoneStateListener != null) {
@@ -221,7 +221,7 @@ public class MediaPlayerService extends Service implements MediaPlayer.OnComplet
     @Override
     public void onCompletion(MediaPlayer mediaPlayer) {
         stopMedia();
-        removeAudioFocus();
+        //removeAudioFocus();
         stopSelf();     // Stop the service
     }
 
@@ -302,6 +302,7 @@ public class MediaPlayerService extends Service implements MediaPlayer.OnComplet
     private void stopMedia() {
         if(mediaPlayer==null) return;
         if(mediaPlayer.isPlaying()) mediaPlayer.stop();
+        removeAudioFocus();
     }
 
     private void pauseMedia() {
