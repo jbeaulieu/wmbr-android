@@ -25,6 +25,10 @@ import java.util.TimeZone;
 import static android.view.View.VISIBLE;
 import static android.view.View.INVISIBLE;
 
+import static com.jbproductions.wmbr.MediaPlayerService.ACTION_PREPARED;
+import static com.jbproductions.wmbr.MediaPlayerService.ACTION_STOP;
+import static com.jbproductions.wmbr.MediaPlayerService.ACTION_UNBIND;
+
 public class StreamFragment extends Fragment {
 
     public StreamFragment() {
@@ -32,10 +36,7 @@ public class StreamFragment extends Fragment {
     }
 
     // Temporary testing url
-    private final String STREAM_URL = "https://wmbr.org/archive/Music_by_Dead_People____3_11_20_8%3A58_PM.mp3";     //"http://wmbr.org:8000/hi";
-
-    // Action identifiers
-    public static final String ACTION_PREPARED = "PLAYER_PREPARED";
+    private static final String STREAM_URL = "http://wmbr.org:8000/hi";
 
     NavigationActivity mainActivity;
     Resources res;
@@ -56,8 +57,18 @@ public class StreamFragment extends Fragment {
         public void onReceive(Context context, Intent intent) {
             Log.d("BROADCAST RECEIVED", intent.getAction());
 
-            if(intent.getAction().equals(ACTION_PREPARED)) {
-                showBufferProgress(false);
+            switch (intent.getAction()) {
+                case ACTION_PREPARED:
+                    showBufferProgress(false);
+                    streamButton.setClickable(true);
+                    break;
+                case ACTION_STOP:
+                case ACTION_UNBIND:
+                    streamButton.setIcon(ResourcesCompat.getDrawable(res, R.drawable.ic_play_arrow_black_24dp, null));
+                    break;
+                default:
+                    showToast(intent.getAction());
+                    break;
             }
         }
     }
@@ -94,6 +105,8 @@ public class StreamFragment extends Fragment {
         BroadcastReceiver broadcastReceiver = new MediaPlayerBroadcastReceiver();
         IntentFilter intentFilter = new IntentFilter();
         intentFilter.addAction(ACTION_PREPARED);
+        intentFilter.addAction(ACTION_STOP);
+        intentFilter.addAction(ACTION_UNBIND);
         getContext().registerReceiver(broadcastReceiver, intentFilter);
 
         /* Clicking the play/stop button should toggle the stream on/off, switch the play/stop icon,
@@ -122,11 +135,13 @@ public class StreamFragment extends Fragment {
     private void togglePlayback() {
         if(mainActivity.isPlaying()) {
             // Stop the player and switch to a play button
+            mainActivity.stopAudio();
+            streamButton.setIcon(ResourcesCompat.getDrawable(res, R.drawable.ic_play_arrow_black_24dp, null));
         }
         else {
             // Start the player, alert to buffering, and switch to a stop button
-            mainActivity.playAudio(STREAM_URL);
-            showToast(getString(R.string.buffer_message));
+            mainActivity.playAudio(STREAM_URL, true);
+            //showToast(getString(R.string.buffer_message));
             showBufferProgress(true);
             streamButton.setIcon(ResourcesCompat.getDrawable(res, R.drawable.ic_stop_black_24dp, null));
         }

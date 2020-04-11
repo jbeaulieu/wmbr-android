@@ -1,6 +1,5 @@
 package com.jbproductions.wmbr;
 
-import android.annotation.SuppressLint;
 import android.app.Notification;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
@@ -21,7 +20,6 @@ import android.os.Binder;
 import android.os.Build;
 import android.os.IBinder;
 import android.os.RemoteException;
-import android.provider.ContactsContract;
 import android.support.v4.app.NotificationCompat;
 import android.support.v4.media.MediaMetadataCompat;
 
@@ -30,8 +28,11 @@ import android.support.v4.media.session.MediaSessionCompat;
 import android.telephony.PhoneStateListener;
 import android.telephony.TelephonyManager;
 import android.util.Log;
+import android.widget.Toast;
 
 import java.io.IOException;
+
+import static com.jbproductions.wmbr.NavigationActivity.PLAY_NEW_AUDIO;
 
 public class MediaPlayerService extends Service implements MediaPlayer.OnCompletionListener, MediaPlayer.OnPreparedListener,
     MediaPlayer.OnErrorListener, MediaPlayer.OnSeekCompleteListener, MediaPlayer.OnInfoListener,
@@ -43,9 +44,10 @@ public class MediaPlayerService extends Service implements MediaPlayer.OnComplet
     private MediaPlayer mediaPlayer;
     private String mediaFile;
     private AudioManager audioManager;
-    private final float MEDIA_VOLUME_DEFAULT = 1.0f;
-    private final float MEDIA_VOLUME_DUCK = 0.1f;
+    private static final float MEDIA_VOLUME_DEFAULT = 1.0f;
+    private static final float MEDIA_VOLUME_DUCK = 0.1f;
 
+    private boolean isLiveStream;
     private int resumePosition;
 
     // Variables for handling incoming phone calls
@@ -54,12 +56,13 @@ public class MediaPlayerService extends Service implements MediaPlayer.OnComplet
     private TelephonyManager telephonyManager;
 
     // Action identifiers
-    public static final String ACTION_PREPARED = "PLAYER_PREPARED";
+    public static final String ACTION_PREPARED = "com.jbproductions.wmbr.PLAYER_PREPARED";
     public static final String ACTION_PLAY = "com.jbproductions.wmbr.ACTION_PLAY";
     public static final String ACTION_PAUSE = "com.jbproductions.wmbr.ACTION_PAUSE";
     public static final String ACTION_PREVIOUS = "com.jbproductions.wmbr.ACTION_PREVIOUS";
     public static final String ACTION_NEXT = "com.jbproductions.wmbr.ACTION_NEXT";
     public static final String ACTION_STOP = "com.jbproductions.wmbr.ACTION_STOP";
+    public static final String ACTION_UNBIND = "com.jbproductions.wmbr.ACTION_UNBIND";
 
     // MediaSession
     private MediaSessionManager mediaSessionManager;
@@ -87,6 +90,9 @@ public class MediaPlayerService extends Service implements MediaPlayer.OnComplet
         //ACTION_AUDIO_BECOMING_NOISY -- change in audio outputs -- BroadcastReceiver
         registerBecomingNoisyReceiver();
 
+        // Listen for new audio to play
+        registerNewAudioReceiver();
+
         notificationManager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
 
         createNotificationChannel();
@@ -96,7 +102,15 @@ public class MediaPlayerService extends Service implements MediaPlayer.OnComplet
     public int onStartCommand(Intent intent, int flags, int startId) {
         try {
             //An audio file is passed to the service through putExtra();
-            mediaFile = intent.getExtras().getString("media");
+            mediaFile = intent.getExtras().getString("mediaSource");
+            isLiveStream = intent.getExtras().getBoolean("liveStream");
+            Log.d("livestream", Boolean.toString(isLiveStream));
+            if(isLiveStream) {
+                broadcastData(this, "TRUE");
+            }
+            else {
+                broadcastData(this, "FALSE");
+            }
         } catch (NullPointerException e) {
             stopSelf();
         }
@@ -133,7 +147,7 @@ public class MediaPlayerService extends Service implements MediaPlayer.OnComplet
             mediaPlayer.release();
         }
 
-        //removeAudioFocus();
+        removeAudioFocus();
 
         //Disable the PhoneStateListener
         if (phoneStateListener != null) {
@@ -144,6 +158,7 @@ public class MediaPlayerService extends Service implements MediaPlayer.OnComplet
 
         //unregister BroadcastReceivers
         unregisterReceiver(becomingNoisyReceiver);
+        unregisterReceiver(newAudioReceiver);
     }
 
     @Override
@@ -182,6 +197,7 @@ public class MediaPlayerService extends Service implements MediaPlayer.OnComplet
 
     @Override
     public void onAudioFocusChange(int focusState) {
+        broadcastData(this, "FOCUS CHANGE");
         switch (focusState) {
             case AudioManager.AUDIOFOCUS_GAIN:
                 // Resume playback
@@ -191,22 +207,40 @@ public class MediaPlayerService extends Service implements MediaPlayer.OnComplet
                 Log.d("AudioFocus", "Focus Gained");
                 break;
             case AudioManager.AUDIOFOCUS_LOSS:
-                // Lost focus for an unbounded amount of time: stop playback and release media player
+                // Lost focus for an unbounded amount of time: stop playback and release media player.
+                // Stop any ongoing playback, release the player, and broadcast that we want to unbind from the service.
+                Log.d("AudioFocus", "Focus Lost");
                 if (mediaPlayer.isPlaying()) mediaPlayer.stop();
+                mediaPlayer.reset();
                 mediaPlayer.release();
                 mediaPlayer = null;
-                Log.d("AudioFocus", "Focus Lost");
+                broadcastData(this, ACTION_UNBIND);
+                removeNotification();
                 break;
             case AudioManager.AUDIOFOCUS_LOSS_TRANSIENT:
-                // Lost focus for a short time, but we have to stop playback. We don't release
-                // the media player because playback is likely to resume
-                if (mediaPlayer.isPlaying()) mediaPlayer.pause();
+                // Lost focus for a short time. We have to stop playback, but it is likely to resume.
+                // If we're playing a live stream, stop the player since we can't pause.
+                // If we're playing an archived recording, pause playback but don't release the player.
+                if (mediaPlayer.isPlaying() && isLiveStream)
+                {
+                    mediaPlayer.stop();
+                    mediaPlayer.reset();
+                    mediaPlayer.release();
+                    mediaPlayer = null;
+                    broadcastData(this, ACTION_UNBIND);
+                    removeNotification();
+                } else if (mediaPlayer.isPlaying()) {
+                    mediaPlayer.pause();
+                    broadcastData(this, ACTION_PAUSE);
+                    buildNotification(PlaybackStatus.PAUSED);
+                }
                 Log.d("AudioFocus", "Transient Focus Loss");
                 break;
             case AudioManager.AUDIOFOCUS_LOSS_TRANSIENT_CAN_DUCK:
                 // Lost focus for a short time, but it's ok to keep playing at an attenuated level
                 if (mediaPlayer.isPlaying()) mediaPlayer.setVolume(MEDIA_VOLUME_DUCK, MEDIA_VOLUME_DUCK);
                 Log.d("AudioFocus", "Ducking Focus");
+                Toast.makeText(this, "LOSS_DUCK", Toast.LENGTH_LONG).show();
                 break;
         }
     }
@@ -296,10 +330,13 @@ public class MediaPlayerService extends Service implements MediaPlayer.OnComplet
     }
 
     private void playMedia() {
-        if(!mediaPlayer.isPlaying()) mediaPlayer.start();
+        if(!mediaPlayer.isPlaying()) {
+            mediaPlayer.start();
+        }
     }
 
     private void stopMedia() {
+        broadcastData(this, ACTION_STOP);
         if(mediaPlayer==null) return;
         if(mediaPlayer.isPlaying()) mediaPlayer.stop();
         removeAudioFocus();
@@ -322,8 +359,21 @@ public class MediaPlayerService extends Service implements MediaPlayer.OnComplet
     private BroadcastReceiver becomingNoisyReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
-            pauseMedia();
-            buildNotification(PlaybackStatus.PAUSED);
+
+            // The device is becoming noisy, so we need to stop playback.
+            // If we're playing a live stream, stop the player since we can't pause.
+            // If we're playing an archived recording, pause playback but don't release the player.
+            if (isLiveStream)
+            {
+                mediaPlayer.stop();
+                mediaPlayer.reset();
+                mediaPlayer.release();
+                mediaPlayer = null;
+                broadcastData(context, ACTION_UNBIND);
+            } else if (mediaPlayer.isPlaying()) {
+                mediaPlayer.pause();
+                broadcastData(context, ACTION_PAUSE);
+            }
         }
     };
 
@@ -360,6 +410,23 @@ public class MediaPlayerService extends Service implements MediaPlayer.OnComplet
 
         // Register the listener with the telephony manager
         telephonyManager.listen(phoneStateListener, PhoneStateListener.LISTEN_CALL_STATE);
+    }
+
+    private BroadcastReceiver newAudioReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            // Reset mediaPlayer to play new audio
+            stopMedia();
+            mediaPlayer.reset();
+            initMediaPlayer();
+            updateMetaData();
+            buildNotification(PlaybackStatus.PLAYING);
+        }
+    };
+
+    private void registerNewAudioReceiver() {
+        IntentFilter filter = new IntentFilter(PLAY_NEW_AUDIO);
+        registerReceiver(newAudioReceiver, filter);
     }
 
     private void initMediaSession() throws RemoteException {
@@ -428,12 +495,12 @@ public class MediaPlayerService extends Service implements MediaPlayer.OnComplet
     }
 
     private void updateMetaData() {
-        // Replace with album art
-        //Bitmap albumArt = BitmapFactory.decodeResource(getResources(), R.drawable.folder);
+        // TODO: Replace with album art
+        Bitmap albumArt = BitmapFactory.decodeResource(getResources(), R.drawable.folder2);
 
         // Update the current metadata
         mediaSession.setMetadata(new MediaMetadataCompat.Builder()
-                //.putBitmap(MediaMetadataCompat.METADATA_KEY_ALBUM_ART, albumArt)
+                .putBitmap(MediaMetadataCompat.METADATA_KEY_ALBUM_ART, albumArt)
                 .putString(MediaMetadataCompat.METADATA_KEY_ARTIST, "WMBR")     // activeAudio.getArtist()
                 .putString(MediaMetadataCompat.METADATA_KEY_ALBUM, "Live")      // activeAudio.getAlbum())
                 .putString(MediaMetadataCompat.METADATA_KEY_TITLE, "Now Playing")   // activeAudio.getTitle())
@@ -446,8 +513,8 @@ public class MediaPlayerService extends Service implements MediaPlayer.OnComplet
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             CharSequence name = getString(R.string.channel_name);
             String description = getString(R.string.channel_description);
-            int importance = NotificationManager.IMPORTANCE_DEFAULT;
-            NotificationChannel channel = new NotificationChannel("wmbr_playback", name, importance);
+            int importance = NotificationManager.IMPORTANCE_LOW;
+            NotificationChannel channel = new NotificationChannel("Media Playback", name, importance);
             channel.setDescription(description);
             // Register the channel with the system; you can't change the importance
             // or other notification behaviors after this
@@ -474,11 +541,11 @@ public class MediaPlayerService extends Service implements MediaPlayer.OnComplet
             play_pauseAction = playbackAction(0);
         }
 
-/*        Bitmap largeIcon = BitmapFactory.decodeResource(getResources(),
-                R.drawable.folder);*/
+        Bitmap largeIcon = BitmapFactory.decodeResource(getResources(),
+                R.drawable.folder2);
 
         // Create a new Notification
-        NotificationCompat.Builder notificationBuilder = new NotificationCompat.Builder(this, "wmbr_playback")
+        NotificationCompat.Builder notificationBuilder = new NotificationCompat.Builder(this, "Media Playback")
                 .setShowWhen(false)
                 // Set the Notification style
                 .setStyle(new android.support.v4.media.app.NotificationCompat.MediaStyle()
@@ -486,15 +553,17 @@ public class MediaPlayerService extends Service implements MediaPlayer.OnComplet
                         .setMediaSession(mediaSession.getSessionToken())
                         // Show our playback controls in the compact notification view.
                         .setShowActionsInCompactView(0, 1, 2))
+                .setOngoing(true)
+                .setPriority(Notification.PRIORITY_LOW)
                 // Set the Notification color
                 .setColor(getResources().getColor(R.color.colorPrimary))
                 // Set the large and small icons
-                //.setLargeIcon(largeIcon)
+                .setLargeIcon(largeIcon)
                 .setSmallIcon(android.R.drawable.stat_sys_headset)
                 // Set Notification content information
                 .setContentText("WMBR")     // activeAudio.getArtist()
                 .setContentTitle("Live")      // activeAudio.getAlbum())
-                .setChannelId("wmbr_playback")
+                .setChannelId("Media Playback")
                 .setContentInfo("Now Playing")   // activeAudio.getTitle())
                 // Add playback actions
                 .addAction(android.R.drawable.ic_media_previous, "previous", playbackAction(3))
@@ -554,6 +623,11 @@ public class MediaPlayerService extends Service implements MediaPlayer.OnComplet
     }
 
     public boolean isPlaying() {
-        return mediaPlayer.isPlaying();
+        if(mediaPlayer != null) {
+            return mediaPlayer.isPlaying();
+        }
+        else {
+            return false;
+        }
     }
 }

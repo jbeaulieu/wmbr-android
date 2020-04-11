@@ -1,9 +1,11 @@
 package com.jbproductions.wmbr;
 
 import android.Manifest;
+import android.content.BroadcastReceiver;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.ServiceConnection;
 import android.content.pm.PackageManager;
 import android.net.Uri;
@@ -24,6 +26,11 @@ import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.widget.Toast;
 
+import static com.jbproductions.wmbr.MediaPlayerService.ACTION_PREPARED;
+import static com.jbproductions.wmbr.MediaPlayerService.ACTION_STOP;
+import static com.jbproductions.wmbr.MediaPlayerService.ACTION_UNBIND;
+
+
 public class NavigationActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
@@ -32,10 +39,12 @@ public class NavigationActivity extends AppCompatActivity
     Toolbar toolbar;
 
     private static final int REQUEST_CALL_PHONE_PERMISSION = 429;
+    public static final String PLAY_NEW_AUDIO = "com.jbproductions.wmbr.PLAY_NEW_AUDIO";
     Fragment mFragmentToSet = null;
 
     MediaPlayerService playerService;
     boolean serviceBound = false;
+    Intent playerIntent;
 
     @Override
     public boolean onNavigationItemSelected(@NonNull final MenuItem menuItem) {
@@ -70,7 +79,7 @@ public class NavigationActivity extends AppCompatActivity
             playerService = binder.getService();
             serviceBound = true;
 
-            Toast.makeText(NavigationActivity.this, "Service Bound", Toast.LENGTH_SHORT).show();
+            //Toast.makeText(NavigationActivity.this, "Service Bound", Toast.LENGTH_SHORT).show();
         }
 
         @Override
@@ -91,6 +100,15 @@ public class NavigationActivity extends AppCompatActivity
         toolbar = findViewById(R.id.toolbar);
 
         setSupportActionBar(toolbar);
+
+        playerIntent = new Intent(this, MediaPlayerService.class);
+
+        BroadcastReceiver broadcastReceiver = new MediaPlayerBroadcastReceiver();
+        IntentFilter intentFilter = new IntentFilter();
+        intentFilter.addAction(ACTION_PREPARED);
+        intentFilter.addAction(ACTION_STOP);
+        intentFilter.addAction(ACTION_UNBIND);
+        registerReceiver(broadcastReceiver, intentFilter);
 
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close) {
             @Override
@@ -141,25 +159,54 @@ public class NavigationActivity extends AppCompatActivity
         }
     }
 
-    public void playAudio(String media) {
+    public void playAudio(String mediaSource, boolean isLiveStream) {
         //Check is service is active
         if (!serviceBound) {
-            Intent playerIntent = new Intent(this, MediaPlayerService.class);
-            playerIntent.putExtra("media", media);
+            playerIntent.putExtra("mediaSource", mediaSource);
+            playerIntent.putExtra("liveStream", isLiveStream);
             startService(playerIntent);
             bindService(playerIntent, serviceConnection, Context.BIND_AUTO_CREATE);
         } else {
             //Service is active
             //Send media with BroadcastReceiver
+            Intent broadcastIntent = new Intent(PLAY_NEW_AUDIO);
+            sendBroadcast(broadcastIntent);
+        }
+    }
+
+    public void stopAudio() {
+        if (serviceBound) {
+            unbindService(serviceConnection);
+            serviceBound = false;
+            playerService.stopSelf();
         }
     }
 
     public boolean isPlaying() {
         if(serviceBound) {
+            Log.d("SERVICE", Boolean.toString(serviceBound));
             return playerService.isPlaying();
         }
         else {
             return false;
+        }
+    }
+
+    private class MediaPlayerBroadcastReceiver extends android.content.BroadcastReceiver {
+
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            Log.d("BROADCAST RECEIVED", intent.getAction());
+            Toast.makeText(getApplicationContext(), intent.getAction(), Toast.LENGTH_SHORT).show();
+            switch (intent.getAction()) {
+                case ACTION_UNBIND:
+                unbindService(serviceConnection);
+                //Toast.makeText(getApplicationContext(), "UNBIND ACTIVITY", Toast.LENGTH_SHORT).show();
+                serviceBound = false;
+                playerService.stopSelf();
+                Log.d("SERVICE", "UNBOUND");
+                break;
+            }
         }
     }
 
