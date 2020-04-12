@@ -47,6 +47,12 @@ public class MediaPlayerService extends Service implements MediaPlayer.OnComplet
     private static final float MEDIA_VOLUME_DEFAULT = 1.0f;
     private static final float MEDIA_VOLUME_DUCK = 0.1f;
 
+    private static final String NOTIFICATION_CHANNEL_ID = "wmbr_playback";
+
+    private static final String LIVE_STREAM_ARTIST = "WMBR 88.1 FM";
+    private static final String LIVE_STREAM_ALBUM = "Live";
+    private static final String LIVE_STREAM_TITLE = "Now Playing";
+
     private boolean isLiveStream;
     private int resumePosition;
 
@@ -446,9 +452,8 @@ public class MediaPlayerService extends Service implements MediaPlayer.OnComplet
         //Set mediaSession's MetaData
         updateMetaData();
 
-        // Attach Callback to receive MediaSession updates
+        // Attach callbacks to receive MediaSession updates
         mediaSession.setCallback(new MediaSessionCompat.Callback() {
-            // Implement callbacks
             @Override
             public void onPlay() {
                 super.onPlay();
@@ -495,15 +500,15 @@ public class MediaPlayerService extends Service implements MediaPlayer.OnComplet
     }
 
     private void updateMetaData() {
-        // TODO: Replace with album art
-        Bitmap albumArt = BitmapFactory.decodeResource(getResources(), R.drawable.folder2);
+
+        Bitmap albumArt = BitmapFactory.decodeResource(getResources(), R.drawable.artwork);
 
         // Update the current metadata
         mediaSession.setMetadata(new MediaMetadataCompat.Builder()
                 .putBitmap(MediaMetadataCompat.METADATA_KEY_ALBUM_ART, albumArt)
-                .putString(MediaMetadataCompat.METADATA_KEY_ARTIST, "WMBR")     // activeAudio.getArtist()
-                .putString(MediaMetadataCompat.METADATA_KEY_ALBUM, "Live")      // activeAudio.getAlbum())
-                .putString(MediaMetadataCompat.METADATA_KEY_TITLE, "Now Playing")   // activeAudio.getTitle())
+                .putString(MediaMetadataCompat.METADATA_KEY_ARTIST, LIVE_STREAM_ARTIST)     // activeAudio.getArtist()
+                .putString(MediaMetadataCompat.METADATA_KEY_ALBUM, LIVE_STREAM_ALBUM)      // activeAudio.getAlbum())
+                .putString(MediaMetadataCompat.METADATA_KEY_TITLE, LIVE_STREAM_TITLE)   // activeAudio.getTitle())
                 .build());
     }
 
@@ -511,10 +516,10 @@ public class MediaPlayerService extends Service implements MediaPlayer.OnComplet
         // Create the NotificationChannel, but only on API 26+ because
         // the NotificationChannel class is new and not in the support library
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            CharSequence name = getString(R.string.channel_name);
-            String description = getString(R.string.channel_description);
+            String name = getString(R.string.notification_channel_name);
+            String description = getString(R.string.notification_channel_description);
             int importance = NotificationManager.IMPORTANCE_LOW;
-            NotificationChannel channel = new NotificationChannel("Media Playback", name, importance);
+            NotificationChannel channel = new NotificationChannel(NOTIFICATION_CHANNEL_ID, name, importance);
             channel.setDescription(description);
             // Register the channel with the system; you can't change the importance
             // or other notification behaviors after this
@@ -527,25 +532,25 @@ public class MediaPlayerService extends Service implements MediaPlayer.OnComplet
 
         Log.d("Notification", "entering build");
 
-        int notificationAction = android.R.drawable.ic_media_pause;//needs to be initialized
+        int notificationAction = R.drawable.btn_playback_pause;//needs to be initialized
         PendingIntent play_pauseAction = null;
 
         //Build a new notification according to the current state of the MediaPlayer
         if (playbackStatus == PlaybackStatus.PLAYING) {
-            notificationAction = android.R.drawable.ic_media_pause;
+            notificationAction = R.drawable.btn_playback_pause;
             //create the pause action
             play_pauseAction = playbackAction(1);
         } else if (playbackStatus == PlaybackStatus.PAUSED) {
-            notificationAction = android.R.drawable.ic_media_play;
+            notificationAction = R.drawable.btn_playback_play;
             //create the play action
             play_pauseAction = playbackAction(0);
         }
 
         Bitmap largeIcon = BitmapFactory.decodeResource(getResources(),
-                R.drawable.folder2);
+                R.drawable.artwork);
 
         // Create a new Notification
-        NotificationCompat.Builder notificationBuilder = new NotificationCompat.Builder(this, "Media Playback")
+        NotificationCompat.Builder notificationBuilder = new NotificationCompat.Builder(this, NOTIFICATION_CHANNEL_ID)
                 .setShowWhen(false)
                 // Set the Notification style
                 .setStyle(new android.support.v4.media.app.NotificationCompat.MediaStyle()
@@ -559,16 +564,16 @@ public class MediaPlayerService extends Service implements MediaPlayer.OnComplet
                 .setColor(getResources().getColor(R.color.colorPrimary))
                 // Set the large and small icons
                 .setLargeIcon(largeIcon)
-                .setSmallIcon(android.R.drawable.stat_sys_headset)
+                .setSmallIcon(R.drawable.ic_notification)
                 // Set Notification content information
-                .setContentText("WMBR")     // activeAudio.getArtist()
-                .setContentTitle("Live")      // activeAudio.getAlbum())
-                .setChannelId("Media Playback")
-                .setContentInfo("Now Playing")   // activeAudio.getTitle())
+                .setContentTitle(LIVE_STREAM_ARTIST)      // activeAudio.getArtist()
+                .setContentText(LIVE_STREAM_ALBUM)     // activeAudio.getAlbum()
+                .setChannelId(NOTIFICATION_CHANNEL_ID)
+                .setContentInfo(LIVE_STREAM_TITLE)   // activeAudio.getTitle()
                 // Add playback actions
-                .addAction(android.R.drawable.ic_media_previous, "previous", playbackAction(3))
+                .addAction(R.drawable.btn_playback_previous, "previous", playbackAction(3))
                 .addAction(notificationAction, "pause", play_pauseAction)
-                .addAction(android.R.drawable.ic_media_next, "next", playbackAction(2));
+                .addAction(R.drawable.btn_playback_next, "next", playbackAction(2));
 
         ((NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE)).notify(NOTIFICATION_ID, notificationBuilder.build());
 
