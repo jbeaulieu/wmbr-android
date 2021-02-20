@@ -11,6 +11,9 @@
     <string name="contact">Contact Us</string>
     <string name="settings">Settings</string>
 
+    <string name="notification_channel_name">Media Playback</string>
+    <string name="notification_channel_description">Playback controls for media</string>
+
     <string name="stream_button_description">Start live stream</string>
     <string name="stop_button_description">Stop live stream</string>
     <string name="content_description_phone_icon">Phone Icon</string>

@@ -1,5 +1,9 @@
 package com.jbproductions.wmbr;
 
+import android.content.BroadcastReceiver;
+import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.res.Resources;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -7,7 +11,7 @@ import android.support.design.button.MaterialButton;
 import android.support.design.card.MaterialCardView;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.res.ResourcesCompat;
-import android.util.SparseArray;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,13 +19,15 @@ import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import java.util.Calendar;
 import java.util.Map;
 import java.util.TimeZone;
-
 import static android.view.View.VISIBLE;
 import static android.view.View.INVISIBLE;
+
+import static com.jbproductions.wmbr.MediaPlayerService.ACTION_PREPARED;
+import static com.jbproductions.wmbr.MediaPlayerService.ACTION_STOP;
+import static com.jbproductions.wmbr.MediaPlayerService.ACTION_UNBIND;
 
 public class StreamFragment extends Fragment {
 
@@ -29,8 +35,10 @@ public class StreamFragment extends Fragment {
         // Required empty public constructor
     }
 
-    private final String STREAM_URL = "http://wmbr.org:8000/hi";
-    private StreamPlayer audioPlayer;
+    // Temporary testing url
+    private static final String STREAM_URL = "http://wmbr.org:8000/hi";
+
+    NavigationActivity mainActivity;
     Resources res;
     MaterialCardView streamCard;
     MaterialCardView wxCard;
@@ -43,26 +51,25 @@ public class StreamFragment extends Fragment {
     TextView weatherTextView;
     ImageView weatherIcon;
 
-    private class streamAudioPlayerCallback implements StreamPlayer.StreamPlayerCallback {
-        @Override
-        public void playerPrepared() {
-            // Player is prepared, hide the buffer progress wheel
-            showBufferProgress(false);
-        }
+    private class MediaPlayerBroadcastReceiver extends android.content.BroadcastReceiver {
 
         @Override
-        public void playerProgress(long offsetInMilliseconds, float percent) {
-            //TODO("not implemented") - progress record
-        }
+        public void onReceive(Context context, Intent intent) {
+            Log.d("BROADCAST RECEIVED", intent.getAction());
 
-        @Override
-        public void itemComplete() {
-            //TODO("not implemented") - finished playing
-        }
-
-        @Override
-        public void playerError() {
-            //TODO("not implemented") - error while playing
+            switch (intent.getAction()) {
+                case ACTION_PREPARED:
+                    showBufferProgress(false);
+                    streamButton.setClickable(true);
+                    break;
+                case ACTION_STOP:
+                case ACTION_UNBIND:
+                    streamButton.setIcon(ResourcesCompat.getDrawable(res, R.drawable.ic_play_arrow_black_24dp, null));
+                    break;
+                default:
+                    showToast(intent.getAction());
+                    break;
+            }
         }
     }
 
@@ -81,22 +88,26 @@ public class StreamFragment extends Fragment {
         weatherTextView = view.findViewById(R.id.weatherTextView);
         weatherIcon = view.findViewById(R.id.weatherImageView);
 
+        // Get Activity to access MediaPlayerService functionality
+        mainActivity = (NavigationActivity) getActivity();
+
         // Get resources to dynamically set drawable objects
         res = getActivity().getResources();
-
-        // Set up new singleton instance of audioPlayer and add callbacks
-        audioPlayer = StreamPlayer.Companion.getInstance(getContext());
-        audioPlayer.addCallback(new streamAudioPlayerCallback());
 
         //Download current metadata for show and host information
         new DownloadMetadataTask().execute();
 
-        //SparseArray<Show> showDB = XmlParser.getShowInfo();
-
         // Check if the stream is already playing. If it is, change the button icon to 'stop'
-        if(audioPlayer.isPlaying()) {
+        if(mainActivity.isPlaying()) {
             streamButton.setIcon(ResourcesCompat.getDrawable(res, R.drawable.ic_stop_black_24dp, null));
         }
+
+        BroadcastReceiver broadcastReceiver = new MediaPlayerBroadcastReceiver();
+        IntentFilter intentFilter = new IntentFilter();
+        intentFilter.addAction(ACTION_PREPARED);
+        intentFilter.addAction(ACTION_STOP);
+        intentFilter.addAction(ACTION_UNBIND);
+        getContext().registerReceiver(broadcastReceiver, intentFilter);
 
         /* Clicking the play/stop button should toggle the stream on/off, switch the play/stop icon,
             and display the "buffering" message and buffer wheel if we're toggling on */
@@ -122,13 +133,15 @@ public class StreamFragment extends Fragment {
      * icon to stop/play respectively, and if necessary displays the buffering icon & message
      */
     private void togglePlayback() {
-        if(audioPlayer.isPlaying()) {
-            audioPlayer.stop();
+        if(mainActivity.isPlaying()) {
+            // Stop the player and switch to a play button
+            mainActivity.stopAudio();
             streamButton.setIcon(ResourcesCompat.getDrawable(res, R.drawable.ic_play_arrow_black_24dp, null));
         }
         else {
-            audioPlayer.playItem(STREAM_URL);
-            showToast(getString(R.string.buffer_message));
+            // Start the player, alert to buffering, and switch to a stop button
+            mainActivity.playAudio(STREAM_URL, true);
+            //showToast(getString(R.string.buffer_message));
             showBufferProgress(true);
             streamButton.setIcon(ResourcesCompat.getDrawable(res, R.drawable.ic_stop_black_24dp, null));
         }
@@ -136,10 +149,10 @@ public class StreamFragment extends Fragment {
 
     /**
      * Hide/Unhide the progress bar used to show that the stream is buffering
-     * @param visible Boolean for if the bar should display or not
+     * @param showProgress Boolean for if the bar should display or not
      */
-    private void showBufferProgress(Boolean visible) {
-        if(visible) {
+    private void showBufferProgress(Boolean showProgress) {
+        if(showProgress) {
             this.bufferProgressBar.setVisibility(VISIBLE);
         } else {
             this.bufferProgressBar.setVisibility(INVISIBLE);
@@ -185,14 +198,14 @@ public class StreamFragment extends Fragment {
             temperatureTextView.setText(wmbrStatus.get("temperature").toString());
             String weather = wmbrStatus.get("wx").toString();
             weatherTextView.setText(weather);
-            LoadWeatherIcon(weather);
+            loadWeatherIcon(weather);
             bufferProgressBar.setVisibility(View.GONE);
             streamCard.setVisibility(VISIBLE);
             wxCard.setVisibility(VISIBLE);
         }
     }
 
-    private void LoadWeatherIcon(String w) {
+    private void loadWeatherIcon(String w) {
 
         String weather = w.toLowerCase();
         // Crop any extra weather descriptors that come after a comma
