@@ -20,9 +20,9 @@ import android.os.Binder;
 import android.os.Build;
 import android.os.IBinder;
 import android.os.RemoteException;
-import android.support.v4.app.NotificationCompat;
-import android.support.v4.media.MediaMetadataCompat;
+import androidx.core.app.NotificationCompat;
 
+import android.support.v4.media.MediaMetadataCompat;
 import android.support.v4.media.session.MediaControllerCompat;
 import android.support.v4.media.session.MediaSessionCompat;
 import android.telephony.PhoneStateListener;
@@ -553,7 +553,7 @@ public class MediaPlayerService extends Service implements MediaPlayer.OnComplet
         NotificationCompat.Builder notificationBuilder = new NotificationCompat.Builder(this, NOTIFICATION_CHANNEL_ID)
                 .setShowWhen(false)
                 // Set the Notification style
-                .setStyle(new android.support.v4.media.app.NotificationCompat.MediaStyle()
+                .setStyle(new androidx.media.app.NotificationCompat.MediaStyle()
                         // Attach our MediaSession token
                         .setMediaSession(mediaSession.getSessionToken())
                         // Show our playback controls in the compact notification view.

@@ -8,7 +8,7 @@
     android:animateLayoutChanges="true"
     tools:context="com.jbproductions.wmbr.StreamFragment">
 
-    <android.support.design.card.MaterialCardView
+    <com.google.android.material.card.MaterialCardView
         android:id="@+id/streaming_card"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -57,7 +57,7 @@
                 android:gravity="center_horizontal"
                 android:textAppearance="@style/TextAppearance.MaterialComponents.Headline6" />
 
-            <android.support.design.button.MaterialButton
+            <com.google.android.material.button.MaterialButton
                 android:id="@+id/streamButton"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -69,9 +69,9 @@
 
         </LinearLayout>
 
-    </android.support.design.card.MaterialCardView>
+    </com.google.android.material.card.MaterialCardView>
 
-    <android.support.design.card.MaterialCardView
+    <com.google.android.material.card.MaterialCardView
         android:id="@+id/wmbr_state_card"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -148,7 +148,7 @@
 
         </LinearLayout>
 
-    </android.support.design.card.MaterialCardView>
+    </com.google.android.material.card.MaterialCardView>
 
     <LinearLayout
         android:layout_width="match_parent"
