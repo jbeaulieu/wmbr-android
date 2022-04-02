@@ -123,7 +123,7 @@
                         android:layout_height="wrap_content"
                         android:layout_margin="5dp"
                         android:gravity="center_horizontal"
-                        android:textAppearance="@style/TextAppearance.MaterialComponents.Tab" />
+                        android:textAppearance="@style/Widget.Material3.TabLayout" />
 
                     <TextView
                         android:id="@+id/temperatureTextView"
@@ -132,7 +132,7 @@
                         android:layout_margin="5dp"
                         android:gravity="center_horizontal"
                         android:text="@string/wx_unknown"
-                        android:textAppearance="@style/TextAppearance.MaterialComponents.Tab" />
+                        android:textAppearance="@style/Widget.Material3.TabLayout" />
 
                     <TextView
                         android:id="@+id/weatherTextView"
@@ -140,7 +140,7 @@
                         android:layout_height="wrap_content"
                         android:layout_margin="5dp"
                         android:gravity="center_horizontal"
-                        android:textAppearance="@style/TextAppearance.MaterialComponents.Tab" />
+                        android:textAppearance="@style/Widget.Material3.TabLayout" />
 
                 </LinearLayout>
 

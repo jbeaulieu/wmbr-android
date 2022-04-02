@@ -9,6 +9,7 @@ import android.content.IntentFilter;
 import android.content.ServiceConnection;
 import android.content.pm.PackageManager;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.os.StrictMode;
@@ -28,6 +29,14 @@ import android.view.MenuItem;
 import android.widget.Toast;
 
 import com.google.android.material.navigation.NavigationView;
+import com.jbproductions.wmbr.service.StreamService;
+import com.jbproductions.wmbr.util.XmlParserKt;
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.HttpURLConnection;
+import java.net.URL;
+import org.xmlpull.v1.XmlPullParserException;
+
 
 import static com.jbproductions.wmbr.MediaPlayerService.ACTION_PREPARED;
 import static com.jbproductions.wmbr.MediaPlayerService.ACTION_STOP;
@@ -149,6 +158,8 @@ public class NavigationActivity extends AppCompatActivity
 
         navigationView.setNavigationItemSelectedListener(this);
 
+        new DownloadXmlTask().execute();
+
         // At the end of setup, load a Stream Fragment, since it functions as the main app screen
         getSupportFragmentManager().beginTransaction().replace(R.id.defaultLayout, new StreamFragment()).commitNow();
     }
@@ -163,18 +174,21 @@ public class NavigationActivity extends AppCompatActivity
     }
 
     public void playAudio(String mediaSource, boolean isLiveStream) {
+        //StreamService streamService = new StreamService();
+
+        startService(new Intent(this, StreamService.class));
         //Check is service is active
-        if (!serviceBound) {
-            playerIntent.putExtra("mediaSource", mediaSource);
-            playerIntent.putExtra("liveStream", isLiveStream);
-            startService(playerIntent);
-            bindService(playerIntent, serviceConnection, Context.BIND_AUTO_CREATE);
-        } else {
-            //Service is active
-            //Send media with BroadcastReceiver
-            Intent broadcastIntent = new Intent(PLAY_NEW_AUDIO);
-            sendBroadcast(broadcastIntent);
-        }
+//        if (!serviceBound) {
+//            playerIntent.putExtra("mediaSource", mediaSource);
+//            playerIntent.putExtra("liveStream", isLiveStream);
+//            startService(playerIntent);
+//            bindService(playerIntent, serviceConnection, Context.BIND_AUTO_CREATE);
+//        } else {
+//            //Service is active
+//            //Send media with BroadcastReceiver
+//            Intent broadcastIntent = new Intent(PLAY_NEW_AUDIO);
+//            sendBroadcast(broadcastIntent);
+//        }
     }
 
     public void stopAudio() {
@@ -215,6 +229,7 @@ public class NavigationActivity extends AppCompatActivity
 
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
         Log.d("PERMISSION GRANTED", Integer.toString(requestCode));
     }
 
@@ -356,4 +371,52 @@ public class NavigationActivity extends AppCompatActivity
             playerService.stopSelf();
         }
     }
+
+    // Implementation of AsyncTask used to download XML feed from stackoverflow.com.
+    private class DownloadXmlTask extends AsyncTask<String, Void, String> {
+        @Override
+        protected String doInBackground(String... urls) {
+            try {
+                return loadXmlFromNetwork();
+            } catch (IOException | XmlPullParserException e) {
+                Log.d("IOException", e.toString());
+            }
+
+            return "DONE";
+        }
+    }
+
+    private String loadXmlFromNetwork() throws XmlPullParserException, IOException {
+        InputStream stream = null;
+
+        try {
+            stream = downloadUrl("https://wmbr.org/cgi-bin/xmlsched");
+            Log.d("HERE", "HERE");
+            XmlParserKt.parseStreamInfo();
+            // Makes sure that the InputStream is closed after the app is
+            // finished using it.
+        } finally {
+            if (stream != null) {
+                stream.close();
+            }
+        }
+
+        return "DONE";
+    }
+
+    // Given a string representation of a URL, sets up a connection and gets
+// an input stream.
+    private InputStream downloadUrl(String urlString) throws IOException {
+        URL url = new URL(urlString);
+        HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+        conn.setReadTimeout(10000 /* milliseconds */);
+        conn.setConnectTimeout(15000 /* milliseconds */);
+        conn.setRequestMethod("GET");
+        conn.setDoInput(true);
+        // Starts the query
+        conn.connect();
+        return conn.getInputStream();
+    }
+
+
 }

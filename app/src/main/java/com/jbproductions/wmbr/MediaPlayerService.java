@@ -153,7 +153,7 @@ public class MediaPlayerService extends Service implements MediaPlayer.OnComplet
             mediaPlayer.release();
         }
 
-        removeAudioFocus();
+        //removeAudioFocus();
 
         //Disable the PhoneStateListener
         if (phoneStateListener != null) {
